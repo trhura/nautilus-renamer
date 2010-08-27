@@ -1,0 +1,31 @@
+About
+-----
+Renamer is a small nautilus script, written in python and gtk+, for batch renaming files in nautilus.
+
+Available Patterns
+------------------
+
+This pattern, {num*}, is not recursive meaning does not work for sub-folders/files ...
+{num3}		for 001  , 002  , 003 ...
+{num5}		for 00001, 00002, 00003 , ...
+{num3+10}	for 010  , 011  , 012 ...
+{num5+100}	for 00100, 00101, 00102 ...
+
+To use original filename or the parent filename ...
+{filename}	Original File Name
+{name}		{filename} without extension
+{ext}		Only extension
+{dir}		Parent Directory
+
+To use Current time in filenames,
+{date}		24Sep2008
+{year}		2008
+{month}		09
+{monthname}	September
+{monthsimp}	Sep
+{day}		24
+{dayname}	Wednesday
+{daysimp}	Wed
+
+
+

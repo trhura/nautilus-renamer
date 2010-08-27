@@ -1,0 +1,170 @@
+# Renamer - nautilus script for batch files renaming 
+# Copyright (C) 2010 Thura Hlaing
+# This file is distributed under the same license as the Renamer package.
+# Thura Hlaing <trhura@gmail.com>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-30 01:51+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Thura Hlaing <trhura@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Renamer:53
+msgid "Options"
+msgstr ""
+
+#: Renamer:58
+msgid "_Patternize"
+msgstr ""
+
+#: Renamer:59
+msgid "_Substitute"
+msgstr ""
+
+#: Renamer:60
+msgid "_Case"
+msgstr ""
+
+#: Renamer:61
+msgid "_Undo"
+msgstr ""
+
+#: Renamer:112
+msgid "_Recursive"
+msgstr ""
+
+#: Renamer:113
+msgid "_Extension"
+msgstr ""
+
+#: Renamer:180
+msgid "For descriptions of available patterns, read README."
+msgstr ""
+
+#: Renamer:183
+msgid "Enter the pattern here ... "
+msgstr ""
+
+#: Renamer:219
+msgid "Enter the word (phrase) to be replaced here ..."
+msgstr ""
+
+#: Renamer:223
+msgid "Enter the word to replace with here ... "
+msgstr ""
+
+#: Renamer:242
+msgid "ALL IN CAPITALS"
+msgstr ""
+
+#: Renamer:243
+msgid "all in lower case"
+msgstr ""
+
+#: Renamer:244
+msgid "First letter upper case"
+msgstr ""
+
+#: Renamer:245
+msgid "Title Case"
+msgstr ""
+
+#: Renamer:246
+msgid "Capital Case After ..."
+msgstr ""
+
+#: Renamer:266
+msgid "Choose One"
+msgstr ""
+
+#: Renamer:292
+msgid ""
+"<b>Undo the last operation inside this folder.\n"
+"\n"
+"</b>"
+msgstr ""
+
+#: Renamer:305
+msgid "Capitalize after: "
+msgstr ""
+
+#: Renamer:309
+msgid "_First Letter"
+msgstr ""
+
+#: Renamer:319
+msgid ""
+"Enter the list of sequences, to capitalize the letter after each of it, "
+"separated by '/'"
+msgstr ""
+
+#: Renamer:320
+msgid "Capitalize the first letter"
+msgstr ""
+
+#: Renamer:370
+msgid "No file selected"
+msgstr ""
+
+#: Renamer:370
+msgid "Dude, select some files first."
+msgstr ""
+
+#: Renamer:382
+msgid "Empty Pattern"
+msgstr ""
+
+#: Renamer:382
+msgid "Please, enter a valid pattern."
+msgstr ""
+
+#: Renamer:392
+msgid "Operation Aborted!"
+msgstr ""
+
+#: Renamer:392
+msgid ""
+"Renamer is trying to rename multiple files into one. The pattern should "
+"contain at least one of {num * } , {filename} or {name}"
+msgstr ""
+
+#: Renamer:402
+msgid "Get a brain!"
+msgstr ""
+
+#: Renamer:402
+msgid "come on, you can't replace nothing with something."
+msgstr ""
+
+#: Renamer:418
+msgid "Rename successful"
+msgstr ""
+
+#: Renamer:418
+#, python-format
+msgid "renamed %d files successfully."
+msgstr ""
+
+#: Renamer:556
+msgid "Log file not found"
+msgstr ""
+
+#: Renamer:556
+msgid "You must be in the same folder, where you use Renamer, to undo."
+msgstr ""
+
+#: Renamer:569
+msgid "Undo successful"
+msgstr ""
+
+#: Renamer:569
+#, python-format
+msgid "%d files restored."
+msgstr ""
