@@ -47,12 +47,30 @@ PATTERNIZE, SUBSTITUTE, CASING, UNDO = range (4)
 ALL_CAP, ALL_LOW, FIRST_CAP, EACH_CAP, CAP_AFTER = range (5)
 
 # data, icons directories
-BASE_DIR    =  os.environ.get("HOME") + '/.gnome2/nautilus-scripts/' + DATA_DIR
-ICONS_PATH  =  BASE_DIR + 'icon/'
+# BASE_DIR    =  os.environ.get("HOME") + '/.gnome2/nautilus-scripts/' + DATA_DIR
+
+not_installed_dir = os.path.dirname(os.path.realpath(__file__))
+if os.path.exists(not_installed_dir + '/po') and \
+   os.path.exists(not_installed_dir + '/icon'):
+    # default base dir, when it is not installed yet
+    BASE_DIR = not_installed_dir
+elif os.path.exists(os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata')):
+    # default base dir, when it is installed as a user script 
+    BASE_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata')
+else:
+    for directory in [sys.prefix, sys.prefix + '/local']:
+    # when it is installed systemwide, to use with nautilus-scripts-manager
+        installed_root_dir = directory + '/share'
+        if os.path.exists(installed_root_dir + '/nautilus-renamer/po') and \
+           os.path.exists(installed_root_dir + '/nautilus-renamer/icon'):
+           BASE_DIR = installed_root_dir + '/nautilus-renamer'
+           break
+                        
+ICONS_PATH = os.path.join(BASE_DIR, 'icon/')
 
 # gettext
 APP = 'nautilus-renamer'
-DIR = BASE_DIR + 'po'
+DIR = os.path.join(BASE_DIR, 'po')
 
 class Application():
 
@@ -76,7 +94,7 @@ class Application():
         # Upper Box Radio Buttons
         pat_rb  = gtk.RadioButton (None,  _("_Patternize"), True)
         sub_rb  = gtk.RadioButton (pat_rb, _("_Substitute"), True)
-        cas_rb  = gtk.RadioButton (pat_rb, _("_Case"), True)
+        cas_rb  = gtk.RadioButton (pat_rb, _("C_ase"), True)
         und_rb  = gtk.RadioButton (pat_rb, _("_Undo"), True)
 
         self.prepare_pat_options (pat_rb)
@@ -84,7 +102,7 @@ class Application():
         lalign.add (self.lbox)
         lalign.set_padding (5, 5, 5, 5)
         lframe.add (lalign)
-        lframe.set_size_request (-1, 100)
+        lframe.set_size_request (-1, 120)
 
         #Popup Menu for available patterns
         self.pat_popup  = gtk.Menu ()

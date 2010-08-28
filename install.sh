@@ -19,16 +19,21 @@ echo "Icons and readme will be stored in $DIR/.rdata"
 echo
 sleep 1
 
-
 echo "--------------------------------------------------"
 echo "DEPENDENCIES --> \"pyGTK\" and \"python-notify\"."
 echo "Make sure you got those packages to use this script."
 echo "--------------------------------------------------"
-sleep 3
+sleep 2
 
 echo "Installing Icons and Locales"
 echo "----------------"
-cp -Rfv .rdata/  "$DIR/"
+# Clean up previous installations
+rm -rf "$DIR/.rdata"
+rm -rf "$DIR/Renamer"
+
+mkdir -p "$DIR/.rdata"
+cp -Rfv po  "$DIR/.rdata/"
+cp -Rfv icon "$DIR/.rdata/"
 echo 
 echo "Installing script"
 echo "-----------------"
@@ -38,5 +43,3 @@ sleep 1
 echo "----------------------"
 echo "Installation Finished"
 echo "----------------------"
-
-
