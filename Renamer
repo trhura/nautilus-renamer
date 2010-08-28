@@ -33,7 +33,7 @@ import gobject
 import pynotify
 
 # Configuration
-DEFAULT_WIDTH   = 420                   # Dialog's default width at startup
+DEFAULT_WIDTH   = 450                   # Dialog's default width at startup
 DEFAULT_HEIGHT  = 300                   # Dialog's default height at startup
 PREVIEW_HEIGHT  = 150                   # Height of preview area
 UNDO_LOG_FILE   = '.rlog'               # Name used for Log file
