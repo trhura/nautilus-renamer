@@ -639,10 +639,6 @@ class Application():
     def _get_new_name (self, oldName):
         """ return a new name, based on the old name, and settings from our dialog. """
 
-        if oldName.startswith('.'):
-        # Exclude hidden files, what else to exculde?
-            return oldName
-
         if self.action == SUBSTITUTE:
             #TODO: Regex Support ?
             if self.ext:
