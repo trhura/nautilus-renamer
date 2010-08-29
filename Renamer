@@ -187,7 +187,7 @@ class Application():
         
         cell    = gtk.CellRendererText ()
         cell.set_property ('scale', 0.9)
-        column  = gtk.TreeViewColumn (_("Old Name"), cell, text=0)
+        column  = gtk.TreeViewColumn (_("Original Name"), cell, text=0)
         view.append_column (column)
         
         cell    = gtk.CellRendererText ()
