@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-29 17:45+0800\n"
-"PO-Revision-Date: 2010-08-29 14:45+0000\n"
+"PO-Revision-Date: 2010-08-30 06:23+0000\n"
 "Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-30 04:20+0000\n"
+"X-Launchpad-Export-Date: 2010-08-31 04:18+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: Renamer:90
@@ -31,7 +31,7 @@ msgstr ""
 
 #: Renamer:97
 msgid "C_ase"
-msgstr ""
+msgstr "K_irjain"
 
 #: Renamer:98
 msgid "_Undo"
@@ -43,7 +43,7 @@ msgstr "Alkuperäinen tiedostonimi"
 
 #: Renamer:125
 msgid "Parent directory"
-msgstr ""
+msgstr "Ylähakemisto"
 
 #: Renamer:126
 msgid "Filename without extenstion"
@@ -55,7 +55,7 @@ msgstr "Tiedostopääte"
 
 #: Renamer:128
 msgid "Day of month"
-msgstr ""
+msgstr "Kuukauden päivä"
 
 #: Renamer:129
 msgid "Full date, e.g., 24Sep2008"
