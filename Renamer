@@ -22,6 +22,7 @@ import re
 import time
 import mmap
 import string
+import random
 
 import pygtk
 pygtk.require ('2.0')
@@ -34,7 +35,7 @@ import pynotify
 
 # Configuration
 DEFAULT_WIDTH   = 450                   # Dialog's default width at startup
-DEFAULT_HEIGHT  = 300                   # Dialog's default height at startup
+DEFAULT_HEIGHT  = 320                   # Dialog's default height at startup
 PREVIEW_HEIGHT  = 150                   # Height of preview area
 UNDO_LOG_FILE   = '.rlog'               # Name used for Log file
 DATA_DIR        = '.rdata/'             # 
@@ -83,6 +84,7 @@ class Application():
         self.logFile  = None
         self.num = 0
         self.num_pat = re.compile(r'(\/num\d*\/|(\/num\d*\+\d*\/))')
+        self.ran_pat = re.compile (r'\/rand\d*-\d*\/')
         self.filesRenamed = 0
         self.pmodel = gtk.ListStore (gobject.TYPE_STRING, gobject.TYPE_STRING)
 
@@ -120,6 +122,7 @@ class Application():
         pat_msimp   = gtk.MenuItem ('/monthsimp/')
         pat_num1    = gtk.MenuItem ('/num2/')
         pat_num2    = gtk.MenuItem ('/num3+0/')
+        pat_rand    = gtk.MenuItem ('/rand10-99/')
         
         pat_fname.set_tooltip_text  (_("Original filename"))
         pat_dir.set_tooltip_text    (_("Parent directory"))
@@ -135,6 +138,7 @@ class Application():
         pat_dsimp.set_tooltip_text  (_("Simple dayname, e.g., Mon"))
         pat_num1.set_tooltip_text   (_("{num5} => 00001, 00002, 00003 , ..."))
         pat_num2.set_tooltip_text   (_("{num5+5} => 00005, 00006, 00007 , ..."))
+        pat_rand.set_tooltip_text (_("A random number from 10 to 99"))
         
         self.pat_popup.attach (pat_fname,   0, 1, 0, 1)
         self.pat_popup.attach (pat_dir,     1, 2, 0, 1)
@@ -150,6 +154,7 @@ class Application():
         self.pat_popup.attach (pat_msimp,   1, 2, 5, 6)
         self.pat_popup.attach (pat_num1,    0, 1, 6, 7)
         self.pat_popup.attach (pat_num2,    1, 2, 6, 7)
+        self.pat_popup.attach (pat_rand,     0, 1, 7, 8)
 
         self.pat_popup.show_all ()
 
@@ -186,13 +191,22 @@ class Application():
         view.set_size_request ( -1, PREVIEW_HEIGHT)
         
         cell    = gtk.CellRendererText ()
-        cell.set_property ('scale', 0.9)
+        cell.set_property ('scale', 0.8)
+        cell.set_property ('width', DEFAULT_WIDTH/2)
+        cell.set_property ('ellipsize', pango.ELLIPSIZE_MIDDLE)
         column  = gtk.TreeViewColumn (_("Original Name"), cell, text=0)
+        column.set_property ('sizing', gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+        column.set_property ('resizable', True)
         view.append_column (column)
         
+        
         cell    = gtk.CellRendererText ()
-        cell.set_property ('scale', 0.9)
+        cell.set_property ('scale', 0.8)
+        cell.set_property ('width', DEFAULT_WIDTH/2 )
+        cell.set_property ('ellipsize', pango.ELLIPSIZE_MIDDLE)
         column  = gtk.TreeViewColumn (_("New Name"), cell, text=1)
+        column.set_property ('sizing', gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+        column.set_property ('resizable', True)
         view.append_column (column) 
         
         scrollwin   = gtk.ScrolledWindow ()
@@ -239,6 +253,7 @@ class Application():
         pat_msimp.connect ('activate', self.on_popup_activate)
         pat_num1.connect ('activate', self.on_popup_activate)
         pat_num2.connect ('activate', self.on_popup_activate)
+        pat_rand.connect ('activate', self.on_popup_activate)
         
         expander.connect ('notify::expanded', self.expander_cb)        
         refresh.connect ('clicked', self.prepare_preview)
@@ -334,7 +349,7 @@ class Application():
         self.view.append_column (column)
 
         cell    = gtk.CellRendererText ()
-        cell.set_property ('scale', 0.9)
+        cell.set_property ('scale', 0.8)
 
         column  = gtk.TreeViewColumn(_("Choose One"))
         column.pack_start (cell, True)
@@ -450,7 +465,7 @@ class Application():
         """ When expander state is changed """
         if widget.get_expanded ():
             # When preview is expanded, resize the dialog a litter bigger.
-            self.dialog.resize (DEFAULT_WIDTH + 100 , DEFAULT_HEIGHT + PREVIEW_HEIGHT)
+            self.dialog.resize (DEFAULT_WIDTH + 150 , DEFAULT_HEIGHT + PREVIEW_HEIGHT)
             self.prepare_preview (widget)
         else:
             # When preview is hidden, restore normal size
@@ -507,15 +522,16 @@ class Application():
         self.ext   = self.ext_cb.get_active ()
         
         if self.action == SUBSTITUTE:
-		    self.replee = self.sub_replee.get_text ()
-		    self.repler = self.sub_repler.get_text () 
-		         
+            self.replee = self.sub_replee.get_text ()
+            self.repler = self.sub_repler.get_text () 
+            
         elif self.action == PATTERNIZE:
+            self.pattern = self.pat_entry.get_text ()
+            
             if self.pattern == '' or self.pattern == self.pat_entry.label:
                 #Empty pattern, return 
                 return  
-
-            self.pattern = self.pat_entry.get_text ()
+            
             self.num = 0
             
             if self.num_pat.search(self.pattern):
@@ -536,7 +552,7 @@ class Application():
             return
             
         if not files:
-            # FIXME:No files to rename
+            # No files to rename
             self.notify (_("No file selected"), _("Please, select some files first."), ICONS_PATH + 'info.png', 5000)
             return
 
@@ -557,15 +573,6 @@ class Application():
             if self.num_pat.search(self.pattern):
                 #if the pattern contains /num*/ or /num*+*/, disable recursion
                 self.recur = False
-
-            if not self.num_pat.search(self.pattern) and self.pattern.find ('/filename/') == -1 \
-               and self.pattern.find ('/name/') == -1 and len(files) > 1:
-                # If the pattern doesn't contain any of /num3/ /num3+3/ /filename/ /name/, abort renaming
-                # As it will try to rename all input files into one name. FIXME:
-                self.notify(_("Operation Aborted!"),\
-                            _("The pattern must contain at least one of /num * / , /filename/ or /name/"),
-                            ICONS_PATH  + 'warning.png',5000)
-                return
 
         elif self.action == SUBSTITUTE:
             # prepare substitute related options, and check for possible errors
@@ -605,7 +612,13 @@ class Application():
         oldPath = os.path.join (oldPath, oldName)
 
         if not path == newPath:
-            # No need to rename if path (old) = newPath 
+            # No need to rename if path (old) = newPath
+            if os.path.exists (newPath):
+                self.notify (_("File Already Exists"),\
+                             newName + _(" already exists. Use Undo to revert."),\
+                             ICONS_PATH  + 'error.png',5000)
+                self.exit()
+                                
             os.rename (path, newPath)
             self.logFile.write ('%s%s%s\n' %(oldPath, LOG_SEP,newPath))
             self.filesRenamed = self.filesRenamed + 1
@@ -635,7 +648,7 @@ class Application():
                     self.pats.append ([pat[:-1]])
         except:
             pass
-				
+            
     def _get_new_name (self, oldName):
         """ return a new name, based on the old name, and settings from our dialog. """
 
@@ -695,7 +708,7 @@ class Application():
             #for number substiution
             if self.num_pat.search(newName):
                 tmp = self.num_pat.search(newName).group()
-                print tmp
+                #print tmp
                 #if /num?/
                 if len(tmp)== 6:
                     substitute = str(self.num).zfill(int(tmp[4]))
@@ -706,13 +719,22 @@ class Application():
                     substitute = str(self.num+int(tmp[6:(len(tmp)-1)])).zfill(int(tmp[4]))
                     newName    = self.num_pat.sub(substitute, newName)
                     self.num   = self.num + 1
-
-            dir, file = os.path.split (oldName)
+            
+            # for random number insertion
+            if self.ran_pat.search(newName):
+                tmp = self.ran_pat.search(newName).group()
+                range = tmp[5:-1] # Extract 10-99 from /rand10-99/
+                start, end = range.split ('-') # Split 10-99 to 10 and 99
+                randstr = str(random.randint (int(start), int(end)))
+                newName = self.ran_pat.sub (randstr, newName)
+                
+            dir, file = os.path.split (os.path.abspath(oldName))
             name, ext = os.path.splitext (file)
+            dirname = os.path.basename(dir)
 
             #replace filename related Tags
             newName = newName.replace('/filename/',oldName)
-            newName = newName.replace('/dir/', dir)
+            newName = newName.replace('/dir/', dirname)
             newName = newName.replace('/name/', name)
             newName = newName.replace('/ext/', ext)
 
@@ -729,12 +751,12 @@ class Application():
             return newName
 
     def undo (self):
-        """ Restore previously renamed` files back according to the log file. """
+        """ Restore previously renamed files back according to the log file. """
         if not self.log_file_p ():
             self.notify(_("Undo Failed"),\
                         _("Log file not found"),\
                          ICONS_PATH  + 'error.png',5000)
-            sys.exit(1)
+            self.exit()
         
         logFile = open (UNDO_LOG_FILE, 'rb')    
         for i in range(5): logFile.readline () #Skip 5 lines of header
@@ -784,18 +806,27 @@ class Application():
             m[(o+l) : ] = m [o : s]
             m[o : (o+l)] = str
             m.close ()
+    
+    def exit (self):
+        """ Exit Application if there is an error."""
+        self.close_log ()
+        
+        if self.action == PATTERNIZE:
+            self._write_recent_pats ()
+        
+        sys.exit (1)
 
     def notify(self, title,text,iconpath,time):
         """ Wrapper to display notifications with timeout time. """
         if not pynotify.init("Renamer"):
-            sys.exit(1)
+            self.exit ()
 
         n = pynotify.Notification(title,text,iconpath)
         n.set_timeout(time)
 
         if not n.show():
             print "Failed to send notification"
-            sys.exit(1)
+            self.exit ()
 
 def init_gettext ():
 
