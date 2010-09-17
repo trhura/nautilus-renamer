@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-17 16:17+0800\n"
+"POT-Creation-Date: 2010-09-17 17:18+0800\n"
 "PO-Revision-Date: 2010-08-29 15:57+0000\n"
 "Last-Translator: David Bosman <david.bosman@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -173,17 +173,27 @@ msgid "Choose One"
 msgstr ""
 
 #: Renamer:382
+msgid "<b>Undo the last operation inside this folder.</b>"
+msgstr ""
+
+#: Renamer:383
 msgid ""
-"<b>Undo the last operation inside this folder.\n"
-"\n"
-"</b>"
+"<span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
 msgstr ""
 
 #: Renamer:385
 msgid ""
-"<span color='red' weight='bold'>No log file is found in this folder.\n"
-"\n"
-"</span>"
+"<span color='red' weight='bold'>No log file is found in this folder.</span>"
+msgstr ""
+
+#: Renamer:386
+msgid ""
+"<span color='grey' size='small'>Note: When it renames files, Renamer writes "
+"a log file, namely "
+msgstr ""
+
+#: Renamer:387
+msgid ", in the folder it was launched, which is used for Undo.</span>"
 msgstr ""
 
 #: Renamer:399

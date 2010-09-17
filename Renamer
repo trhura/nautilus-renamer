@@ -42,6 +42,7 @@ DATA_DIR        = '.rdata/'             #
 LOG_SEP         =  ' is converted to '  # Log file separator
 REC_PATS        = 5                     # Remember up to 5 recent patterns
 REC_FILE        = 'rec_pats'            # filename for recent patterns
+NOTIFICATION_TIMEOUT =  -1              # notification timeout, pynotify.EXPIRES_DEFAULT
 
 # Fake Enums
 PATTERNIZE, SUBSTITUTE, CASING, UNDO = range (4)
@@ -85,6 +86,7 @@ class Application():
         self.num = 0
         self.num_pat = re.compile(r'(\/num\d*\/|(\/num\d*\+\d*\/))')
         self.ran_pat = re.compile (r'\/rand\d*-\d*\/')
+        self.ran_seq = []
         self.filesRenamed = 0
         self.pmodel = gtk.ListStore (gobject.TYPE_STRING, gobject.TYPE_STRING)
 
@@ -379,12 +381,12 @@ class Application():
         und_label.set_alignment (0.1, -1)        
         
         if self.log_file_p():
-            und_label.set_markup (_("<b>Undo the last operation inside this folder.\n\n</b>" +
-                                    "<span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"))
+            und_label.set_markup (_("<b>Undo the last operation inside this folder.</b>") + "\n\n" +
+                                  _("<span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"))
         else: #FIXME: 
-            und_label.set_markup (_("<span color='red' weight='bold'>No log file is found in this folder.\n\n</span>" +
-                                   "<span color='grey' size='small'>Note: When it renames files, Renamer writes a log file, namely " + 
-                                   UNDO_LOG_FILE + ", in the folder it was launched, which is used for Undo.</span>"))
+            und_label.set_markup (_("<span color='red' weight='bold'>No log file is found in this folder.</span>" )+ "\n\n" +
+                                  _("<span color='grey' size='small'>Note: When it renames files, Renamer writes a log file, namely ") +
+                                   UNDO_LOG_FILE + _(", in the folder it was launched, which is used for Undo.</span>"))
 
         self.lbox.pack_start (und_label, True, True, 0)
         self.lbox.show_all ()
@@ -486,18 +488,33 @@ class Application():
         
         if self.case_opt == CAP_AFTER:
             self.prepare_cap_after_options ()
+    
+    def remove (self, child):
+        """ callback to remove a child from lbox """
+        self.lbox.remove (child)
 
     def build_preview_model (self, path, vpath=''):
         " Base function for building list store for preview "        
         parent, name = os.path.split (path)
-        newPath = os.path.join (os.path.split(vpath)[0], self._get_new_name(name))
+        newName = self._get_new_name(name)
+        
+        if not newName:
+            # If there is any error getting new name, return False
+            print "build preview error ...."
+            return False
+        
+        newPath = os.path.join (os.path.split(vpath)[0],newName)
         
         if not path == newPath:
             self.pmodel.append ([path, newPath])
         
         if  os.path.isdir(path) and self.recur:
             for subdir in os.listdir (path):
-                self.build_preview_model (os.path.join(path, subdir), os.path.join(newPath, subdir))
+                if not self.build_preview_model (os.path.join(path, subdir), os.path.join(newPath, subdir)):
+                    # If there is any error
+                    return False
+        
+        return True
         
     def prepare_preview (self, widget):
         " Wrapper around build_preview_model. Prepare and validate settings."
@@ -506,7 +523,7 @@ class Application():
         if self.action == UNDO and self.log_file_p():
             logFile = open (UNDO_LOG_FILE, 'rb')
             
-            for i in range(5): logFile.readline () #Skip 5 lines of header
+            for i in xrange(5): logFile.readline () #Skip 5 lines of header
             
             for line in logFile:
                 oldpath, newpath = line.split('\n')[0].split(LOG_SEP)
@@ -515,50 +532,29 @@ class Application():
                 self.pmodel.append ([newpath, oldpath])
                 
             logFile.close ()
+            return
             
-            return 
+        if not self.prepare_data_from_dialog():
+        # if there is any error, return
+            return
+                
+        for file in files:
+            if not self.build_preview_model (file):
+                # if there is any error
+                return
         
+    def prepare_data_from_dialog (self):
+        """ Initialize data require for rename and preview from dailog
+            Report and return False.on errors"""
+        
+        if not files:
+            # No files to rename
+            self.notify (_("No file selected"), _("Please, select some files first."), ICONS_PATH + 'info.png', NOTIFICATION_TIMEOUT)
+            return False
+
         self.recur = self.recur_cb.get_active ()
         self.ext   = self.ext_cb.get_active ()
         
-        if self.action == SUBSTITUTE:
-            self.replee = self.sub_replee.get_text ()
-            self.repler = self.sub_repler.get_text () 
-            
-        elif self.action == PATTERNIZE:
-            self.pattern = self.pat_entry.get_text ()
-            
-            if self.pattern == '' or self.pattern == self.pat_entry.label:
-                #Empty pattern, return 
-                return  
-            
-            self.num = 0
-            
-            if self.num_pat.search(self.pattern):
-                # If pattern contains {num**** .. disable recursion
-                self.recur = False          
-                    
-        for file in files:
-            self.build_preview_model (file)
-    
-    def remove (self, child):
-        """ callback to remove a child from lbox """
-        self.lbox.remove (child)
-
-    def rename (self, files):
-        """ Wrapper around _rename (). Prepare and validate settings, and write logs."""
-        if self.action == UNDO:
-            self.undo ()
-            return
-            
-        if not files:
-            # No files to rename
-            self.notify (_("No file selected"), _("Please, select some files first."), ICONS_PATH + 'info.png', 5000)
-            return
-
-        self.recur = self.recur_cb.get_active ()
-        self.ext   = self.ext_cb.get_active ()        
-
         if self.action == PATTERNIZE:
             # prepare patternize related options, and check for possible errors
             self.pattern = self.pat_entry.get_text ()
@@ -567,12 +563,19 @@ class Application():
             if self.pattern == '' or self.pattern == self.pat_entry.label:
                 self.notify (_("Empty Pattern"), \
                              _("Please, enter a valid pattern."), \
-                             ICONS_PATH + 'warning.png', 5000)
-                return
+                             ICONS_PATH + 'warning.png', NOTIFICATION_TIMEOUT)
+                return False
 
             if self.num_pat.search(self.pattern):
                 #if the pattern contains /num*/ or /num*+*/, disable recursion
                 self.recur = False
+            
+            if self.ran_pat.search(self.pattern):
+                # If a random pattern is found, prepare sequence of random numbers
+                tmp = self.ran_pat.search(self.pattern).group()
+                range = tmp[5:-1] # Extract 10-99 from /rand10-99/
+                start, end = range.split ('-') # Split 10-99 to 10 and 99                
+                self.ran_seq = [x for x in xrange (int(start), int(end))]
 
         elif self.action == SUBSTITUTE:
             # prepare substitute related options, and check for possible errors
@@ -580,14 +583,25 @@ class Application():
             self.repler = self.sub_repler.get_text ()
 
             if self.replee == self.sub_replee.label or self.replee == '':
-            #FIXME:
                 self.notify(_("Empty Word"),\
                             _("Please enter a valid word to be replaced."),\
-                            ICONS_PATH  + 'warning.png',5000)
-                return
+                            ICONS_PATH  + 'warning.png',NOTIFICATION_TIMEOUT)
+                return False
                 
             if self.repler == self.sub_repler.label:
-                self.repler = ''
+                self.repler = ''    
+        
+        return True
+    
+    def rename (self, files):
+        """ Wrapper around _rename (). Prepare and validate settings, and write logs."""
+        if self.action == UNDO:
+            self.undo ()
+            return
+            
+        if not self.prepare_data_from_dialog():
+        # if there is any error, return
+            return
 
         self.start_log ()
 
@@ -601,13 +615,17 @@ class Application():
 
         self.notify(_("Rename successful"),\
                     _("renamed %d files successfully.") % self.filesRenamed,\
-                    ICONS_PATH  + 'success.png',5000)
+                    ICONS_PATH  + 'success.png',NOTIFICATION_TIMEOUT)
 
     def _rename (self, path, oldPath=''):
         """ Base function to rename files
             If self.recur is set, also renames file recursively"""
         parent, oldName = os.path.split (path)
         newName = self._get_new_name (oldName)
+        
+        if not newName:
+            self.exit ()
+            
         newPath = os.path.join (parent, newName)
         oldPath = os.path.join (oldPath, oldName)
 
@@ -616,7 +634,7 @@ class Application():
             if os.path.exists (newPath):
                 self.notify (_("File Already Exists"),\
                              newName + _(" already exists. Use Undo to revert."),\
-                             ICONS_PATH  + 'error.png',5000)
+                             ICONS_PATH  + 'error.png',NOTIFICATION_TIMEOUT)
                 self.exit()
                                 
             os.rename (path, newPath)
@@ -722,11 +740,17 @@ class Application():
             
             # for random number insertion
             if self.ran_pat.search(newName):
-                tmp = self.ran_pat.search(newName).group()
-                range = tmp[5:-1] # Extract 10-99 from /rand10-99/
-                start, end = range.split ('-') # Split 10-99 to 10 and 99
-                randstr = str(random.randint (int(start), int(end)))
-                newName = self.ran_pat.sub (randstr, newName)
+                if not self.ran_seq:
+                    # if random number sequence is None
+                    print "Not Enought Random Number Range"
+                    self.notify (_("Not Enough Random Number Range"),
+                                 _("Please, use a larger range"),
+                                 ICONS_PATH + "warning.png", NOTIFICATION_TIMEOUT)
+                    return False
+                    
+                randint = random.choice (self.ran_seq)
+                self.ran_seq.remove (randint)
+                newName = self.ran_pat.sub (str(randint), newName)
                 
             dir, file = os.path.split (os.path.abspath(oldName))
             name, ext = os.path.splitext (file)
@@ -763,7 +787,8 @@ class Application():
 
         for line in logFile:
             oldpath, newpath = line.split('\n')[0].split(LOG_SEP)
-            print os.path.join(os.path.dirname(oldpath),os.path.basename(newpath)),oldpath
+            oldpath = os.path.abspath (oldpath)
+            #print os.path.join(os.path.dirname(oldpath),os.path.basename(newpath)),oldpath
             os.rename(os.path.join(os.path.dirname(oldpath),os.path.basename(newpath)),oldpath)
             self.filesRenamed = self.filesRenamed + 1
 

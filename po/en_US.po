@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-17 16:17+0800\n"
-"PO-Revision-Date: 2010-09-17 16:22+0800\n"
+"POT-Creation-Date: 2010-09-17 17:18+0800\n"
+"PO-Revision-Date: 2010-09-17 17:20+0800\n"
 "Last-Translator: Thura Hlaing <trhura@gmail.com>\n"
 "Language-Team: English\n"
 "Language: de\n"
@@ -175,24 +175,39 @@ msgid "Choose One"
 msgstr "Choose One"
 
 #: Renamer:382
-msgid ""
-"<b>Undo the last operation inside this folder.\n"
-"\n"
-"</b>"
+#, fuzzy
+msgid "<b>Undo the last operation inside this folder.</b>"
 msgstr ""
 "<b>Undo the last operation inside this folder.\n"
 "\n"
 "</b>"
 
-#: Renamer:385
+#: Renamer:383
 msgid ""
-"<span color='red' weight='bold'>No log file is found in this folder.\n"
-"\n"
-"</span>"
+"<span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
+msgstr ""
+"<span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
+
+#: Renamer:385
+#, fuzzy
+msgid ""
+"<span color='red' weight='bold'>No log file is found in this folder.</span>"
 msgstr ""
 "<span color='red' weight='bold'>No log file is found in this folder.\n"
 "\n"
 "</span>"
+
+#: Renamer:386
+msgid ""
+"<span color='grey' size='small'>Note: When it renames files, Renamer writes "
+"a log file, namely "
+msgstr ""
+"<span color='grey' size='small'>Note: When it renames files, Renamer writes "
+"a log file, namely "
+
+#: Renamer:387
+msgid ", in the folder it was launched, which is used for Undo.</span>"
+msgstr ""
 
 #: Renamer:399
 msgid "Capitalize after: "
