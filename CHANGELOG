@@ -1,12 +1,12 @@
 2.1 (17 Sep 2010)
 -----------------
-* Check for any existed file before renaming, exist if there is
+* Check for any existed file before renaming, abort if there is
 * Added random number pattern
 * Fixed a bug with patterize preview
 * Fixed preview columns
 * Fixed /dir/ patterns
 * update german translations
-* Added French, translations
+* Added French, Finnish translations
 
 2.0 (28 Jul 2010)
 ----------------
