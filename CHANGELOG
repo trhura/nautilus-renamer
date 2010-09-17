@@ -3,7 +3,7 @@
 * Check for any existed file before renaming, exist if there is
 * Added random number pattern
 * Fixed a bug with patterize preview
-* Modify preview frame 
+* Fixed preview columns
 * Fixed /dir/ patterns
 * update german translations
 * Added French, translations
