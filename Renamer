@@ -865,7 +865,7 @@ def init_gettext ():
 	if(language): 
 		langs += language.split(':')
 		
-	langs += ['en_US', 'de_DE']
+	langs += ['en_US', 'de_DE', 'fi_FI', 'fr_FR']
 	
 	gettext.bindtextdomain(APP, DIR)
 	gettext.textdomain(APP) 
@@ -877,6 +877,7 @@ def init_gettext ():
 if __name__ == '__main__':
 	
 	init_gettext ()
+	
 	files = [file for file in sys.argv[1:]]
 	
 	app = Application ()

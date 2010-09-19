@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-17 20:59+0800\n"
-"PO-Revision-Date: 2010-09-17 17:20+0800\n"
+"PO-Revision-Date: 2010-09-17 21:13+0800\n"
 "Last-Translator: Thura Hlaing <trhura@gmail.com>\n"
 "Language-Team: English\n"
 "Language: de\n"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: Renamer:389
 msgid ", in the folder it was launched, which is used for Undo.</span>"
-msgstr ""
+msgstr ", in the folder it was launched, which is used for Undo.</span>"
 
 #: Renamer:401
 msgid "Capitalize after: "
@@ -272,7 +272,7 @@ msgstr " already exists. Use Undo to revert."
 
 #: Renamer:746
 msgid "Not Enough Random Number Range"
-msgstr ""
+msgstr "Not Enough Random Number Range"
 
 #: Renamer:747
 #, fuzzy
