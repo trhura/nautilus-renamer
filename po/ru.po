@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-09-17 20:59+0800\n"
-"PO-Revision-Date: 2010-09-17 17:02+0000\n"
-"Last-Translator: Sergey Sedov <sedov@webmail.perm.ru>\n"
+"PO-Revision-Date: 2010-09-27 20:41+0000\n"
+"Last-Translator: nvg66 <nvg66@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-18 05:48+0000\n"
+"X-Launchpad-Export-Date: 2010-09-28 05:39+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: Renamer:94
 msgid "Options"
-msgstr "Параметры"
+msgstr "Опции"
 
 #: Renamer:99
 msgid "_Patternize"
@@ -51,7 +51,7 @@ msgstr "Название файла без расширения"
 
 #: Renamer:132
 msgid "File extension"
-msgstr "Расширение файла"
+msgstr "Тип файла"
 
 #: Renamer:133
 msgid "Day of month"
