@@ -1,0 +1,281 @@
+# Japanese translation for nautilus-renamer
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the nautilus-renamer package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: nautilus-renamer\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-09-17 20:59+0800\n"
+"PO-Revision-Date: 2010-10-03 15:54+0000\n"
+"Last-Translator: tylg <Unknown>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-10-04 05:07+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: Renamer:94
+msgid "Options"
+msgstr "オプション"
+
+#: Renamer:99
+msgid "_Patternize"
+msgstr "パターン(_P)"
+
+#: Renamer:100
+msgid "_Substitute"
+msgstr "置換(_S)"
+
+#: Renamer:101
+msgid "C_ase"
+msgstr "変換(_C)"
+
+#: Renamer:102
+msgid "_Undo"
+msgstr "元に戻す(_U)"
+
+#: Renamer:129
+msgid "Original filename"
+msgstr "元ファイル名"
+
+#: Renamer:130
+msgid "Parent directory"
+msgstr "親ディレクトリ"
+
+#: Renamer:131
+msgid "Filename without extenstion"
+msgstr "拡張子なしのファイル名"
+
+#: Renamer:132
+msgid "File extension"
+msgstr "拡張子"
+
+#: Renamer:133
+msgid "Day of month"
+msgstr "日付"
+
+#: Renamer:134
+msgid "Full date, e.g., 24Sep2008"
+msgstr "日付（例:24092008、24Sep2008）"
+
+#: Renamer:135
+msgid "Numerical month of year"
+msgstr "月の数字"
+
+#: Renamer:136
+msgid "Year, e.g., 1990"
+msgstr "年（例:1990）"
+
+#: Renamer:137
+msgid "Full month name, e.g., August"
+msgstr "長い月名（例:8月、August）"
+
+#: Renamer:138
+msgid "Simple month name, e.g., Aug"
+msgstr "短い月名（例:8月、Aug）"
+
+#: Renamer:139
+msgid "Full day name, e.g., Monday"
+msgstr "長い曜日（例:月曜日、Monday）"
+
+#: Renamer:140
+msgid "Simple dayname, e.g., Mon"
+msgstr "短い曜日(例:月、Mon）"
+
+#: Renamer:141
+msgid "{num5} => 00001, 00002, 00003 , ..."
+msgstr "{num5} => 00001, 00002, 00003 , ..."
+
+#: Renamer:142
+msgid "{num5+5} => 00005, 00006, 00007 , ..."
+msgstr "{num5+5} => 00005, 00006, 00007 , ..."
+
+#: Renamer:143
+msgid "A random number from 10 to 99"
+msgstr "10から99までのランダムな数字"
+
+#: Renamer:171
+msgid "_Extension"
+msgstr ""
+
+#: Renamer:172
+msgid "_Recursive"
+msgstr "再帰的"
+
+#: Renamer:173
+msgid "Also operate on extensions"
+msgstr ""
+
+#: Renamer:174
+msgid "Also operate on subfolders and files"
+msgstr "サブフォルダやファイルに対し再帰的に適用"
+
+#: Renamer:176
+msgid "Refresh Previe_w"
+msgstr "プレビューを更新(_W)"
+
+#: Renamer:199
+msgid "Original Name"
+msgstr "元の名前"
+
+#: Renamer:209
+msgid "New Name"
+msgstr "新しい名前"
+
+#: Renamer:218
+msgid "Pre_view"
+msgstr "プレビュー(_V)"
+
+#: Renamer:280
+msgid ""
+"<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
+"available pattens.</span>"
+msgstr ""
+"<span size='small'>ファイルをパターンでリネームします。<b>?</b>をクリックすると利用可能なパターンが表示されます。</span>"
+
+#: Renamer:282
+msgid "Enter the pattern here ... "
+msgstr "パターンを入力してください "
+
+#: Renamer:309
+msgid "Enter the word (phrase) to be replaced here ..."
+msgstr "ここに置換対象の文字列を入力してください"
+
+#: Renamer:313
+msgid "Enter the word to replace with here ... "
+msgstr "ここに置換後の文字列を入力してください "
+
+#: Renamer:332
+msgid "ALL IN CAPITALS"
+msgstr "全て大文字"
+
+#: Renamer:333
+msgid "all in lower case"
+msgstr "全て小文字"
+
+#: Renamer:334
+msgid "First letter upper case"
+msgstr "文頭の文字を大文字に"
+
+#: Renamer:335
+msgid "Title Case"
+msgstr "語頭の文字を大文字に"
+
+#: Renamer:336
+msgid "Capital Case After ..."
+msgstr ""
+
+#: Renamer:356
+msgid "Choose One"
+msgstr "1つを選択してください"
+
+#: Renamer:384
+msgid "<b>Undo the last operation inside this folder.</b>"
+msgstr "<b>このフォルダーに適用した最後の操作前の段階に戻します。</b>"
+
+#: Renamer:385
+msgid ""
+"<span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
+msgstr "<span color='grey' size='small'>注意:1つだけ元に戻すことはできません。</span>"
+
+#: Renamer:387
+msgid ""
+"<span color='red' weight='bold'>No log file is found in this folder.</span>"
+msgstr "<span color='red' weight='bold'>このフォルダーの操作ログが見つかりませんでした。</span>"
+
+#: Renamer:388
+msgid ""
+"<span color='grey' size='small'>Note: When it renames files, Renamer writes "
+"a log file, namely "
+msgstr "<span color='grey' size='small'>注釈:ファイル名を変更したとき、Renamerは操作ログを残します。 "
+
+#: Renamer:389
+msgid ", in the folder it was launched, which is used for Undo.</span>"
+msgstr "ファイルが見つかった場合、元に戻す操作に使用されます。</span>"
+
+#: Renamer:401
+msgid "Capitalize after: "
+msgstr ""
+
+#: Renamer:405
+msgid "_First Letter"
+msgstr ""
+
+#: Renamer:415
+msgid ""
+"Enter the list of sequences, to capitalize the letter after each of it, "
+"separated by '/'"
+msgstr ""
+
+#: Renamer:416
+msgid "Capitalize the first letter"
+msgstr ""
+
+#: Renamer:552
+msgid "No file selected"
+msgstr "ファイルが選択されていません"
+
+#: Renamer:552
+msgid "Please, select some files first."
+msgstr "最初にファイルを選択してください。"
+
+#: Renamer:564
+msgid "Empty Pattern"
+msgstr "パターン欄が空です"
+
+#: Renamer:565
+msgid "Please, enter a valid pattern."
+msgstr "有効なパターンを入力してください。"
+
+#: Renamer:586
+msgid "Empty Word"
+msgstr "文字列欄が空です"
+
+#: Renamer:587
+msgid "Please enter a valid word to be replaced."
+msgstr "置換対象に有効な文字列を入力してください。"
+
+#: Renamer:616
+msgid "Rename successful"
+msgstr "ファイル名の変更が完了しました"
+
+#: Renamer:617
+#, python-format
+msgid "renamed %d files successfully."
+msgstr "%dファイルが変更されました。"
+
+#: Renamer:635
+msgid "File Already Exists"
+msgstr "ファイルは既に存在します"
+
+#: Renamer:636
+msgid " already exists. Use Undo to revert."
+msgstr " 既に存在します。元に戻してください。"
+
+#: Renamer:746
+msgid "Not Enough Random Number Range"
+msgstr "ランダムな数の範囲が不足しています"
+
+#: Renamer:747
+msgid "Please, use a larger range"
+msgstr "もっと大きな範囲を指定してください"
+
+#: Renamer:780
+msgid "Undo Failed"
+msgstr "元に戻せませんでした"
+
+#: Renamer:781
+msgid "Log file not found"
+msgstr "操作ログファイルが見つかりません"
+
+#: Renamer:798
+msgid "Undo successful"
+msgstr "元に戻すのに成功しました"
+
+#: Renamer:799
+#, python-format
+msgid "%d files restored."
+msgstr "%dファイルが戻されました"
