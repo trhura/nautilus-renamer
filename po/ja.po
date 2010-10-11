@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-09-17 20:59+0800\n"
-"PO-Revision-Date: 2010-10-03 15:54+0000\n"
+"PO-Revision-Date: 2010-10-10 16:16+0000\n"
 "Last-Translator: tylg <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-04 05:07+0000\n"
+"X-Launchpad-Export-Date: 2010-10-11 04:55+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: Renamer:94
@@ -184,17 +184,17 @@ msgstr "<span color='grey' size='small'>注意:1つだけ元に戻すことは�
 #: Renamer:387
 msgid ""
 "<span color='red' weight='bold'>No log file is found in this folder.</span>"
-msgstr "<span color='red' weight='bold'>このフォルダーの操作ログが見つかりませんでした。</span>"
+msgstr "<span color='red' weight='bold'>操作ログが見つかりません。</span>"
 
 #: Renamer:388
 msgid ""
 "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
 "a log file, namely "
-msgstr "<span color='grey' size='small'>注釈:ファイル名を変更したとき、Renamerは操作ログを残します。 "
+msgstr "<span color='grey' size='small'>注釈:ファイル名を変更すると、Renamerは操作ログを残します。 "
 
 #: Renamer:389
 msgid ", in the folder it was launched, which is used for Undo.</span>"
-msgstr "ファイルが見つかった場合、元に戻す操作に使用されます。</span>"
+msgstr "ファイルが見つかると、元に戻す操作に使用されます。</span>"
 
 #: Renamer:401
 msgid "Capitalize after: "
