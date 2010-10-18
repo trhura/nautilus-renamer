@@ -84,8 +84,10 @@ class Application():
         self.pattern  = None
         self.logFile  = None
         self.num = 0
-        self.num_pat = re.compile(r'(\/num\d*\/|(\/num\d*\+\d*\/))')
-        self.ran_pat = re.compile (r'\/rand\d*-\d*\/')
+        self.num_pat = re.compile(r'\/num\d+(\+\d+)?\/')
+        self.ran_pat = re.compile (r'\/rand\d+-\d+\/')
+        self.name_slice = re.compile (r'\/name:-?\d+(:-?\d+)?\/')
+        self.filename_slice = re.compile (r'\/filename:-?\d+(:-?\d+)?\/')
         self.ran_seq = []
         self.filesRenamed = 0
         self.pmodel = gtk.ListStore (gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -636,7 +638,8 @@ class Application():
                              newName + _(" already exists. Use Undo to revert."),\
                              ICONS_PATH  + 'error.png',NOTIFICATION_TIMEOUT)
                 self.exit()
-                                
+
+            print path, newPath
             os.rename (path, newPath)
             self.logFile.write ('%s%s%s\n' %(oldPath, LOG_SEP,newPath))
             self.filesRenamed = self.filesRenamed + 1
@@ -761,6 +764,48 @@ class Application():
             newName = newName.replace('/dir/', dirname)
             newName = newName.replace('/name/', name)
             newName = newName.replace('/ext/', ext)
+
+            #for /name:offset(:length)/
+            if self.name_slice.search(newName):
+                tmp = self.name_slice.search(newName).group()
+                tmp = tmp[:-1].split (':')
+                if len(tmp) ==  2:
+                    tmp, offset = tmp
+                    offset = int(offset)
+                    if offset < 0:
+                        substitute = name[:offset]
+                    else:
+                        substitute = name[offset:] 
+                else:
+                    tmp, offset, length = tmp
+                    offset = int(offset)
+                    length = int(length)
+                    if length < 0:
+                        substitute = name[offset+length:offset]
+                    else:
+                        substitute = name[offset:offset+length]
+                newName    = self.name_slice.sub(substitute, newName)
+                
+            #for /filename:offset(:length)/
+            if self.filename_slice.search(newName):
+                tmp = self.filename_slice.search(newName).group()
+                tmp = tmp[:-1].split (':')
+                if len(tmp) ==  2:
+                    tmp, offset = tmp
+                    offset = int(offset)
+                    if offset < 0:
+                        substitute = oldName[:offset]
+                    else:
+                        substitute = oldName[offset:] 
+                else:
+                    tmp, offset, length = tmp
+                    offset = int(offset)
+                    length = int(length)
+                    if length < 0:
+                        substitute = oldName[offset+length:offset]
+                    else:
+                        substitute = oldName[offset:offset+length]
+                newName    = self.filename_slice.sub(substitute, newName)
 
             #Some Time/Date Replacements
             newName = newName.replace('/date/', time.strftime('%d%b%Y', time.localtime()))
