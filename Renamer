@@ -19,6 +19,7 @@ GNU General Public License for more details.
 import os
 import sys
 import re
+import fnmatch
 import time
 import mmap
 import string
@@ -87,7 +88,8 @@ class Application():
         self.num_pat = re.compile(r'\/num\d+(\+\d+)?\/')
         self.ran_pat = re.compile (r'\/rand\d+-\d+\/')
         self.name_slice = re.compile (r'\/name:-?\d+(:-?\d+)?\/')
-        self.filename_slice = re.compile (r'\/filename:-?\d+(:-?\d+)?\/')
+        self.filename_slice = re.compile (r'\/filename:-?\d+(:-?\d+)?\/') 
+        self.filename_delete = re.compile (r'\/filename-.*/')
         self.ran_seq = []
         self.filesRenamed = 0
         self.pmodel = gtk.ListStore (gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -639,7 +641,6 @@ class Application():
                              ICONS_PATH  + 'error.png',NOTIFICATION_TIMEOUT)
                 self.exit()
 
-            print path, newPath
             os.rename (path, newPath)
             self.logFile.write ('%s%s%s\n' %(oldPath, LOG_SEP,newPath))
             self.filesRenamed = self.filesRenamed + 1
@@ -807,6 +808,37 @@ class Application():
                         substitute = oldName[offset:offset+length]
                 newName    = self.filename_slice.sub(substitute, newName)
 
+                
+            # -pattern remove matching pattern
+            if self.filename_delete.search (newName):
+                tmp = self.filename_delete.search(newName).group()
+                tmp = tmp [10:-1]
+                pattern = re.compile (tmp)
+                substitute = oldName 
+                
+                if pattern.search (oldName):
+                    find = pattern.search (oldName).group ()
+                    substitute = oldName.replace (find, '')
+                    
+                newName = self.filename_delete.sub(substitute, newName)
+
+            # if self.filename_delete_prefix.search (newName):
+            #     tmp = self.filename_delete_prefix.search(newName).group()
+            #     tmp = tmp[10:-1] # trim unnecessary stuff
+            #     if tmp[0] == '#':
+            #         # delete longest matching pattern
+            #         pattern = re.compile (tmp[1:])
+            #         if pattern.findall (oldName):
+            #             find = pattern.findall (oldName)[-1]
+            #             pos = oldName.rfind (find)
+            #     else:
+            #         # delete shortest matching pattern
+            #         pattern = re.compile (tmp)
+            #         if pattern.findall (oldName):
+            #             find = pattern.findall (oldName)[0]
+            #             pos = oldName.find (find)
+                        
+                
             #Some Time/Date Replacements
             newName = newName.replace('/date/', time.strftime('%d%b%Y', time.localtime()))
             newName = newName.replace('/year/', time.strftime('%Y', time.localtime()))
