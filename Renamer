@@ -583,18 +583,27 @@ class Application():
 
         elif self.action == SUBSTITUTE:
             # prepare substitute related options, and check for possible errors
-            self.replee = self.sub_replee.get_text ()
-            self.repler = self.sub_repler.get_text ()
+            replee = self.sub_replee.get_text ()
+            repler = self.sub_repler.get_text ()
 
-            if self.replee == self.sub_replee.label or self.replee == '':
+            if replee == self.sub_replee.label or replee == '':
                 self.notify(_("Empty Word"),\
                             _("Please enter a valid word to be replaced."),\
                             ICONS_PATH  + 'warning.png',NOTIFICATION_TIMEOUT)
                 return False
+
+            if repler == self.sub_repler.label:
+               repler = ''
+
+            self.replees = replee.split ('/')
+            self.replers = repler.split ('/')
+
+            if len(self.replees) != len(self.replers):
+                self.notify(_("Foo Error"),\
+                            _("Foo Error"),\
+                            ICONS_PATH  + 'warning.png',NOTIFICATION_TIMEOUT)
+                return False
                 
-            if self.repler == self.sub_repler.label:
-                self.repler = ''    
-        
         return True
     
     def rename (self, files):
@@ -676,11 +685,22 @@ class Application():
 
         if self.action == SUBSTITUTE:
             #TODO: Regex Support ?
+
             if self.ext:
-                return oldName.replace (self.replee, self.repler)
+                newName = oldName
             else:
                 name, ext = os.path.splitext (oldName)
-                return name.replace (self.replee, self.repler ) + ext               
+                newName = name
+
+            for i in xrange (0, len(self.replees)):
+                # print self.replees[i], self.replers[i]
+                pattern = re.compile (self.replees[i])
+                newName = pattern.sub (self.replers[i], newName)
+
+            if self.ext:
+                return newName
+            else:
+                return newName + ext               
 
         if self.action == CASING:
             if self.ext:
@@ -693,7 +713,7 @@ class Application():
 
             elif self.case_opt == ALL_LOW:
                 name = name.lower()
-
+                
             elif self.case_opt == FIRST_CAP:
                 name = name.capitalize()
 
@@ -808,37 +828,7 @@ class Application():
                         substitute = oldName[offset:offset+length]
                 newName    = self.filename_slice.sub(substitute, newName)
 
-                
-            # -pattern remove matching pattern
-            if self.filename_delete.search (newName):
-                tmp = self.filename_delete.search(newName).group()
-                tmp = tmp [10:-1]
-                pattern = re.compile (tmp)
-                substitute = oldName 
-                
-                if pattern.search (oldName):
-                    find = pattern.search (oldName).group ()
-                    substitute = oldName.replace (find, '')
-                    
-                newName = self.filename_delete.sub(substitute, newName)
 
-            # if self.filename_delete_prefix.search (newName):
-            #     tmp = self.filename_delete_prefix.search(newName).group()
-            #     tmp = tmp[10:-1] # trim unnecessary stuff
-            #     if tmp[0] == '#':
-            #         # delete longest matching pattern
-            #         pattern = re.compile (tmp[1:])
-            #         if pattern.findall (oldName):
-            #             find = pattern.findall (oldName)[-1]
-            #             pos = oldName.rfind (find)
-            #     else:
-            #         # delete shortest matching pattern
-            #         pattern = re.compile (tmp)
-            #         if pattern.findall (oldName):
-            #             find = pattern.findall (oldName)[0]
-            #             pos = oldName.find (find)
-                        
-                
             #Some Time/Date Replacements
             newName = newName.replace('/date/', time.strftime('%d%b%Y', time.localtime()))
             newName = newName.replace('/year/', time.strftime('%Y', time.localtime()))
