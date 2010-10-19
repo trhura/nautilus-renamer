@@ -19,7 +19,6 @@ GNU General Public License for more details.
 import os
 import sys
 import re
-import fnmatch
 import time
 import mmap
 import string
@@ -310,12 +309,15 @@ class Application():
         self.lbox.foreach (self.remove)
 
         self.sub_replee = gtk.Entry ()
-        self.sub_replee.label =  _("Enter the word (phrase) to be replaced here ...")
+        self.sub_replee.label =  _("Words to be replaced separated by \"/\", e.g., 1/2 ...")
         self.prepare_entry (self.sub_replee)
 
         self.sub_repler = gtk.Entry ()
-        self.sub_repler.label = _("Enter the word to replace with here ... ")
+        self.sub_repler.label = _("Corresponding words to replace with, e.g., one/two ...")
         self.prepare_entry (self.sub_repler)
+
+        self.sub_replee.set_tooltip_text (_("Enter the words (regular expressions) to be replaced, separated by '/'"))
+        self.sub_repler.set_tooltip_text (_("Enter the corresponding words to replace with"))
 
         self.lbox.pack_start (self.sub_replee, True, True, 0)
         self.lbox.pack_start (self.sub_repler, True, True, 0)
@@ -385,12 +387,9 @@ class Application():
         und_label.set_alignment (0.1, -1)        
         
         if self.log_file_p():
-            und_label.set_markup (_("<b>Undo the last operation inside this folder.</b>") + "\n\n" +
-                                  _("<span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"))
-        else: #FIXME: 
-            und_label.set_markup (_("<span color='red' weight='bold'>No log file is found in this folder.</span>" )+ "\n\n" +
-                                  _("<span color='grey' size='small'>Note: When it renames files, Renamer writes a log file, namely ") +
-                                   UNDO_LOG_FILE + _(", in the folder it was launched, which is used for Undo.</span>"))
+            und_label.set_markup (_("<b>Undo the last operation inside this folder.</b>\n\n <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"))
+        else: 
+            und_label.set_markup (_("<span color='red' weight='bold'>No log file is found in this folder.</span>\n\n<span color='grey' size='small'>Note: When it renames files, Renamer writes a log file, in the folder it was launched, which is used for Undo.</span>"))
 
         self.lbox.pack_start (und_label, True, True, 0)
         self.lbox.show_all ()
@@ -553,7 +552,7 @@ class Application():
         
         if not files:
             # No files to rename
-            self.notify (_("No file selected"), _("Please, select some files first."), ICONS_PATH + 'info.png', NOTIFICATION_TIMEOUT)
+            self.show_error (_("No file selected"), _("Please, select some files first."))
             return False
 
         self.recur = self.recur_cb.get_active ()
@@ -565,11 +564,9 @@ class Application():
             self.num = 0
 
             if self.pattern == '' or self.pattern == self.pat_entry.label:
-                self.notify (_("Empty Pattern"), \
-                             _("Please, enter a valid pattern."), \
-                             ICONS_PATH + 'warning.png', NOTIFICATION_TIMEOUT)
+                self.show_error (_("Empty Pattern"), _("Please, enter a valid pattern."))
                 return False
-
+            
             if self.num_pat.search(self.pattern):
                 #if the pattern contains /num*/ or /num*+*/, disable recursion
                 self.recur = False
@@ -587,9 +584,7 @@ class Application():
             repler = self.sub_repler.get_text ()
 
             if replee == self.sub_replee.label or replee == '':
-                self.notify(_("Empty Word"),\
-                            _("Please enter a valid word to be replaced."),\
-                            ICONS_PATH  + 'warning.png',NOTIFICATION_TIMEOUT)
+                self.show_error (_("Empty Word"), _("Please enter a valid word to be replaced."))
                 return False
 
             if repler == self.sub_repler.label:
@@ -597,12 +592,6 @@ class Application():
 
             self.replees = replee.split ('/')
             self.replers = repler.split ('/')
-
-            if len(self.replees) != len(self.replers):
-                self.notify(_("Foo Error"),\
-                            _("Foo Error"),\
-                            ICONS_PATH  + 'warning.png',NOTIFICATION_TIMEOUT)
-                return False
                 
         return True
     
@@ -645,9 +634,7 @@ class Application():
         if not path == newPath:
             # No need to rename if path (old) = newPath
             if os.path.exists (newPath):
-                self.notify (_("File Already Exists"),\
-                             newName + _(" already exists. Use Undo to revert."),\
-                             ICONS_PATH  + 'error.png',NOTIFICATION_TIMEOUT)
+                self.show_error (_("File Already Exists"), _(" already exists. Use Undo to revert."))
                 self.exit()
 
             os.rename (path, newPath)
@@ -693,9 +680,13 @@ class Application():
                 newName = name
 
             for i in xrange (0, len(self.replees)):
-                # print self.replees[i], self.replers[i]
+                # print self.replees[i], self.replers[i] 
                 pattern = re.compile (self.replees[i])
-                newName = pattern.sub (self.replers[i], newName)
+                if i < len (self.replers):
+                    newName = pattern.sub (self.replers[i], newName)
+                else:
+                    # if there is no corresponding word to replace, use the last one
+                    newName = pattern.sub (self.replers[-1], newName)
 
             if self.ext:
                 return newName
@@ -767,9 +758,8 @@ class Application():
                 if not self.ran_seq:
                     # if random number sequence is None
                     print "Not Enought Random Number Range"
-                    self.notify (_("Not Enough Random Number Range"),
-                                 _("Please, use a larger range"),
-                                 ICONS_PATH + "warning.png", NOTIFICATION_TIMEOUT)
+                    self.show_error (_("Not Enough Random Number Range"), _("Please, use a larger range"))
+                    sys.exit (1)
                     return False
                     
                 randint = random.choice (self.ran_seq)
@@ -860,9 +850,7 @@ class Application():
     def undo (self):
         """ Restore previously renamed files back according to the log file. """
         if not self.log_file_p ():
-            self.notify(_("Undo Failed"),\
-                        _("Log file not found"),\
-                         ICONS_PATH  + 'error.png',5000)
+            self.show_error (_("Undo Failed"), _("Log file not found"))
             self.exit()
         
         logFile = open (UNDO_LOG_FILE, 'rb')    
@@ -902,6 +890,9 @@ class Application():
 
     def close_log (self):
         """ Close log file, and insert total files renamed."""
+        if not self.logFile:
+            return
+        
         self.logFile.close ()
 
         with open (UNDO_LOG_FILE, 'r+b') as file:
@@ -924,6 +915,12 @@ class Application():
         
         sys.exit (1)
 
+    def show_error (self, title, message):
+        dialog = gtk.MessageDialog (type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE)
+        dialog.set_markup ("<b>%s</b>\n\n%s"%(title, message))
+        dialog.run ()
+        dialog.destroy ()
+        
     def notify(self, title,text,iconpath,time):
         """ Wrapper to display notifications with timeout time. """
         if not pynotify.init("Renamer"):
@@ -964,10 +961,9 @@ if __name__ == '__main__':
 	files = [file for file in sys.argv[1:]]
 	
 	app = Application ()
-	ret = app.dialog.run ()
-	
-	if ret == gtk.RESPONSE_OK:
-		app.rename (files)
+
+	while (app.dialog.run () == gtk.RESPONSE_OK):
+            app.rename (files)
 
 
 

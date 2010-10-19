@@ -1,11 +1,8 @@
 TODO
 ----
 * Translations
-* slice original names like /name:offset:length/
 * Remove matching prefix /name#word/, /name##word/
 * Remove matching suffix /name%word/, /name%%word/
-* Substitution /name/pattern/string/
 * More Testing
-* Regex support for substitution
 * More features ?
 * Convert to nautilus plugin ?
