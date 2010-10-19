@@ -748,22 +748,22 @@ class Application():
             newName = self.pattern
             
             #for number substiution
-            if self.num_pat.search(newName):
-                tmp = self.num_pat.search(newName).group()
+            for match in self.num_pat.finditer (newName):
+                tmp = match.group()
                 #print tmp
                 #if /num?/
                 if len(tmp)== 6:
                     substitute = str(self.num).zfill(int(tmp[4]))
-                    newName    = self.num_pat.sub(substitute, newName)
+                    newName    = self.num_pat.sub(substitute, newName, 1)
                     self.num   = self.num + 1
                 #if /num?+?/
                 elif len(tmp) > 7:
                     substitute = str(self.num+int(tmp[6:(len(tmp)-1)])).zfill(int(tmp[4]))
-                    newName    = self.num_pat.sub(substitute, newName)
+                    newName    = self.num_pat.sub(substitute, newName, 1)
                     self.num   = self.num + 1
             
             # for random number insertion
-            if self.ran_pat.search(newName):
+            for match in self.ran_pat.finditer (newName):
                 if not self.ran_seq:
                     # if random number sequence is None
                     print "Not Enought Random Number Range"
@@ -774,7 +774,7 @@ class Application():
                     
                 randint = random.choice (self.ran_seq)
                 self.ran_seq.remove (randint)
-                newName = self.ran_pat.sub (str(randint), newName)
+                newName = self.ran_pat.sub (str(randint), newName, 1)
                 
             dir, file = os.path.split (os.path.abspath(oldName))
             name, ext = os.path.splitext (file)
@@ -787,9 +787,10 @@ class Application():
             newName = newName.replace('/ext/', ext)
 
             #for /name:offset(:length)/
-            if self.name_slice.search(newName):
-                tmp = self.name_slice.search(newName).group()
+            for match in self.name_slice.finditer (newName):
+                tmp = match.group ()
                 tmp = tmp[:-1].split (':')
+
                 if len(tmp) ==  2:
                     tmp, offset = tmp
                     offset = int(offset)
@@ -802,15 +803,23 @@ class Application():
                     offset = int(offset)
                     length = int(length)
                     if length < 0:
-                        substitute = name[offset+length:offset]
+                        if offset  == 0:
+                            substitute = name[offset+length:]
+                        else:
+                            substitute = name[offset+length:offset]
                     else:
-                        substitute = name[offset:offset+length]
-                newName    = self.name_slice.sub(substitute, newName)
+                        if (len(name[offset:]) > length):
+                            substitute = name[offset:offset+length]
+                        else:
+                            substitute = name[offset:]
+                            
+                newName    = self.name_slice.sub (substitute, newName, 1)
                 
             #for /filename:offset(:length)/
-            if self.filename_slice.search(newName):
-                tmp = self.filename_slice.search(newName).group()
+            for match in self.filename_slice.finditer (newName):
+                tmp = match.group ()
                 tmp = tmp[:-1].split (':')
+
                 if len(tmp) ==  2:
                     tmp, offset = tmp
                     offset = int(offset)
@@ -823,10 +832,17 @@ class Application():
                     offset = int(offset)
                     length = int(length)
                     if length < 0:
-                        substitute = oldName[offset+length:offset]
+                        if offset  == 0:
+                            substitute = oldName[offset+length:]
+                        else:
+                            substitute = oldName[offset+length:offset]
                     else:
-                        substitute = oldName[offset:offset+length]
-                newName    = self.filename_slice.sub(substitute, newName)
+                        if (len(name[offset:]) > length):
+                            substitute = name[offset:offset+length]
+                        else:
+                            substitute = name[offset:]
+                            
+                newName    = self.filename_slice.sub(substitute, newName, 1)
 
 
             #Some Time/Date Replacements
