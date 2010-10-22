@@ -1,0 +1,11 @@
+Local Install
+-------------
+
+Run "make -f Makefile.local install"
+
+
+Global Install
+--------------
+
+Coming Soon ......
+

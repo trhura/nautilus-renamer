@@ -1,6 +1,6 @@
 NAUTILUS_SCRIPTS_DIR=~/.gnome2/nautilus-scripts
 
-localinstall: uninstall 
+install: uninstall 
 	mkdir -p $(NAUTILUS_SCRIPTS_DIR)/.rdata
 	cp -Rfv po  $(NAUTILUS_SCRIPTS_DIR)/.rdata/
 	cp -Rfv icon $(NAUTILUS_SCRIPTS_DIR)/.rdata/
@@ -11,10 +11,4 @@ uninstall:
 	rm -rf $(NAUTILUS_SCRIPTS_DIR)/.rdata
 	rm -rf $(NAUTILUS_SCRIPTS_DIR)/Renamer
 
-install:
-	cp nautilus-renamer.py 
-	mkdir 
-clean:
-	rm nautilus-renamer.pyc
-
-.PHONY: all clean localinstall install
+.PHONY: all clean install

@@ -3,7 +3,7 @@
 * Enhance substitute (support regex, multiple substitutions)
 * Fixes patternize (before, some patterns cannot be used more than once)
 * Added filename slicing pattern /filename:offset:length/
-* Use error dialogs, instead of notifications
+* Use dialogs for errors, instead of notifications
 * Don't exists if the error is fixable
 
 2.1 (17 Sep 2010)

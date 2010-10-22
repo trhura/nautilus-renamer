@@ -552,6 +552,10 @@ class Application():
 
         self.recur = self.recur_cb.get_active ()
         self.ext   = self.ext_cb.get_active ()
+
+        if self.action != UNDO and not files:
+            # If it is not undo, and no selected files
+            return False
         
         if self.action == PATTERNIZE:
             # prepare patternize related options, and check for possible errors
@@ -595,6 +599,11 @@ class Application():
         if self.action == UNDO:
             self.undo ()
             return True
+
+        if not files:
+            # No files to rename
+            show_error (_("No file selected"), _("Please, select some files first."))
+            self.exit ()
             
         if not self.prepare_data_from_dialog():
             # if there is any error, return
@@ -952,14 +961,9 @@ if __name__ == '__main__':
 	init_gettext ()
 	
 	files = [file for file in sys.argv[1:]]
-
-        if not files:
-            # No files to rename
-            show_error (_("No file selected"), _("Please, select some files first."))
             
-        else:
-            app = Application ()
+        app = Application ()
             
-            while (app.dialog.run () == gtk.RESPONSE_OK):
-                if app.rename (files):
-                    break
+        while (app.dialog.run () == gtk.RESPONSE_OK):
+            if app.rename (files):
+                break
