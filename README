@@ -31,10 +31,13 @@ You can also slice /filename/ and /name/ using /name:offset:length/. Length is o
 When they are negative, they are manipulated backwards.
 
 "123abc.jpg" => /filename:3/ => "abc.jpg"
-"123abc.jpg" => /name:-3/  => "123"
+"123abc.jpg" => /name:-3/  => "abc"
 "123abc.jpg" => /name:0:-3/  => "abc"
 "123abc.jpg" => /name:-3:3/  => "abc"
 "123abc.jpg" => /name:-3:-3/ => "123"
+"123abc.jpg" => /name:-3:100/ => "abc"
+"123abc.jpg" => /name:-3:-100/ => "123"
+
 
 
 

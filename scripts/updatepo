@@ -7,7 +7,7 @@ import subprocess;
 outfile = 'po/nautilus-renamer.pot'
 pattern = re.compile('^([a-zA-Z_]+)\.po$')
 
-files = ['Renamer']
+files = ['nautilus-renamer.py']
 common_args = ['-o', outfile, '--copyright-holder=Thura Hlaing <trhura@gmail.com>', '--package-name=nautilus-renamer',
 	'--package-version=2.3', '--msgid-bugs-address=trhura@gmail.com']
 
