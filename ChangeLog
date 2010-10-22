@@ -5,6 +5,7 @@
 * Added filename slicing pattern /filename:offset:length/
 * Use dialogs for errors, instead of notifications
 * Don't exists if the error is fixable
+* Get rid of icons (use Stocks)
 
 2.1 (17 Sep 2010)
 -----------------
@@ -18,13 +19,13 @@
 
 2.0 (28 Jul 2010)
 ----------------
-* Added preview 
-* Added Tooltips 
+* Added preview
+* Added Tooltips
 * Code cleanup
 
 1.4 (4 Jun 2010)
 ----------------
-* Added German Translation  by Jan-Christoph Borchardt 
+* Added German Translation  by Jan-Christoph Borchardt
 
 1.3 (30 Mar 2010)
 ----------------
@@ -74,6 +75,4 @@
 ----
 * GUI Added ...
 * Fix some bugs ...
-* Planning to add more functions
-
-
+* Planning to add more functions 

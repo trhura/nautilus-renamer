@@ -1,7 +1,7 @@
 Local Install
 -------------
 
-Run "make -f Makefile.local install"
+Run "make install"
 
 
 Global Install

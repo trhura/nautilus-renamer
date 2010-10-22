@@ -29,6 +29,7 @@ pygtk.require ('2.0')
 import locale, gettext
 
 import gtk
+import glib
 import pango
 import gobject
 import pynotify
@@ -48,31 +49,24 @@ NOTIFICATION_TIMEOUT =  -1              # notification timeout, pynotify.EXPIRES
 PATTERNIZE, SUBSTITUTE, CASING, UNDO = range (4)
 ALL_CAP, ALL_LOW, FIRST_CAP, EACH_CAP, CAP_AFTER = range (5)
 
-# data, icons directories
-# BASE_DIR    =  os.environ.get("HOME") + '/.gnome2/nautilus-scripts/' + DATA_DIR
+# dir to store application state, recent patterns ... 
+CONFIG_DIR = os.path.join (glib.get_user_data_dir (), "nautilus-renamer")
 
-not_installed_dir = os.path.dirname(os.path.realpath(__file__))
-if os.path.exists(not_installed_dir + '/po') and \
-   os.path.exists(not_installed_dir + '/icon'):
-    # default base dir, when it is not installed yet
-    BASE_DIR = not_installed_dir
-elif os.path.exists(os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata')):
-    # default base dir, when it is installed as a user script 
-    BASE_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata')
-else:
-    for directory in [sys.prefix, sys.prefix + '/local']:
-    # when it is installed systemwide, to use with nautilus-scripts-manager
-        installed_root_dir = directory + '/share'
-        if os.path.exists(installed_root_dir + '/nautilus-renamer/po') and \
-           os.path.exists(installed_root_dir + '/nautilus-renamer/icon'):
-           BASE_DIR = installed_root_dir + '/nautilus-renamer'
-           break
-                        
-ICONS_PATH = os.path.join(BASE_DIR, 'icon/')
-
-# gettext
 APP = 'nautilus-renamer'
-DIR = os.path.join(BASE_DIR, 'po')
+
+not_installed_dir = os.path.dirname(os.path.realpath(__file__)) 
+if os.path.exists(not_installed_dir + '/po'):
+    # po dir, when it is not installed yet
+    PO_DIR = not_installed_dir + '/po'
+    
+elif os.path.exists(os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')):
+    # po dir, when it is installed as a user script 
+    PO_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')
+
+else:
+    PO_DIR = None 
+
+
 
 class Application():
 
@@ -89,6 +83,7 @@ class Application():
         self.name_slice = re.compile (r'\/name:-?\d+(:-?\d+)?\/')
         self.filename_slice = re.compile (r'\/filename:-?\d+(:-?\d+)?\/') 
         self.filename_delete = re.compile (r'\/filename-.*/')
+        self.a_pattern = re.compile (r'\/.*\/') #used to check invalid patterns
         self.ran_seq = []
         self.filesRenamed = 0
         self.pmodel = gtk.ListStore (gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -236,7 +231,7 @@ class Application():
         self.dialog.vbox.add (malign)
 
         self.dialog.set_default_size (DEFAULT_WIDTH, DEFAULT_HEIGHT)
-        self.dialog.set_icon_from_file (ICONS_PATH + 'renamer.png')
+        self.dialog.set_icon_name (gtk.STOCK_EDIT)
         self.dialog.show_all ()
                 
         pat_rb.connect ('toggled', self.prepare_pat_options)
@@ -621,7 +616,7 @@ class Application():
 
         self.notify(_("Rename successful"),\
                     _("renamed %d files successfully.") % self.filesRenamed,\
-                    ICONS_PATH  + 'success.png',NOTIFICATION_TIMEOUT)
+                     gtk.STOCK_APPLY,NOTIFICATION_TIMEOUT)
 
         return True
 
@@ -653,7 +648,7 @@ class Application():
                 
     def _write_recent_pats (self):
         """ Store recent patterns """
-        with open (BASE_DIR + REC_FILE, 'w') as file:
+        with open (os.path.join (CONFIG_DIR, REC_FILE), 'w') as file:
             i = 1
             cpat = self.pat_entry.get_text()
             file.write (cpat + '\n' ) 
@@ -667,7 +662,7 @@ class Application():
         self.pats = gtk.ListStore (gobject.TYPE_STRING)
 
         try:
-            with open (BASE_DIR + REC_FILE, 'r') as file:
+            with open (os.path.join (CONFIG_DIR, REC_FILE), 'r') as file:
                 for pat in file:
                     self.pats.append ([pat[:-1]])
         except:
@@ -677,8 +672,6 @@ class Application():
         """ return a new name, based on the old name, and settings from our dialog. """
 
         if self.action == SUBSTITUTE:
-            #TODO: Regex Support ?
-
             if self.ext:
                 newName = oldName
             else:
@@ -844,7 +837,7 @@ class Application():
             newName = newName.replace('/day/', time.strftime('%d', time.localtime()))
             newName = newName.replace('/dayname/', time.strftime('%A', time.localtime()))
             newName = newName.replace('/daysimp/', time.strftime('%a', time.localtime()))
-
+            
             return newName
 
     def undo (self):
@@ -868,7 +861,7 @@ class Application():
         os.remove (UNDO_LOG_FILE)
         self.notify(_("Undo successful"),\
                     _("%d files restored.") % self.filesRenamed, \
-                    ICONS_PATH  + 'success.png',5000)
+                    gtk.STOCK_APPLY,5000)
         
     def log_file_p (self):
         """ Check for log file in current folder, 
@@ -949,12 +942,12 @@ def init_gettext ():
 		
         langs = ['en_US', 'de_DE', 'fi_FI', 'fr_FR']
 	
-	gettext.bindtextdomain(APP, DIR)
+	gettext.bindtextdomain(APP, PO_DIR)
 	gettext.textdomain(APP) 
 	
-	lang = gettext.translation (APP, DIR, languages=langs, fallback=True)
+	lang = gettext.translation (APP, PO_DIR, languages=langs, fallback=True)
 	_ = lang.gettext
-	gettext.install (APP, DIR)
+	gettext.install (APP, PO_DIR)
 	
 if __name__ == '__main__':
 	
