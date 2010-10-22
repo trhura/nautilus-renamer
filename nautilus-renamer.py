@@ -42,7 +42,7 @@ UNDO_LOG_FILE   = '.rlog'               # Name used for Log file
 DATA_DIR        = '.rdata/'             # 
 LOG_SEP         =  ' is converted to '  # Log file separator
 REC_PATS        = 5                     # Remember up to 5 recent patterns
-REC_FILE        = 'rec_pats'            # filename for recent patterns
+REC_FILE        = 'recent_patterns'     # filename for recent patterns
 NOTIFICATION_TIMEOUT =  -1              # notification timeout, pynotify.EXPIRES_DEFAULT
 
 # Fake Enums
@@ -64,9 +64,7 @@ elif os.path.exists(os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')):
     PO_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')
 
 else:
-    PO_DIR = None 
-
-
+    PO_DIR = None
 
 class Application():
 
@@ -635,7 +633,7 @@ class Application():
         if not path == newPath:
             # No need to rename if path (old) = newPath
             if os.path.exists (newPath):
-                show_error (_("File Already Exists"), _(" already exists. Use Undo to revert."))
+                show_error (_("File Already Exists"), newPath + _(" already exists. Use Undo to revert."))
                 self.exit()
 
             os.rename (path, newPath)
@@ -648,6 +646,9 @@ class Application():
                 
     def _write_recent_pats (self):
         """ Store recent patterns """
+        if not os.path.exists(CONFIG_DIR):
+            os.makedirs (CONFIG_DIR)
+
         with open (os.path.join (CONFIG_DIR, REC_FILE), 'w') as file:
             i = 1
             cpat = self.pat_entry.get_text()
