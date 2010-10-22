@@ -4,7 +4,7 @@ import os;
 import sys;
 import shutil;
 
-top_dir = os.getcwd ()
+top_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append (os.path.join (top_dir, 'scripts'))
 
 try:
@@ -17,6 +17,8 @@ NAUTILUS_SCRIPTS_LOCAL_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts')
 NAUTILUS_SCRIPTS_GLOBAL_DIR = os.path.join (sys.prefix, 'share', 'nautilus-scripts')
 LOCALE_DIR = os.path.join (sys.prefix, 'share', 'locale')
 
+DOC_FILES = ['README', 'COPYING', 'ChangeLog', 'TODO' , 'AUTHORS']
+
 genmo.gen_mo_files (os.path.join (top_dir, 'po'), LOCALE_DIR)
 
 try:
@@ -24,17 +26,21 @@ try:
     copy_to = os.path.join (NAUTILUS_SCRIPTS_GLOBAL_DIR, 'Renamer')
     link_to = os.path.join (NAUTILUS_SCRIPTS_LOCAL_DIR, 'Renamer')
 
-    os.remove (copy_to)
-    os.remove (link_to)
-    
     shutil.copy2 (script, copy_to)
     print "Copying %s to %s ..." % (script, copy_to)
-    
+
+    try:
+        os.remove (link_to)
+    except:
+        pass
+
     os.symlink (copy_to, link_to)
-    print "Creating Symlink %s to %s ..." % (script, copy_to) 
+    print "Creating Symlink %s to %s ..." % (script, copy_to)
+
+    for file in DOC_FILES:
+        copy_to = os.path.join (sys.prefix, 'share', 'doc', file)
+        shutil.copy2 (os.path.join (top_dir, file), copy_to)
+        print "Copying %s to %s ..." % (file, copy_to)
+        
 except:
-    pass 
-
-
-
-
+    print "Install Failed !!!"

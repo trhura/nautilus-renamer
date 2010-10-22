@@ -1,11 +1,13 @@
-2.3
+2.3 (23 Oct 2010)
 ----------------
 * Enhance substitute (support regex, multiple substitutions)
 * Fixes patternize (before, some patterns cannot be used more than once)
 * Added filename slicing pattern /filename:offset:length/
 * Use dialogs for errors, instead of notifications
 * Don't exists if the error is fixable
-* Get rid of icons (use Stocks)
+* Get rid of custom icons (use only gtk stocks)
+* Add systemwide installation
+* More Translation
 
 2.1 (17 Sep 2010)
 -----------------

@@ -1,8 +1,5 @@
 NAUTILUS_SCRIPTS_DIR = ~/.gnome2/nautilus-scripts
 
-define PREFIX python -c 'import sys; print sys.prefix'
-endef
-
 install: uninstall 
 	mkdir -p $(NAUTILUS_SCRIPTS_DIR)/.rdata 
 	./scripts/genmo.py po/ $(NAUTILUS_SCRIPTS_DIR)/.rdata/po/	
@@ -12,7 +9,6 @@ globalinstall:
 	./scripts/install
 
 uninstall:
-
 	rm -rf $(NAUTILUS_SCRIPTS_DIR)/.rdata
 	rm -rf $(NAUTILUS_SCRIPTS_DIR)/Renamer
 

@@ -1,8 +1,8 @@
 TODO
 ----
-* Translations
+* More Translations
+* More Testing
+* More features
 * Remove matching prefix /name#word/, /name##word/
 * Remove matching suffix /name%word/, /name%%word/
-* More Testing
-* More features ?
 * Convert to nautilus plugin ?
