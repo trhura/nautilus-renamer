@@ -931,22 +931,10 @@ def show_error (title, message):
 
 def init_gettext ():
 
-	langs = []
-	lc, encoding = locale.getdefaultlocale()
-	
-	if(lc):
-		langs = [lc]
-	
-	language = os.environ.get('LANGUAGE', None)
-	if(language): 
-		langs += language.split(':')
-		
-        langs = ['en_US', 'de_DE', 'fi_FI', 'fr_FR']
-	
 	gettext.bindtextdomain(APP, PO_DIR)
 	gettext.textdomain(APP) 
 	
-	lang = gettext.translation (APP, PO_DIR, languages=langs, fallback=True)
+	lang = gettext.translation (APP, PO_DIR, fallback=True)
 	_ = lang.gettext
 	gettext.install (APP, PO_DIR)
 	

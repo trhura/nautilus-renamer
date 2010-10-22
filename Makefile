@@ -12,4 +12,4 @@ uninstall:
 	rm -rf $(NAUTILUS_SCRIPTS_DIR)/.rdata
 	rm -rf $(NAUTILUS_SCRIPTS_DIR)/Renamer
 
-.PHONY: all clean install
+.PHONY: install globalinstall uninstall
