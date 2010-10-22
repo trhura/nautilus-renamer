@@ -21,26 +21,28 @@ DOC_FILES = ['README', 'COPYING', 'ChangeLog', 'TODO' , 'AUTHORS']
 
 genmo.gen_mo_files (os.path.join (top_dir, 'po'), LOCALE_DIR)
 
+
+script = os.path.join (top_dir, 'nautilus-renamer.py')
+copy_to = os.path.join (NAUTILUS_SCRIPTS_GLOBAL_DIR, 'Renamer')
+link_to = os.path.join (NAUTILUS_SCRIPTS_LOCAL_DIR, 'Renamer')
+
+shutil.copy2 (script, copy_to)
+print "Copying %s to %s ..." % (script, copy_to)
+
 try:
-    script = os.path.join (top_dir, 'nautilus-renamer.py')
-    copy_to = os.path.join (NAUTILUS_SCRIPTS_GLOBAL_DIR, 'Renamer')
-    link_to = os.path.join (NAUTILUS_SCRIPTS_LOCAL_DIR, 'Renamer')
-
-    shutil.copy2 (script, copy_to)
-    print "Copying %s to %s ..." % (script, copy_to)
-
-    try:
-        os.remove (link_to)
-    except:
-        pass
-
-    os.symlink (copy_to, link_to)
-    print "Creating Symlink %s to %s ..." % (script, copy_to)
-
-    for file in DOC_FILES:
-        copy_to = os.path.join (sys.prefix, 'share', 'doc', file)
-        shutil.copy2 (os.path.join (top_dir, file), copy_to)
-        print "Copying %s to %s ..." % (file, copy_to)
-        
+    os.remove (link_to)
 except:
-    print "Install Failed !!!"
+    pass
+
+os.symlink (copy_to, link_to)
+print "Creating Symlink %s to %s ..." % (script, copy_to)
+
+doc_dir = os.path.join (sys.prefix, 'share', 'doc', 'nautilus-renamer')
+
+if not os.path.exists (doc_dir):
+    os.makedirs (doc_dir)
+    
+for file in DOC_FILES:
+    copy_to = os.path.join (doc_dir, file)
+    shutil.copy2 (os.path.join (top_dir, file), copy_to)
+    print "Copying %s to %s ..." % (file, copy_to) 
