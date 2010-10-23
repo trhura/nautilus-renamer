@@ -6,16 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
 "PO-Revision-Date: 2010-10-10 16:16+0000\n"
 "Last-Translator: tylg <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
-"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-20 05:05+0000\n"
+"X-Launchpad-Export-Date: 2010-10-23 05:03+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: nautilus-renamer.py:97
@@ -135,8 +134,7 @@ msgid ""
 "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
 "available pattens.</span>"
 msgstr ""
-"<span size='small'>ファイルをパターンでリネームします。<b>?</b>をクリックする"
-"と利用可能なパターンが表示されます。</span>"
+"<span size='small'>ファイルをパターンでリネームします。<b>?</b>をクリックすると利用可能なパターンが表示されます。</span>"
 
 #: nautilus-renamer.py:285
 msgid "Enter the pattern here ... "
@@ -147,19 +145,17 @@ msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
 msgstr ""
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Corresponding words to replace with, e.g., one/two ..."
-msgstr "ここに置換後の文字列を入力してください "
+msgstr ""
 
 #: nautilus-renamer.py:319
-#, fuzzy
-msgid "Enter the words (regular expressions) to be replaced, separated by '/'"
-msgstr "ここに置換対象の文字列を入力してください"
+msgid ""
+"Enter the words (regular expressions) to be replaced, separated by '/'"
+msgstr ""
 
 #: nautilus-renamer.py:320
-#, fuzzy
 msgid "Enter the corresponding words to replace with"
-msgstr "ここに置換後の文字列を入力してください "
+msgstr ""
 
 #: nautilus-renamer.py:338
 msgid "ALL IN CAPITALS"
@@ -186,13 +182,11 @@ msgid "Choose One"
 msgstr "1つを選択してください"
 
 #: nautilus-renamer.py:390
-#, fuzzy
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
 " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
 msgstr ""
-"<span color='grey' size='small'>注意:1つだけ元に戻すことはできません。</span>"
 
 #: nautilus-renamer.py:392
 msgid ""
@@ -285,21 +279,3 @@ msgstr "元に戻すのに成功しました"
 #, python-format
 msgid "%d files restored."
 msgstr "%dファイルが戻されました"
-
-#~ msgid "<b>Undo the last operation inside this folder.</b>"
-#~ msgstr "<b>このフォルダーに適用した最後の操作前の段階に戻します。</b>"
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</"
-#~ "span>"
-#~ msgstr "<span color='red' weight='bold'>操作ログが見つかりません。</span>"
-
-#~ msgid ""
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer "
-#~ "writes a log file, namely "
-#~ msgstr ""
-#~ "<span color='grey' size='small'>注釈:ファイル名を変更すると、Renamerは操作"
-#~ "ログを残します。 "
-
-#~ msgid ", in the folder it was launched, which is used for Undo.</span>"
-#~ msgstr "ファイルが見つかると、元に戻す操作に使用されます。</span>"
