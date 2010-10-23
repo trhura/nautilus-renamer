@@ -9,6 +9,11 @@
 * Add system-wide installation
 * More Translations (Thanks to all contributors ;)
 
+2.2 (17 Sep 2010)
+-----------------
+* Fixed bug #641191 
+* Report errors on preview
+
 2.1 (17 Sep 2010)
 -----------------
 * Check for any existed file before renaming, abort if there is
