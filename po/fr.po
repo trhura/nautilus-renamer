@@ -6,16 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
 "PO-Revision-Date: 2010-08-29 15:57+0000\n"
 "Last-Translator: David Bosman <david.bosman@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-20 05:05+0000\n"
+"X-Launchpad-Export-Date: 2010-10-23 05:03+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: nautilus-renamer.py:97
@@ -145,19 +144,17 @@ msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
 msgstr ""
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Corresponding words to replace with, e.g., one/two ..."
-msgstr "Entrez le mot avec lequel le remplacer ici... "
+msgstr ""
 
 #: nautilus-renamer.py:319
-#, fuzzy
-msgid "Enter the words (regular expressions) to be replaced, separated by '/'"
-msgstr "Entrez le mot (phrase) devant être remplacé ici..."
+msgid ""
+"Enter the words (regular expressions) to be replaced, separated by '/'"
+msgstr ""
 
 #: nautilus-renamer.py:320
-#, fuzzy
 msgid "Enter the corresponding words to replace with"
-msgstr "Entrez le mot avec lequel le remplacer ici... "
+msgstr ""
 
 #: nautilus-renamer.py:338
 msgid "ALL IN CAPITALS"

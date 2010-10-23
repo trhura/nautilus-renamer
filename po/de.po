@@ -6,16 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.3\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
 "PO-Revision-Date: 2010-09-18 16:58+0000\n"
 "Last-Translator: Jan-Christoph Borchardt <JanCBorchardt@gmail.com>\n"
 "Language-Team: German\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-20 05:05+0000\n"
+"X-Launchpad-Export-Date: 2010-10-23 05:03+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: nautilus-renamer.py:97
@@ -147,19 +146,17 @@ msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
 msgstr ""
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Corresponding words to replace with, e.g., one/two ..."
-msgstr "Ersetzendes Wort … "
+msgstr ""
 
 #: nautilus-renamer.py:319
-#, fuzzy
-msgid "Enter the words (regular expressions) to be replaced, separated by '/'"
-msgstr "Zu ersetzendes Wort (Ausdruck) …"
+msgid ""
+"Enter the words (regular expressions) to be replaced, separated by '/'"
+msgstr ""
 
 #: nautilus-renamer.py:320
-#, fuzzy
 msgid "Enter the corresponding words to replace with"
-msgstr "Ersetzendes Wort … "
+msgstr ""
 
 #: nautilus-renamer.py:338
 msgid "ALL IN CAPITALS"
@@ -186,14 +183,11 @@ msgid "Choose One"
 msgstr "Eine auswählen"
 
 #: nautilus-renamer.py:390
-#, fuzzy
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
 " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
 msgstr ""
-"<span color='grey' size='small'>Hinweis: Sie können Rückgängig nicht "
-"rückgängig machen. ;)</span>"
 
 #: nautilus-renamer.py:392
 msgid ""
@@ -289,28 +283,6 @@ msgstr "Erfolgreich rückgängig gemacht"
 msgid "%d files restored."
 msgstr "%d Dateien wiederhergestellt."
 
-#~ msgid "<b>Undo the last operation inside this folder.</b>"
-#~ msgstr "<b>Die letzte Aktion in diesem Ordner rückgängig machen.</b>"
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</"
-#~ "span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>Für diesen Ordner gibt es kein Protokoll."
-#~ "</span>"
-
-#~ msgid ""
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer "
-#~ "writes a log file, namely "
-#~ msgstr ""
-#~ "<span color='grey' size='small'>Hinweis: Beim Umbenennen schreibt "
-#~ "Umbenenner ein Protokoll "
-
-#~ msgid ", in the folder it was launched, which is used for Undo.</span>"
-#~ msgstr ""
-#~ ", im Ordner in dem es ausgeführt wurde. Dies wird zum rückgängig machen "
-#~ "verwendet.</span>"
-
 #~ msgid "_Case"
 #~ msgstr "_Schreibung ändern"
 
@@ -337,8 +309,7 @@ msgstr "%d Dateien wiederhergestellt."
 #~ "contain at least one of {num * } , {filename} or {name}"
 #~ msgstr ""
 #~ "Renamer versucht, mehrere Dateien in eine umzubenennen. Das Muster sollte "
-#~ "wenigstens ein Element der folgenden beinhalten: {num * }, {filename}, "
-#~ "{name}"
+#~ "wenigstens ein Element der folgenden beinhalten: {num * }, {filename}, {name}"
 
 #~ msgid "Get a brain!"
 #~ msgstr "Das funktioniert nicht."
