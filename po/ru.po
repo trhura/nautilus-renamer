@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
-"PO-Revision-Date: 2010-09-27 20:41+0000\n"
-"Last-Translator: nvg66 <nvg66@yandex.ru>\n"
+"PO-Revision-Date: 2010-10-31 20:15+0000\n"
+"Last-Translator: suslikk <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-24 05:06+0000\n"
+"X-Launchpad-Export-Date: 2010-11-01 05:23+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: nautilus-renamer.py:97
@@ -59,43 +59,43 @@ msgstr "День месяца"
 
 #: nautilus-renamer.py:137
 msgid "Full date, e.g., 24Sep2008"
-msgstr ""
+msgstr "Полная дата, например, 24Сентября2008"
 
 #: nautilus-renamer.py:138
 msgid "Numerical month of year"
-msgstr ""
+msgstr "Номер месяца в году"
 
 #: nautilus-renamer.py:139
 msgid "Year, e.g., 1990"
-msgstr ""
+msgstr "Год, например, 1990"
 
 #: nautilus-renamer.py:140
 msgid "Full month name, e.g., August"
-msgstr ""
+msgstr "Полное название месяца, например, Август"
 
 #: nautilus-renamer.py:141
 msgid "Simple month name, e.g., Aug"
-msgstr ""
+msgstr "Сокращенное название месяца, например, Авг"
 
 #: nautilus-renamer.py:142
 msgid "Full day name, e.g., Monday"
-msgstr ""
+msgstr "Полное название дня недели, например, Понедельник"
 
 #: nautilus-renamer.py:143
 msgid "Simple dayname, e.g., Mon"
-msgstr ""
+msgstr "Сокращенное название дня недели, например, Пон"
 
 #: nautilus-renamer.py:144
 msgid "{num5} => 00001, 00002, 00003 , ..."
-msgstr ""
+msgstr "{num5} => 00001, 00002, 00003 , ..."
 
 #: nautilus-renamer.py:145
 msgid "{num5+5} => 00005, 00006, 00007 , ..."
-msgstr ""
+msgstr "{num5+5} => 00005, 00006, 00007 , ..."
 
 #: nautilus-renamer.py:146
 msgid "A random number from 10 to 99"
-msgstr ""
+msgstr "Произвольное число от 10 до 99"
 
 #: nautilus-renamer.py:174
 msgid "_Extension"
@@ -107,11 +107,11 @@ msgstr ""
 
 #: nautilus-renamer.py:176
 msgid "Also operate on extensions"
-msgstr ""
+msgstr "Обрабатывать также расширения"
 
 #: nautilus-renamer.py:177
 msgid "Also operate on subfolders and files"
-msgstr ""
+msgstr "Также обрабатывать подпапки и файлы"
 
 #: nautilus-renamer.py:179
 msgid "Refresh Previe_w"
@@ -119,11 +119,11 @@ msgstr ""
 
 #: nautilus-renamer.py:202
 msgid "Original Name"
-msgstr ""
+msgstr "Первоначальное название"
 
 #: nautilus-renamer.py:212
 msgid "New Name"
-msgstr ""
+msgstr "Новое название"
 
 #: nautilus-renamer.py:221
 msgid "Pre_view"
@@ -134,51 +134,54 @@ msgid ""
 "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
 "available pattens.</span>"
 msgstr ""
+"<span size='small'>Переименовать файлы, на основе шаблонов. Нажмите на "
+"<b>?</b> для просмотра шаблонов.</span>"
 
 #: nautilus-renamer.py:285
 msgid "Enter the pattern here ... "
-msgstr ""
+msgstr "Введите шаблон здесь... "
 
 #: nautilus-renamer.py:312
 msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
-msgstr ""
+msgstr "Слова будут замещены разделителем \"/\", например, 1/2..."
 
 #: nautilus-renamer.py:316
 msgid "Corresponding words to replace with, e.g., one/two ..."
-msgstr ""
+msgstr "Соответствующие слова замещаются, например, один/два ..."
 
 #: nautilus-renamer.py:319
 msgid ""
 "Enter the words (regular expressions) to be replaced, separated by '/'"
 msgstr ""
+"Введите слова (регулярные выражения) для замещения, разделив их \"/\""
 
 #: nautilus-renamer.py:320
 msgid "Enter the corresponding words to replace with"
-msgstr ""
+msgstr "Введите соответствующие слова для замены"
 
 #: nautilus-renamer.py:338
 msgid "ALL IN CAPITALS"
-msgstr ""
+msgstr "ВСЕ БУКВЫ ЗАГЛАВНЫЕ"
 
 #: nautilus-renamer.py:339
 msgid "all in lower case"
-msgstr ""
+msgstr "все буквы в нижнем регистре"
 
 #: nautilus-renamer.py:340
 msgid "First letter upper case"
-msgstr ""
+msgstr "Первая буква в верхнем регистре"
 
 #: nautilus-renamer.py:341
 msgid "Title Case"
-msgstr ""
+msgstr "Заглавный"
 
 #: nautilus-renamer.py:342
 msgid "Capital Case After ..."
-msgstr ""
+msgstr "Заглавные Буквы После ..."
 
 #: nautilus-renamer.py:362
 msgid "Choose One"
-msgstr ""
+msgstr "Выбрать Один"
 
 #: nautilus-renamer.py:390
 msgid ""
@@ -186,6 +189,9 @@ msgid ""
 "\n"
 " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
 msgstr ""
+"<b>Отменить последнюю операция внутри этой папки.</b>\n"
+" <span color='grey' size='small'>Примечание: Вы не можете отменять и "
+"отменять. ;)</span>"
 
 #: nautilus-renamer.py:392
 msgid ""
@@ -194,10 +200,16 @@ msgid ""
 "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
 "a log file, in the folder it was launched, which is used for Undo.</span>"
 msgstr ""
+"<span color='red' weight='bold'>Не обнаружено log файлов в этой "
+"папке</span>\n"
+"\n"
+"<span color='grey' size='small'>Примечание: Во время переименовывания, "
+"Renamer записывает log файл в папке, которой был запущен. Этот файл "
+"используется для Отмены.</span>"
 
 #: nautilus-renamer.py:404
 msgid "Capitalize after: "
-msgstr ""
+msgstr "Заглавные буквы после: "
 
 #: nautilus-renamer.py:408
 msgid "_First Letter"
