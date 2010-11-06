@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
-"PO-Revision-Date: 2010-08-30 06:23+0000\n"
+"PO-Revision-Date: 2010-11-05 10:56+0000\n"
 "Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-24 05:06+0000\n"
+"X-Launchpad-Export-Date: 2010-11-06 05:05+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: nautilus-renamer.py:97
@@ -95,7 +95,7 @@ msgstr "{num5+5} => 00005, 00006, 00007 , ..."
 
 #: nautilus-renamer.py:146
 msgid "A random number from 10 to 99"
-msgstr ""
+msgstr "Satunnainen numero välillä 10-99"
 
 #: nautilus-renamer.py:174
 msgid "_Extension"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: nautilus-renamer.py:177
 msgid "Also operate on subfolders and files"
-msgstr ""
+msgstr "Tee muutokset myös alikansioihin ja niiden tiedostoihin"
 
 #: nautilus-renamer.py:179
 msgid "Refresh Previe_w"
@@ -178,7 +178,7 @@ msgstr ""
 
 #: nautilus-renamer.py:362
 msgid "Choose One"
-msgstr ""
+msgstr "Valitse yksi"
 
 #: nautilus-renamer.py:390
 msgid ""
@@ -239,7 +239,7 @@ msgstr ""
 
 #: nautilus-renamer.py:618
 msgid "Rename successful"
-msgstr ""
+msgstr "Uudelleen nimeäminen onnistui"
 
 #: nautilus-renamer.py:619
 #, python-format
@@ -248,7 +248,7 @@ msgstr ""
 
 #: nautilus-renamer.py:637
 msgid "File Already Exists"
-msgstr ""
+msgstr "Tiedosto on jo olemassa"
 
 #: nautilus-renamer.py:637
 msgid " already exists. Use Undo to revert."
@@ -268,7 +268,7 @@ msgstr ""
 
 #: nautilus-renamer.py:853
 msgid "Log file not found"
-msgstr ""
+msgstr "Lokitiedostoa ei löytynyt"
 
 #: nautilus-renamer.py:869
 msgid "Undo successful"
@@ -277,4 +277,4 @@ msgstr ""
 #: nautilus-renamer.py:870
 #, python-format
 msgid "%d files restored."
-msgstr ""
+msgstr "%d tiedostoa palautettiin."
