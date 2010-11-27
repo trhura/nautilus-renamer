@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
-"PO-Revision-Date: 2010-10-31 20:15+0000\n"
-"Last-Translator: suslikk <Unknown>\n"
+"PO-Revision-Date: 2010-11-26 12:59+0000\n"
+"Last-Translator: Alexander 'FONTER' Zinin <spore_09@mail.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-01 05:23+0000\n"
+"X-Launchpad-Export-Date: 2010-11-27 05:09+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: nautilus-renamer.py:97
@@ -27,7 +27,7 @@ msgstr ""
 
 #: nautilus-renamer.py:103
 msgid "_Substitute"
-msgstr ""
+msgstr "_Заменить"
 
 #: nautilus-renamer.py:104
 msgid "C_ase"
@@ -99,7 +99,7 @@ msgstr "Произвольное число от 10 до 99"
 
 #: nautilus-renamer.py:174
 msgid "_Extension"
-msgstr ""
+msgstr "_Расширение"
 
 #: nautilus-renamer.py:175
 msgid "_Recursive"
@@ -115,7 +115,7 @@ msgstr "Также обрабатывать подпапки и файлы"
 
 #: nautilus-renamer.py:179
 msgid "Refresh Previe_w"
-msgstr ""
+msgstr "Обновить Предосм_отр"
 
 #: nautilus-renamer.py:202
 msgid "Original Name"
@@ -127,7 +127,7 @@ msgstr "Новое название"
 
 #: nautilus-renamer.py:221
 msgid "Pre_view"
-msgstr ""
+msgstr "Пре_досмотр"
 
 #: nautilus-renamer.py:283
 msgid ""
@@ -227,23 +227,23 @@ msgstr ""
 
 #: nautilus-renamer.py:555
 msgid "No file selected"
-msgstr ""
+msgstr "Файл не выбран"
 
 #: nautilus-renamer.py:555
 msgid "Please, select some files first."
-msgstr ""
+msgstr "Пожалуйста, выберите несколько файлов."
 
 #: nautilus-renamer.py:567
 msgid "Empty Pattern"
-msgstr ""
+msgstr "Пустой шаблон"
 
 #: nautilus-renamer.py:567
 msgid "Please, enter a valid pattern."
-msgstr ""
+msgstr "Пожалуйста, введите допустимый шаблон."
 
 #: nautilus-renamer.py:587
 msgid "Empty Word"
-msgstr ""
+msgstr "Пустое слово"
 
 #: nautilus-renamer.py:587
 msgid "Please enter a valid word to be replaced."
@@ -251,7 +251,7 @@ msgstr ""
 
 #: nautilus-renamer.py:618
 msgid "Rename successful"
-msgstr ""
+msgstr "Успешно Переименованно!"
 
 #: nautilus-renamer.py:619
 #, python-format
@@ -260,11 +260,11 @@ msgstr ""
 
 #: nautilus-renamer.py:637
 msgid "File Already Exists"
-msgstr ""
+msgstr "Файл уже существует"
 
 #: nautilus-renamer.py:637
 msgid " already exists. Use Undo to revert."
-msgstr ""
+msgstr " уже существует. Используйте Отменить, чтобы вернуться."
 
 #: nautilus-renamer.py:761
 msgid "Not Enough Random Number Range"
@@ -272,21 +272,21 @@ msgstr ""
 
 #: nautilus-renamer.py:761
 msgid "Please, use a larger range"
-msgstr ""
+msgstr "Пожалуйста, используйте больший диапазон"
 
 #: nautilus-renamer.py:853
 msgid "Undo Failed"
-msgstr ""
+msgstr "Отменить неудалось"
 
 #: nautilus-renamer.py:853
 msgid "Log file not found"
-msgstr ""
+msgstr "Лог файл не найден"
 
 #: nautilus-renamer.py:869
 msgid "Undo successful"
-msgstr ""
+msgstr "Отмена успешно"
 
 #: nautilus-renamer.py:870
 #, python-format
 msgid "%d files restored."
-msgstr ""
+msgstr "%d файлы восстановлены."
