@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
-"PO-Revision-Date: 2010-11-26 12:59+0000\n"
-"Last-Translator: Alexander 'FONTER' Zinin <spore_09@mail.ru>\n"
+"PO-Revision-Date: 2011-01-17 01:41+0000\n"
+"Last-Translator: m1kc <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-27 05:09+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-01-17 05:08+0000\n"
+"X-Generator: Launchpad (build 12177)\n"
 
 #: nautilus-renamer.py:97
 msgid "Options"
@@ -223,7 +223,7 @@ msgstr ""
 
 #: nautilus-renamer.py:419
 msgid "Capitalize the first letter"
-msgstr ""
+msgstr "Сделать заглавной первую букву"
 
 #: nautilus-renamer.py:555
 msgid "No file selected"
@@ -247,7 +247,7 @@ msgstr "Пустое слово"
 
 #: nautilus-renamer.py:587
 msgid "Please enter a valid word to be replaced."
-msgstr ""
+msgstr "Пожалуйста, введите правильное слово для замены."
 
 #: nautilus-renamer.py:618
 msgid "Rename successful"
@@ -256,7 +256,7 @@ msgstr "Успешно Переименованно!"
 #: nautilus-renamer.py:619
 #, python-format
 msgid "renamed %d files successfully."
-msgstr ""
+msgstr "успешно переименовано %d файлов."
 
 #: nautilus-renamer.py:637
 msgid "File Already Exists"
