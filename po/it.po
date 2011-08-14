@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
-"PO-Revision-Date: 2011-03-15 21:39+0000\n"
-"Last-Translator: newlife <Unknown>\n"
+"PO-Revision-Date: 2011-08-13 10:55+0000\n"
+"Last-Translator: Enrico \"eNry\" Carafa <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-16 05:05+0000\n"
-"X-Generator: Launchpad (build 12559)\n"
+"X-Launchpad-Export-Date: 2011-08-14 04:51+0000\n"
+"X-Generator: Launchpad (build 13674)\n"
 
 #: nautilus-renamer.py:97
 msgid "Options"
@@ -181,7 +181,7 @@ msgstr ""
 
 #: nautilus-renamer.py:362
 msgid "Choose One"
-msgstr ""
+msgstr "Seleziona uno"
 
 #: nautilus-renamer.py:390
 msgid ""
@@ -240,7 +240,7 @@ msgstr ""
 
 #: nautilus-renamer.py:567
 msgid "Please, enter a valid pattern."
-msgstr ""
+msgstr "Per favore, inserisci un pattern valido."
 
 #: nautilus-renamer.py:587
 msgid "Empty Word"
