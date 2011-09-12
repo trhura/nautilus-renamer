@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
-"PO-Revision-Date: 2010-10-18 15:52+0000\n"
-"Last-Translator: Micke Elm <mickeelm@hotmail.com>\n"
+"PO-Revision-Date: 2011-09-11 20:18+0000\n"
+"Last-Translator: Xcorp <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-24 05:06+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-09-12 05:12+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 
 #: nautilus-renamer.py:97
 msgid "Options"
@@ -143,20 +143,20 @@ msgstr "Skriv in mönstret här ... "
 
 #: nautilus-renamer.py:312
 msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
-msgstr ""
+msgstr "Ord att ersätta separerade med \"/\", t.ex. 1/2"
 
 #: nautilus-renamer.py:316
 msgid "Corresponding words to replace with, e.g., one/two ..."
-msgstr ""
+msgstr "Matchande ord att ersätta med, t.ex. ett/två"
 
 #: nautilus-renamer.py:319
 msgid ""
 "Enter the words (regular expressions) to be replaced, separated by '/'"
-msgstr ""
+msgstr "Fyll i orden(regulgära uttryck) att ersätta, separerade med \"/\""
 
 #: nautilus-renamer.py:320
 msgid "Enter the corresponding words to replace with"
-msgstr ""
+msgstr "Fyll i matchande ord att ersätta med"
 
 #: nautilus-renamer.py:338
 msgid "ALL IN CAPITALS"
@@ -188,6 +188,8 @@ msgid ""
 "\n"
 " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
 msgstr ""
+"<b>Ångra den senaste ändringen i denna katalogen</b>\n"
+" <span color='grey' size='small'>Du kan inte ångra en ångring ;)</span>"
 
 #: nautilus-renamer.py:392
 msgid ""
@@ -196,6 +198,12 @@ msgid ""
 "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
 "a log file, in the folder it was launched, which is used for Undo.</span>"
 msgstr ""
+"<span color='red' weight='bold'>Ingen loggfil hittades i denna "
+"katalogen.</span>\n"
+"\n"
+"<span color='grey' size='small'>När Renamer byter namn på filer skriver det "
+"en en loggfil i katalogen det startades ifrån, detta för att senare kunna "
+"ångra ändringarna.</span>"
 
 #: nautilus-renamer.py:404
 msgid "Capitalize after: "
