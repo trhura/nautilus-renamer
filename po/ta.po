@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-20 00:23+0800\n"
-"PO-Revision-Date: 2011-12-18 13:33+0000\n"
+"PO-Revision-Date: 2011-12-21 13:40+0000\n"
 "Last-Translator: Vigneshwaran P <Unknown>\n"
 "Language-Team: Tamil <ta@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-19 04:55+0000\n"
-"X-Generator: Launchpad (build 14525)\n"
+"X-Launchpad-Export-Date: 2011-12-22 05:33+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 
 #: nautilus-renamer.py:97
 msgid "Options"
@@ -35,11 +35,11 @@ msgstr ""
 
 #: nautilus-renamer.py:105
 msgid "_Undo"
-msgstr ""
+msgstr "(_U)செய்ததை நீக்கு"
 
 #: nautilus-renamer.py:132
 msgid "Original filename"
-msgstr ""
+msgstr "அசல் கோப்புபெயர்"
 
 #: nautilus-renamer.py:133
 msgid "Parent directory"
@@ -63,71 +63,71 @@ msgstr ""
 
 #: nautilus-renamer.py:138
 msgid "Numerical month of year"
-msgstr ""
+msgstr "ஆண்டின் மாத எண்"
 
 #: nautilus-renamer.py:139
 msgid "Year, e.g., 1990"
-msgstr ""
+msgstr "ஆண்டு, ஏ.கா., 1990"
 
 #: nautilus-renamer.py:140
 msgid "Full month name, e.g., August"
-msgstr ""
+msgstr "மாததின் முழு பெயர், ஏ.கா., ஆகஸ்ட்"
 
 #: nautilus-renamer.py:141
 msgid "Simple month name, e.g., Aug"
-msgstr ""
+msgstr "மாததின் எளிய பெயர்"
 
 #: nautilus-renamer.py:142
 msgid "Full day name, e.g., Monday"
-msgstr ""
+msgstr "நாளின் முழு பெயர்"
 
 #: nautilus-renamer.py:143
 msgid "Simple dayname, e.g., Mon"
-msgstr ""
+msgstr "நாளின் ஏளிய பெயர்"
 
 #: nautilus-renamer.py:144
 msgid "{num5} => 00001, 00002, 00003 , ..."
-msgstr ""
+msgstr "{num5} => 00001, 00002, 00003 , ..."
 
 #: nautilus-renamer.py:145
 msgid "{num5+5} => 00005, 00006, 00007 , ..."
-msgstr ""
+msgstr "{num5+5} => 00005, 00006, 00007 , ..."
 
 #: nautilus-renamer.py:146
 msgid "A random number from 10 to 99"
-msgstr ""
+msgstr "10 முதல் 99 வரை ஒரு ரேண்டம் எண்"
 
 #: nautilus-renamer.py:174
 msgid "_Extension"
-msgstr ""
+msgstr "நீடிப்புகள்"
 
 #: nautilus-renamer.py:175
 msgid "_Recursive"
-msgstr ""
+msgstr "சுழல்நிலை"
 
 #: nautilus-renamer.py:176
 msgid "Also operate on extensions"
-msgstr ""
+msgstr "மேலும் நீடிப்புகளுடன் இயக்குக"
 
 #: nautilus-renamer.py:177
 msgid "Also operate on subfolders and files"
-msgstr ""
+msgstr "மேலும் உள்ளடைவுகளை மற்றும் கோப்புகளில் இயக்குக"
 
 #: nautilus-renamer.py:179
 msgid "Refresh Previe_w"
-msgstr ""
+msgstr "முன் பார்வையை புதுபிக"
 
 #: nautilus-renamer.py:202
 msgid "Original Name"
-msgstr ""
+msgstr "நிஜப் பெயர்"
 
 #: nautilus-renamer.py:212
 msgid "New Name"
-msgstr ""
+msgstr "புதிய பெயர்"
 
 #: nautilus-renamer.py:221
 msgid "Pre_view"
-msgstr ""
+msgstr "முன் பார்வை"
 
 #: nautilus-renamer.py:283
 msgid ""
@@ -137,11 +137,11 @@ msgstr ""
 
 #: nautilus-renamer.py:285
 msgid "Enter the pattern here ... "
-msgstr ""
+msgstr "வடிவத்தை இங்கே உள்ளிடவும் "
 
 #: nautilus-renamer.py:312
 msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
-msgstr ""
+msgstr "வார்த்தைகள் \"/\" கொண்டு பிரிக, எ.கா., 1 / 2"
 
 #: nautilus-renamer.py:316
 msgid "Corresponding words to replace with, e.g., one/two ..."
