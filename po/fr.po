@@ -1,0 +1,322 @@
+# French translation for nautilus-renamer
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the nautilus-renamer package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: nautilus-renamer\n"
+"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"POT-Creation-Date: 2012-01-11 09:36+0630\n"
+"PO-Revision-Date: 2010-11-14 19:43+0000\n"
+"Last-Translator: Eric Broneer <Unknown>\n"
+"Language-Team: French <fr@li.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
+"X-Generator: Launchpad (build 14640)\n"
+
+#: nautilus-renamer.py:76
+#, fuzzy
+msgid "_Pattern"
+msgstr "_Motif"
+
+#: nautilus-renamer.py:77
+msgid "_Substitute"
+msgstr "_Remplacer"
+
+#: nautilus-renamer.py:78
+msgid "C_ase"
+msgstr "C_asse"
+
+#: nautilus-renamer.py:79
+msgid "_Undo"
+msgstr "_Annuler"
+
+#: nautilus-renamer.py:114
+msgid "Original filename"
+msgstr "Nom de fichier original"
+
+#: nautilus-renamer.py:115
+msgid "Parent directory"
+msgstr "Répertoire parent"
+
+#: nautilus-renamer.py:116
+msgid "Filename without extenstion"
+msgstr "Nom de fichier sans extension"
+
+#: nautilus-renamer.py:117
+msgid "File extension"
+msgstr "Extension"
+
+#: nautilus-renamer.py:118
+msgid "Day of month"
+msgstr "Jour du mois"
+
+#: nautilus-renamer.py:119
+msgid "Full date, e.g., 24Sep2008"
+msgstr "Date complète, par ex. 24sep2008"
+
+#: nautilus-renamer.py:120
+msgid "Numerical month of year"
+msgstr "Numéro du mois"
+
+#: nautilus-renamer.py:121
+msgid "Year, e.g., 1990"
+msgstr "Année, par ex. 1990"
+
+#: nautilus-renamer.py:122
+msgid "Full month name, e.g., August"
+msgstr "Nom complet du mois, par ex. août"
+
+#: nautilus-renamer.py:123
+msgid "Simple month name, e.g., Aug"
+msgstr "Nom du mois abrégé, par ex. sep"
+
+#: nautilus-renamer.py:124
+msgid "Full day name, e.g., Monday"
+msgstr "Nom complet du jour, par ex. lundi"
+
+#: nautilus-renamer.py:125
+msgid "Simple dayname, e.g., Mon"
+msgstr "Nom du jour abrégé, par ex. lun"
+
+#: nautilus-renamer.py:126
+msgid "{num5} => 00001, 00002, 00003 , ..."
+msgstr "{num5} => 00001, 00002, 00003 , ..."
+
+#: nautilus-renamer.py:127
+msgid "{num5+5} => 00005, 00006, 00007 , ..."
+msgstr "{num5+5} => 00005, 00006, 00007 , ..."
+
+#: nautilus-renamer.py:128
+msgid "A random number from 10 to 99"
+msgstr "Un nombre aléatoire entre 10 et 99"
+
+#: nautilus-renamer.py:129
+msgid "The first three letters of filename."
+msgstr ""
+
+#: nautilus-renamer.py:150
+msgid "_Extension"
+msgstr "_Extension"
+
+#: nautilus-renamer.py:151
+msgid "_Recursive"
+msgstr "_Récursif"
+
+#: nautilus-renamer.py:152
+msgid "Also operate on extensions"
+msgstr "Agir aussi sur les extensions"
+
+#: nautilus-renamer.py:153
+msgid "Also operate on subfolders and files"
+msgstr "Agir aussi sur les sous-dossiers et fichiers"
+
+#: nautilus-renamer.py:161
+msgid "Refresh Previe_w"
+msgstr "Rafraîchir l'_aperçu"
+
+#: nautilus-renamer.py:175
+msgid "Original Name"
+msgstr "Nom original"
+
+#: nautilus-renamer.py:183
+msgid "New Name"
+msgstr "Nouveau nom"
+
+#: nautilus-renamer.py:197
+msgid "Pre_view"
+msgstr "_Aperçu"
+
+#: nautilus-renamer.py:268
+msgid "Enter the pattern here ... "
+msgstr "Entrez le motif ici… "
+
+#: nautilus-renamer.py:279
+msgid "Enter the base pattern to rename. Click '?' for available patterns."
+msgstr ""
+
+#: nautilus-renamer.py:294
+msgid "Delete or replace multiple characters and words..."
+msgstr ""
+
+#: nautilus-renamer.py:298
+msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
+msgstr "Mots à remplacer, séparés par des \"/\", par ex. 1/2…"
+
+#: nautilus-renamer.py:302
+msgid "Corresponding words to replace with, e.g., one/two ..."
+msgstr "Mots de remplacement correspondants, par ex. un/deux…"
+
+#: nautilus-renamer.py:305
+#, fuzzy
+msgid "Enter the characters or words to be replaced, separated by '/'"
+msgstr ""
+"Entrez les mots à remplacer (expressions régulières) séparés par des \"/\""
+
+#: nautilus-renamer.py:306
+msgid "Enter the corresponding words to replace with"
+msgstr "Entrez les mots de remplacement correspondants"
+
+#: nautilus-renamer.py:316
+#, fuzzy
+msgid "Keep Original Case"
+msgstr "Nom original"
+
+#: nautilus-renamer.py:317
+msgid "ALL IN CAPITALS"
+msgstr "TOUT EN MAJUSCULES"
+
+#: nautilus-renamer.py:318
+msgid "all in lower case"
+msgstr "tout en minuscules"
+
+#: nautilus-renamer.py:319
+msgid "First letter upper case"
+msgstr "Première lettre en majuscule"
+
+#: nautilus-renamer.py:320
+msgid "Title Case"
+msgstr "Casse de Titre"
+
+#: nautilus-renamer.py:321
+msgid "Capital Case After ..."
+msgstr "Une majuscule après…"
+
+#: nautilus-renamer.py:342
+msgid "Choose One"
+msgstr "Sélectionnez"
+
+#: nautilus-renamer.py:352
+msgid "Choose the casing style you want to apply."
+msgstr ""
+
+#: nautilus-renamer.py:371
+#, fuzzy
+msgid ""
+"<b>Undo the last operation inside this folder.</b>\n"
+"\n"
+" <span "
+msgstr ""
+"<b>Annuler la dernière opération dans ce répertoire.</b>\n"
+"\n"
+" <span color='grey' size='small'>Nota : on ne peut pas annuler une "
+"annulation. ;)</span>"
+
+#: nautilus-renamer.py:374
+msgid "<span color='red' weight='bold'>No log file is found in this folder."
+msgstr ""
+
+#: nautilus-renamer.py:384
+#, fuzzy
+msgid "Enter a list of letters or words, seperated by '/'."
+msgstr ""
+"Entrez une liste des séquences après lesquelles il faut mettre une "
+"majuscule, séparés par des \"/\""
+
+#: nautilus-renamer.py:394
+msgid "_First Letter"
+msgstr "_Première lettre"
+
+#: nautilus-renamer.py:396
+msgid ""
+"A list of sequences, separated by '/'. The letters after them will be "
+"capitalized."
+msgstr ""
+
+#: nautilus-renamer.py:397
+msgid "Capitalize the first letter"
+msgstr "Mettre la première lettre en majuscules"
+
+#: nautilus-renamer.py:576
+msgid "No file selected"
+msgstr "Aucun fichier sélectionné"
+
+#: nautilus-renamer.py:576
+msgid "Please, select some files first."
+msgstr "Sélectionnez d'abord des fichiers"
+
+#: nautilus-renamer.py:591
+msgid "Rename successful"
+msgstr "Les fichiers ont été renommés avec succès"
+
+#: nautilus-renamer.py:592
+#, python-format
+msgid "renamed %d files successfully."
+msgstr "%d fichiers ont été renommés avec succés"
+
+#: nautilus-renamer.py:612
+msgid "File Already Exists"
+msgstr "Le fichier existe déjà"
+
+#: nautilus-renamer.py:612
+msgid " already exists. Use Undo to revert."
+msgstr " existe déjà. Utilisez Annuler."
+
+#: nautilus-renamer.py:674
+msgid "Not Enough Random Number Range"
+msgstr "La plage de nombres aléatoires n'est pas assez grande."
+
+#: nautilus-renamer.py:674
+msgid "Please, use a larger range"
+msgstr "Utilisez une plage plus large."
+
+#: nautilus-renamer.py:811
+msgid "Undo Failed"
+msgstr "Impossible d'annuler"
+
+#: nautilus-renamer.py:811
+msgid "Log file not found"
+msgstr "Fichier \"log\" non trouvé"
+
+#: nautilus-renamer.py:827
+msgid "Undo successful"
+msgstr "Annulation réussie"
+
+#: nautilus-renamer.py:828
+#, python-format
+msgid "%d files restored."
+msgstr "%d fichiers restaurés."
+
+#~ msgid "Options"
+#~ msgstr "Options"
+
+#~ msgid ""
+#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> "
+#~ "for available pattens.</span>"
+#~ msgstr ""
+#~ "<span size='small'>Renommer les fichiers sur base d'un motif. Cliquez sur "
+#~ "<b>?</b> pour afficher les motifs disponibles.</span>"
+
+#~ msgid ""
+#~ "<span color='red' weight='bold'>No log file is found in this folder.</"
+#~ "span>\n"
+#~ "\n"
+#~ "<span color='grey' size='small'>Note: When it renames files, Renamer "
+#~ "writes a log file, in the folder it was launched, which is used for Undo."
+#~ "</span>"
+#~ msgstr ""
+#~ "<span color='red' weight='bold'>Il n'y a pas de fichier \"log\" dans ce "
+#~ "répertoire.</span>\n"
+#~ "\n"
+#~ "<span color='grey' size='small'>Nota : lorsque Renamer renomme des "
+#~ "fichiers, il garde une trace dans un fichier \"log\" qui peut être "
+#~ "utiliser pour annuler l'opération.</span>"
+
+#~ msgid "Capitalize after: "
+#~ msgstr "Mettre en majuscule après : "
+
+#~ msgid "Empty Pattern"
+#~ msgstr "Motif vide"
+
+#~ msgid "Please, enter a valid pattern."
+#~ msgstr "Entrez un motif valide"
+
+#~ msgid "Empty Word"
+#~ msgstr "Mot vide"
+
+#~ msgid "Please enter a valid word to be replaced."
+#~ msgstr "Entrez un mot de remplacement valide."
