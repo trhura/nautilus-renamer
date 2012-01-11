@@ -6,8 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
+<<<<<<< TREE
 "Report-Msgid-Bugs-To: trhura@gmail.com\n"
 "POT-Creation-Date: 2012-01-11 09:14+0630\n"
+=======
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-10-20 00:23+0800\n"
+>>>>>>> MERGE-SOURCE
 "PO-Revision-Date: 2011-09-11 20:18+0000\n"
 "Last-Translator: Xcorp <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -15,12 +20,24 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+<<<<<<< TREE
 "X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
 #, fuzzy
 msgid "_Pattern"
+=======
+"X-Launchpad-Export-Date: 2011-09-12 05:12+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
+
+#: nautilus-renamer.py:97
+msgid "Options"
+msgstr "Alternativ"
+
+#: nautilus-renamer.py:102
+msgid "_Patternize"
+>>>>>>> MERGE-SOURCE
 msgstr "_Mönster"
 
 #: nautilus-renamer.py:77
@@ -151,21 +168,35 @@ msgstr "Ord att ersätta separerade med \"/\", t.ex. 1/2"
 msgid "Corresponding words to replace with, e.g., one/two ..."
 msgstr "Matchande ord att ersätta med, t.ex. ett/två"
 
+<<<<<<< TREE
 #: nautilus-renamer.py:305
 #, fuzzy
 msgid "Enter the characters or words to be replaced, separated by '/'"
+=======
+#: nautilus-renamer.py:319
+msgid ""
+"Enter the words (regular expressions) to be replaced, separated by '/'"
+>>>>>>> MERGE-SOURCE
 msgstr "Fyll i orden(regulgära uttryck) att ersätta, separerade med \"/\""
 
+<<<<<<< TREE
 #: nautilus-renamer.py:306
+=======
+#: nautilus-renamer.py:320
+>>>>>>> MERGE-SOURCE
 msgid "Enter the corresponding words to replace with"
 msgstr "Fyll i matchande ord att ersätta med"
 
+<<<<<<< TREE
 #: nautilus-renamer.py:316
 #, fuzzy
 msgid "Keep Original Case"
 msgstr "Ursprungligt namn"
 
 #: nautilus-renamer.py:317
+=======
+#: nautilus-renamer.py:338
+>>>>>>> MERGE-SOURCE
 msgid "ALL IN CAPITALS"
 msgstr "ALLT I STORA BOKSTÄVER"
 
@@ -198,11 +229,16 @@ msgstr ""
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
+<<<<<<< TREE
 " <span "
+=======
+" <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
+>>>>>>> MERGE-SOURCE
 msgstr ""
 "<b>Ångra den senaste ändringen i denna katalogen</b>\n"
 " <span color='grey' size='small'>Du kan inte ångra en ångring ;)</span>"
 
+<<<<<<< TREE
 #: nautilus-renamer.py:374
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
 msgstr ""
@@ -215,6 +251,27 @@ msgstr ""
 "Separera varje sekvens med '/'"
 
 #: nautilus-renamer.py:394
+=======
+#: nautilus-renamer.py:392
+msgid ""
+"<span color='red' weight='bold'>No log file is found in this folder.</span>\n"
+"\n"
+"<span color='grey' size='small'>Note: When it renames files, Renamer writes "
+"a log file, in the folder it was launched, which is used for Undo.</span>"
+msgstr ""
+"<span color='red' weight='bold'>Ingen loggfil hittades i denna "
+"katalogen.</span>\n"
+"\n"
+"<span color='grey' size='small'>När Renamer byter namn på filer skriver det "
+"en en loggfil i katalogen det startades ifrån, detta för att senare kunna "
+"ångra ändringarna.</span>"
+
+#: nautilus-renamer.py:404
+msgid "Capitalize after: "
+msgstr "Sätt stora bokstäver efter: "
+
+#: nautilus-renamer.py:408
+>>>>>>> MERGE-SOURCE
 msgid "_First Letter"
 msgstr "_Första Bokstaven"
 

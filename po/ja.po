@@ -6,8 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
+<<<<<<< TREE
 "Report-Msgid-Bugs-To: trhura@gmail.com\n"
 "POT-Creation-Date: 2012-01-11 09:14+0630\n"
+=======
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-10-20 00:23+0800\n"
+>>>>>>> MERGE-SOURCE
 "PO-Revision-Date: 2011-11-14 18:51+0000\n"
 "Last-Translator: Jens O. John <jens.o.john@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -15,12 +20,24 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+<<<<<<< TREE
 "X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
 #, fuzzy
 msgid "_Pattern"
+=======
+"X-Launchpad-Export-Date: 2011-11-15 05:12+0000\n"
+"X-Generator: Launchpad (build 14291)\n"
+
+#: nautilus-renamer.py:97
+msgid "Options"
+msgstr "オプション"
+
+#: nautilus-renamer.py:102
+msgid "_Patternize"
+>>>>>>> MERGE-SOURCE
 msgstr "パターン(_P)"
 
 #: nautilus-renamer.py:77

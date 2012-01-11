@@ -6,24 +6,48 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
+<<<<<<< TREE
 "Report-Msgid-Bugs-To: trhura@gmail.com\n"
 "POT-Creation-Date: 2012-01-11 09:14+0630\n"
+=======
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-10-20 00:23+0800\n"
+>>>>>>> MERGE-SOURCE
 "PO-Revision-Date: 2011-12-09 17:59+0000\n"
 "Last-Translator: Danillo <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+<<<<<<< TREE
 "Language: pt_BR\n"
+=======
+>>>>>>> MERGE-SOURCE
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+<<<<<<< TREE
 "X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
 #, fuzzy
 msgid "_Pattern"
+=======
+"X-Launchpad-Export-Date: 2011-12-10 05:24+0000\n"
+"X-Generator: Launchpad (build 14450)\n"
+
+#: nautilus-renamer.py:97
+msgid "Options"
+msgstr "Opções"
+
+#: nautilus-renamer.py:102
+msgid "_Patternize"
+>>>>>>> MERGE-SOURCE
 msgstr "_Padronizar"
 
+<<<<<<< TREE
 #: nautilus-renamer.py:77
+=======
+#: nautilus-renamer.py:103
+>>>>>>> MERGE-SOURCE
 msgid "_Substitute"
 msgstr "Substituir"
 
@@ -95,11 +119,15 @@ msgstr "{num5+5} => 00005, 00006, 00007 , ..."
 msgid "A random number from 10 to 99"
 msgstr "Um número aleatório entre 10 e 99"
 
+<<<<<<< TREE
 #: nautilus-renamer.py:129
 msgid "The first three letters of filename."
 msgstr ""
 
 #: nautilus-renamer.py:150
+=======
+#: nautilus-renamer.py:174
+>>>>>>> MERGE-SOURCE
 msgid "_Extension"
 msgstr "_Extensão"
 
@@ -131,10 +159,23 @@ msgstr "Novo nome"
 msgid "Pre_view"
 msgstr "Pré-_visualizar"
 
+<<<<<<< TREE
 #: nautilus-renamer.py:268
+=======
+#: nautilus-renamer.py:283
+msgid ""
+"<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
+"available pattens.</span>"
+msgstr ""
+"<span size='small'>Renomear arquivos, baseado em um padrão. Clique em "
+"<b>?</b> para os padrões disponíveis.</span>"
+
+#: nautilus-renamer.py:285
+>>>>>>> MERGE-SOURCE
 msgid "Enter the pattern here ... "
 msgstr "Entre com um modelo aqui... "
 
+<<<<<<< TREE
 #: nautilus-renamer.py:279
 msgid "Enter the base pattern to rename. Click '?' for available patterns."
 msgstr ""
@@ -144,30 +185,51 @@ msgid "Delete or replace multiple characters and words..."
 msgstr ""
 
 #: nautilus-renamer.py:298
+=======
+#: nautilus-renamer.py:312
+>>>>>>> MERGE-SOURCE
 msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
 msgstr "Separar palavras para substituir por \"/\", ex. 1/2..."
 
+<<<<<<< TREE
 #: nautilus-renamer.py:302
+=======
+#: nautilus-renamer.py:316
+>>>>>>> MERGE-SOURCE
 msgid "Corresponding words to replace with, e.g., one/two ..."
 msgstr "Palavras correspondentes para substituir com, ex. um/dois..."
 
+<<<<<<< TREE
 #: nautilus-renamer.py:305
 #, fuzzy
 msgid "Enter the characters or words to be replaced, separated by '/'"
+=======
+#: nautilus-renamer.py:319
+msgid ""
+"Enter the words (regular expressions) to be replaced, separated by '/'"
+>>>>>>> MERGE-SOURCE
 msgstr ""
 "Digite as palavras (expressões regulares) para serem substituídas, separando-"
 "as por \"/\""
 
+<<<<<<< TREE
 #: nautilus-renamer.py:306
+=======
+#: nautilus-renamer.py:320
+>>>>>>> MERGE-SOURCE
 msgid "Enter the corresponding words to replace with"
 msgstr "Digite as palavras correspondentes para substituir"
 
+<<<<<<< TREE
 #: nautilus-renamer.py:316
 #, fuzzy
 msgid "Keep Original Case"
 msgstr "Nome original"
 
 #: nautilus-renamer.py:317
+=======
+#: nautilus-renamer.py:338
+>>>>>>> MERGE-SOURCE
 msgid "ALL IN CAPITALS"
 msgstr "TUDO EM MAIÚSCULAS"
 
@@ -182,28 +244,53 @@ msgstr "Primeira letra em maiúsculo"
 #: nautilus-renamer.py:320
 msgid "Title Case"
 msgstr "Tamanho de título"
+<<<<<<< TREE
 
 #: nautilus-renamer.py:321
 msgid "Capital Case After ..."
 msgstr "Maiúsculo após..."
+=======
+>>>>>>> MERGE-SOURCE
 
 #: nautilus-renamer.py:342
+<<<<<<< TREE
+=======
+msgid "Capital Case After ..."
+msgstr "Maiúsculo após..."
+
+#: nautilus-renamer.py:362
+>>>>>>> MERGE-SOURCE
 msgid "Choose One"
 msgstr "Escolha uma"
 
+<<<<<<< TREE
 #: nautilus-renamer.py:352
 msgid "Choose the casing style you want to apply."
 msgstr ""
 
 #: nautilus-renamer.py:371
 #, fuzzy
+=======
+#: nautilus-renamer.py:390
+>>>>>>> MERGE-SOURCE
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
 " <span "
 msgstr ""
 "<b>Desfazer a última operação dentro desta pasta.</b>\n"
+<<<<<<< TREE
+=======
 "\n"
+" <span color='grey' size='small'>Nota: Você não pode desfazer um comando de "
+"desfazer. ;)</span>"
+
+#: nautilus-renamer.py:392
+msgid ""
+"<span color='red' weight='bold'>No log file is found in this folder.</span>\n"
+>>>>>>> MERGE-SOURCE
+"\n"
+<<<<<<< TREE
 " <span color='grey' size='small'>Nota: Você não pode desfazer um comando de "
 "desfazer. ;)</span>"
 
@@ -219,6 +306,23 @@ msgstr ""
 "delas, separadas por '/'"
 
 #: nautilus-renamer.py:394
+=======
+"<span color='grey' size='small'>Note: When it renames files, Renamer writes "
+"a log file, in the folder it was launched, which is used for Undo.</span>"
+msgstr ""
+"<span color='red' weight='bold'>Nenhum arquivo de log foi encontrado nesta "
+"pasta.</span>\n"
+"\n"
+"<span color='grey' size='small'>Nota: Quando os arquivos são renomeados, o "
+"programa que renomeia escreve na pasta aberta um arquivo de log, que é usado "
+"para desfazer.</span>"
+
+#: nautilus-renamer.py:404
+msgid "Capitalize after: "
+msgstr "Escreva com letra maiúscula depois de: "
+
+#: nautilus-renamer.py:408
+>>>>>>> MERGE-SOURCE
 msgid "_First Letter"
 msgstr "_Primeira Letra"
 
@@ -227,6 +331,11 @@ msgid ""
 "A list of sequences, separated by '/'. The letters after them will be "
 "capitalized."
 msgstr ""
+<<<<<<< TREE
+=======
+"Entre a lista de sequências, para tornar maiúscula a letra após cada uma "
+"delas, separadas por '/'"
+>>>>>>> MERGE-SOURCE
 
 #: nautilus-renamer.py:397
 msgid "Capitalize the first letter"
@@ -240,7 +349,27 @@ msgstr "Nenhum arquivo foi selecionado"
 msgid "Please, select some files first."
 msgstr "Por favor selecione alguns arquivos primeiro."
 
+<<<<<<< TREE
 #: nautilus-renamer.py:591
+=======
+#: nautilus-renamer.py:567
+msgid "Empty Pattern"
+msgstr "Padrão Vazio"
+
+#: nautilus-renamer.py:567
+msgid "Please, enter a valid pattern."
+msgstr "Por favor, entre um padrão válido."
+
+#: nautilus-renamer.py:587
+msgid "Empty Word"
+msgstr "Palavra Vazia"
+
+#: nautilus-renamer.py:587
+msgid "Please enter a valid word to be replaced."
+msgstr "Por favor entre com uma palavra válida para ser trocada"
+
+#: nautilus-renamer.py:618
+>>>>>>> MERGE-SOURCE
 msgid "Rename successful"
 msgstr "Renomeado com sucesso"
 
@@ -281,6 +410,7 @@ msgstr "Desfeito com sucesso"
 #, python-format
 msgid "%d files restored."
 msgstr "Arquivos %d restaurados."
+<<<<<<< TREE
 
 #~ msgid "Options"
 #~ msgstr "Opções"
@@ -321,3 +451,5 @@ msgstr "Arquivos %d restaurados."
 
 #~ msgid "Please enter a valid word to be replaced."
 #~ msgstr "Por favor entre com uma palavra válida para ser trocada"
+=======
+>>>>>>> MERGE-SOURCE
