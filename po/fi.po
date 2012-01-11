@@ -6,16 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-01-11 09:36+0630\n"
 "PO-Revision-Date: 2010-11-05 10:56+0000\n"
 "Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
-"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
+"X-Launchpad-Export-Date: 2012-01-11 04:55+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
@@ -159,9 +158,8 @@ msgid "Enter the corresponding words to replace with"
 msgstr ""
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Keep Original Case"
-msgstr "Alkuperäinen nimi"
+msgstr ""
 
 #: nautilus-renamer.py:317
 msgid "ALL IN CAPITALS"

@@ -6,22 +6,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-01-11 09:36+0630\n"
 "PO-Revision-Date: 2012-01-09 10:25+0000\n"
 "Last-Translator: Fidel Nadera <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
+"X-Launchpad-Export-Date: 2012-01-11 04:55+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
-#, fuzzy
 msgid "_Pattern"
-msgstr "_Modellare"
+msgstr ""
 
 #: nautilus-renamer.py:77
 msgid "_Substitute"
@@ -152,19 +150,16 @@ msgid "Corresponding words to replace with, e.g., one/two ..."
 msgstr "Corrispondente a parole da sostituire con, es., one/two ..."
 
 #: nautilus-renamer.py:305
-#, fuzzy
 msgid "Enter the characters or words to be replaced, separated by '/'"
 msgstr ""
-"Inserire le parole (espressioni regolari) da sostituire, separate da  '/'"
 
 #: nautilus-renamer.py:306
 msgid "Enter the corresponding words to replace with"
 msgstr "Inserire le parole corrispondenti da sostituire"
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Keep Original Case"
-msgstr "Nome Originale"
+msgstr ""
 
 #: nautilus-renamer.py:317
 msgid "ALL IN CAPITALS"
@@ -195,16 +190,11 @@ msgid "Choose the casing style you want to apply."
 msgstr ""
 
 #: nautilus-renamer.py:371
-#, fuzzy
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
 " <span "
 msgstr ""
-"<b>Annulla l'ultima operazione in questa cartella.</b>\n"
-"\n"
-" <span color='grey' size='small'>Note: Non puoi annullare una operazione già "
-"annullata. ;)</span>"
 
 #: nautilus-renamer.py:374
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
@@ -278,33 +268,49 @@ msgstr ""
 msgid "%d files restored."
 msgstr "%d file ripristinati."
 
-#~ msgid "Options"
-#~ msgstr "Opzioni"
-
 #~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> "
-#~ "for available pattens.</span>"
+#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
+#~ "available pattens.</span>"
 #~ msgstr ""
 #~ "<span size='small'>Rinomina i files, basandoti su un modello. Clicca su "
 #~ "<b>?</b> per i modelli disponibili.</span>"
 
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</"
-#~ "span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer "
-#~ "writes a log file, in the folder it was launched, which is used for Undo."
-#~ "</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>Nessun file di log in questa cartella.</"
-#~ "span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Nota: Quando rinomina i file, Renamer "
-#~ "scrive un file di log, nella cartella in cui viene lanciato , usato per "
-#~ "le operazioni di annullamento.</span>"
+#~ msgid "_Patternize"
+#~ msgstr "_Modellare"
 
-#~ msgid "Please, enter a valid pattern."
-#~ msgstr "Per favore, inserisci un pattern valido."
+#~ msgid "Options"
+#~ msgstr "Opzioni"
+
+#~ msgid ""
+#~ "Enter the words (regular expressions) to be replaced, separated by '/'"
+#~ msgstr ""
+#~ "Inserire le parole (espressioni regolari) da sostituire, separate da  '/'"
+
+#~ msgid ""
+#~ "<span color='red' weight='bold'>No log file is found in this folder.</span>\n"
+#~ "\n"
+#~ "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
+#~ "a log file, in the folder it was launched, which is used for Undo.</span>"
+#~ msgstr ""
+#~ "<span color='red' weight='bold'>Nessun file di log in questa "
+#~ "cartella.</span>\n"
+#~ "\n"
+#~ "<span color='grey' size='small'>Nota: Quando rinomina i file, Renamer scrive "
+#~ "un file di log, nella cartella in cui viene lanciato , usato per le "
+#~ "operazioni di annullamento.</span>"
+
+#~ msgid ""
+#~ "<b>Undo the last operation inside this folder.</b>\n"
+#~ "\n"
+#~ " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
+#~ msgstr ""
+#~ "<b>Annulla l'ultima operazione in questa cartella.</b>\n"
+#~ "\n"
+#~ " <span color='grey' size='small'>Note: Non puoi annullare una operazione già "
+#~ "annullata. ;)</span>"
 
 #~ msgid "Please enter a valid word to be replaced."
 #~ msgstr "Per favore, inserisci una parola da sostituire valida ."
+
+#~ msgid "Please, enter a valid pattern."
+#~ msgstr "Per favore, inserisci un pattern valido."

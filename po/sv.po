@@ -6,22 +6,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-01-11 09:36+0630\n"
 "PO-Revision-Date: 2011-09-11 20:18+0000\n"
 "Last-Translator: Xcorp <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
-"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
+"X-Launchpad-Export-Date: 2012-01-11 04:56+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
-#, fuzzy
 msgid "_Pattern"
-msgstr "_Mönster"
+msgstr ""
 
 #: nautilus-renamer.py:77
 msgid "_Substitute"
@@ -152,18 +150,16 @@ msgid "Corresponding words to replace with, e.g., one/two ..."
 msgstr "Matchande ord att ersätta med, t.ex. ett/två"
 
 #: nautilus-renamer.py:305
-#, fuzzy
 msgid "Enter the characters or words to be replaced, separated by '/'"
-msgstr "Fyll i orden(regulgära uttryck) att ersätta, separerade med \"/\""
+msgstr ""
 
 #: nautilus-renamer.py:306
 msgid "Enter the corresponding words to replace with"
 msgstr "Fyll i matchande ord att ersätta med"
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Keep Original Case"
-msgstr "Ursprungligt namn"
+msgstr ""
 
 #: nautilus-renamer.py:317
 msgid "ALL IN CAPITALS"
@@ -194,25 +190,19 @@ msgid "Choose the casing style you want to apply."
 msgstr ""
 
 #: nautilus-renamer.py:371
-#, fuzzy
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
 " <span "
 msgstr ""
-"<b>Ångra den senaste ändringen i denna katalogen</b>\n"
-" <span color='grey' size='small'>Du kan inte ångra en ångring ;)</span>"
 
 #: nautilus-renamer.py:374
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
 msgstr ""
 
 #: nautilus-renamer.py:384
-#, fuzzy
 msgid "Enter a list of letters or words, seperated by '/'."
 msgstr ""
-"Skriv in listan av de sekvenser som det skall sättas stor bokstav efter. "
-"Separera varje sekvens med '/'"
 
 #: nautilus-renamer.py:394
 msgid "_First Letter"
@@ -278,33 +268,28 @@ msgstr "Ångra lyckades"
 msgid "%d files restored."
 msgstr "%d filer återställda."
 
+#~ msgid "_Patternize"
+#~ msgstr "_Mönster"
+
 #~ msgid "Options"
 #~ msgstr "Alternativ"
 
 #~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> "
-#~ "for available pattens.</span>"
+#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
+#~ "available pattens.</span>"
 #~ msgstr ""
 #~ "<span size='small'>Byt namn på filer, baserat på ett mönster. Klicka på "
 #~ "<b>?</b> för tillgängliga mönster.</span>"
 
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</"
-#~ "span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer "
-#~ "writes a log file, in the folder it was launched, which is used for Undo."
-#~ "</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>Ingen loggfil hittades i denna katalogen."
-#~ "</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>När Renamer byter namn på filer skriver "
-#~ "det en en loggfil i katalogen det startades ifrån, detta för att senare "
-#~ "kunna ångra ändringarna.</span>"
-
 #~ msgid "Capitalize after: "
 #~ msgstr "Sätt stora bokstäver efter: "
+
+#~ msgid ""
+#~ "Enter the list of sequences, to capitalize the letter after each of it, "
+#~ "separated by '/'"
+#~ msgstr ""
+#~ "Skriv in listan av de sekvenser som det skall sättas stor bokstav efter. "
+#~ "Separera varje sekvens med '/'"
 
 #~ msgid "Empty Pattern"
 #~ msgstr "Tomt Mönster"
@@ -312,8 +297,33 @@ msgstr "%d filer återställda."
 #~ msgid "Please, enter a valid pattern."
 #~ msgstr "Var god ange ett giltigt mönster."
 
+#~ msgid "Please enter a valid word to be replaced."
+#~ msgstr "Var god ange ett giltigt ord som skall ersättas."
+
 #~ msgid "Empty Word"
 #~ msgstr "Tomt Ord"
 
-#~ msgid "Please enter a valid word to be replaced."
-#~ msgstr "Var god ange ett giltigt ord som skall ersättas."
+#~ msgid ""
+#~ "<span color='red' weight='bold'>No log file is found in this folder.</span>\n"
+#~ "\n"
+#~ "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
+#~ "a log file, in the folder it was launched, which is used for Undo.</span>"
+#~ msgstr ""
+#~ "<span color='red' weight='bold'>Ingen loggfil hittades i denna "
+#~ "katalogen.</span>\n"
+#~ "\n"
+#~ "<span color='grey' size='small'>När Renamer byter namn på filer skriver det "
+#~ "en en loggfil i katalogen det startades ifrån, detta för att senare kunna "
+#~ "ångra ändringarna.</span>"
+
+#~ msgid ""
+#~ "Enter the words (regular expressions) to be replaced, separated by '/'"
+#~ msgstr "Fyll i orden(regulgära uttryck) att ersätta, separerade med \"/\""
+
+#~ msgid ""
+#~ "<b>Undo the last operation inside this folder.</b>\n"
+#~ "\n"
+#~ " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
+#~ msgstr ""
+#~ "<b>Ångra den senaste ändringen i denna katalogen</b>\n"
+#~ " <span color='grey' size='small'>Du kan inte ångra en ångring ;)</span>"
