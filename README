@@ -36,8 +36,7 @@ To use Current time in filenames,
 /dayname/	Wednesday
 /daysimp/	Wed
 
-You can also slice /filename/ and /name/, using /name:offset:length/. Length is optional, and both offset and length can be negative.
-When they are negative, they are manipulated backwards (from end).
+You can also slice /filename/ and /name/, using /name:offset:length/. Length is optional, and both offset and length can be negative. When they are negative, they are manipulated backwards (from end).
 
 "123abc.jpg" => /filename:3/ => "abc.jpg"
 "123abc.jpg" => /name:-3/  => "abc"

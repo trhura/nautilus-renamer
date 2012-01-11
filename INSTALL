@@ -3,18 +3,8 @@ Get Lastest Version
 If you want to install the lastest version with updated translations, use bzr to download.
     bzr branch lp:nautilus-renamer
 
-Local Install
+Install
 -------------
-To install Renamer for current user, run
-    make install
-
-
-Global Install
---------------
-
-To install Renamer systemwide, so that other users can also use it with "nautilus-scripts-manager", use
-    sudo make globalinstall
-
-or run the install script in scripts folder
-    sudo ./scripts/install 
+To install Renamer only for current user, run
+    make localinstall
 

@@ -1,15 +1,18 @@
 NAUTILUS_SCRIPTS_DIR = ~/.gnome2/nautilus-scripts
 
-install: uninstall 
-	mkdir -p $(NAUTILUS_SCRIPTS_DIR)/.rdata 
-	./scripts/genmo.py po/ $(NAUTILUS_SCRIPTS_DIR)/.rdata/po/	
+build:
+	./scripts/genmo.py po/ mo/
+
+localinstall: build uninstall 
+	mkdir -p $(NAUTILUS_SCRIPTS_DIR)/.rdata/po 
+	cp -Rfv mo/* $(NAUTILUS_SCRIPTS_DIR)/.rdata/po
 	cp -fv nautilus-renamer.py $(NAUTILUS_SCRIPTS_DIR)/Renamer
 
-globalinstall:
-	./scripts/install
-
 uninstall:
-	rm -rf $(NAUTILUS_SCRIPTS_DIR)/.rdata
-	rm -rf $(NAUTILUS_SCRIPTS_DIR)/Renamer
+	rm -rfv $(NAUTILUS_SCRIPTS_DIR)/.rdata
+	rm -rfv $(NAUTILUS_SCRIPTS_DIR)/Renamer
 
-.PHONY: install globalinstall uninstall
+clean:
+	rm -rfv mo
+
+.PHONY: clean localinstall uninstall

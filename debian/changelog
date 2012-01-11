@@ -1,0 +1,23 @@
+nautilus-renamer (3.0-0oneric1) oneiric; urgency=low
+
+  * new rlease (3.0)
+
+ -- Thura Hlaing <trhura@gmail.com>  Tue, 10 Jan 2012 10:45:08 +0630
+
+nautilus-renamer (1.2-0~2~oneiric1) oneiric; urgency=low
+
+  * Auto build.
+
+ -- Dr. Amr Osman <dr3mro@gmail.com>  Fri, 06 Jan 2012 02:24:16 +0000
+
+nautilus-renamer (1.2) oneiric; urgency=high
+
+  * Add python nautilus to deps
+
+ -- Amr Osman <dr3mro@gmail.com>  Fri, 06 Jan 2012 02:44:29 +0200
+
+nautilus-renamer (1.1) oneiric; urgency=high
+
+  * Initial release
+
+ -- Amr Osman <dr3mro@gmail.com>  Fri, 06 Jan 2012 02:30:29 +0200

@@ -1,0 +1,3 @@
+nautilus-renamer.py /usr/share/nautilus-renamer/
+nautilus-extension/nautilus-renamer.py /usr/share/nautilus-python/extensions/
+mo/* /usr/share/locale/

@@ -1,0 +1,14 @@
+Source: nautilus-renamer
+Section: gnome
+Priority: optional
+Maintainer: Amr Osman <dr3mro@gmail.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.2
+Homepage: https://launchpad.net/nautilus-renamer
+
+
+Package: nautilus-renamer
+Architecture: all
+Depends: python, python-gobject, python-nautilus
+Description: nautilus-renamer
+ Mass rename files in nautilus

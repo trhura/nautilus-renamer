@@ -1,3 +1,12 @@
+3.0 (10 Jan 2012)
+-----------------
+* Ported to GObject Introspection/Gtk3
+* Revamp ui, so that patterns, substitution and Case can be applied simultaneously
+* Fixed bug #769829
+* Cleanup Code
+* Remove globalinstall option
+* Added debian package
+
 2.3 (23 Oct 2010)
 ----------------
 * Enhance substitute (support regular expressions, multiple substitutions)

@@ -1,8 +1,8 @@
 #! /usr/bin/python
 #  -*- coding: utf-8 -*-
 
-"""
-Copyright (C) 2006-2010 Thura Hlaing <trhura@gmail.com>
+'''
+Copyright (C) 2006-2011 Thura Hlaing <trhura@gmail.com>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -14,7 +14,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
-"""
+'''
 
 import os
 import sys
@@ -23,55 +23,40 @@ import time
 import mmap
 import string
 import random
-
-import pygtk
-pygtk.require ('2.0')
+import glib
 import locale, gettext
 
-import gtk
-import glib
-import pango
-import gobject
-import pynotify
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Gio
+from gi.repository import Pango
+from gi.repository import GObject
+from gi.repository import Notify
 
 # Configuration
-DEFAULT_WIDTH   = 450                   # Dialog's default width at startup
-DEFAULT_HEIGHT  = 320                   # Dialog's default height at startup
+DEFAULT_WIDTH   = 550                   # Dialog's default width at startup
+DEFAULT_HEIGHT  = 350                   # Dialog's default height at startup
 PREVIEW_HEIGHT  = 150                   # Height of preview area
 UNDO_LOG_FILE   = '.rlog'               # Name used for Log file
 DATA_DIR        = '.rdata/'             # 
-LOG_SEP         =  ' is converted to '  # Log file separator
+LOG_SEP         = ' is converted to '   # Log file separator
 REC_PATS        = 5                     # Remember up to 5 recent patterns
 REC_FILE        = 'recent_patterns'     # filename for recent patterns
-NOTIFICATION_TIMEOUT =  -1              # notification timeout, pynotify.EXPIRES_DEFAULT
+NOTIFICATION_TIMEOUT =  -1              # notification timeout, Notify.EXPIRES_DEFAULT
+SMALL_FONT_SIZE = Pango.SCALE * 10
 
 # Fake Enums
-PATTERNIZE, SUBSTITUTE, CASING, UNDO = range (4)
-ALL_CAP, ALL_LOW, FIRST_CAP, EACH_CAP, CAP_AFTER = range (5)
+CASE_NONE, CASE_ALL_CAP, CASE_ALL_LOW, CASE_FIRST_CAP, CASE_EACH_CAP, CASE_CAP_AFTER = range (6)
 
 # dir to store application state, recent patterns ... 
-CONFIG_DIR = os.path.join (glib.get_user_data_dir (), "nautilus-renamer")
-
+CONFIG_DIR = os.path.join (glib.get_user_data_dir (), 'nautilus-renamer')
 APP = 'nautilus-renamer'
 
-not_installed_dir = os.path.dirname(os.path.realpath(__file__)) 
-if os.path.exists(not_installed_dir + '/po'):
-    # po dir, when it is not installed yet
-    PO_DIR = not_installed_dir + '/po'
-    
-elif os.path.exists(os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')):
-    # po dir, when it is installed as a user script 
-    PO_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')
-
-else:
-    PO_DIR = None
-
-class Application():
-
+class RenameApplication(Gtk.Application):
     def __init__(self):
 
-        self.case_opt = ALL_CAP
-        self.recur    = False
+        self.case_opt = CASE_NONE
+        self.recur    = False  
         self.ext      = False
         self.pattern  = None
         self.logFile  = None
@@ -84,386 +69,380 @@ class Application():
         self.a_pattern = re.compile (r'\/.*\/') #used to check invalid patterns
         self.ran_seq = []
         self.filesRenamed = 0
-        self.pmodel = gtk.ListStore (gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.undo_p = False
+        self.pmodel = Gtk.ListStore.new ([GObject.TYPE_STRING, GObject.TYPE_STRING])
 
-        ubox    = gtk.Table (2, 2, True)     # Upper Box
-        lframe  = gtk.Frame (_("Options"))
-        lalign  = gtk.Alignment ( 0.1, 0.2, 1.0, 0.0)
-        self.lbox   = gtk.VBox  (False, 5)  # Lower Box
+        # Toggle Buttons Box
+        self.pbutton = Gtk.Button.new_with_mnemonic (_("_Pattern"))
+        self.sbutton = Gtk.Button.new_with_mnemonic (_("_Substitute"))
+        self.cbutton = Gtk.Button.new_with_mnemonic (_("C_ase"))
+        self.ubutton = Gtk.Button.new_with_mnemonic (_("_Undo"))
 
-        # Upper Box Radio Buttons
-        pat_rb  = gtk.RadioButton (None,  _("_Patternize"), True)
-        sub_rb  = gtk.RadioButton (pat_rb, _("_Substitute"), True)
-        cas_rb  = gtk.RadioButton (pat_rb, _("C_ase"), True)
-        und_rb  = gtk.RadioButton (pat_rb, _("_Undo"), True)
+        buttonbox = Gtk.ButtonBox.new (Gtk.Orientation.HORIZONTAL)
+        buttonbox.set_layout (Gtk.ButtonBoxStyle.START) 
+        buttonbox.pack_start (self.pbutton, False, False, 0);
+        buttonbox.pack_start (self.sbutton, False, False, 0);
+        buttonbox.pack_start (self.cbutton, False, False, 0);
+        buttonbox.pack_start (self.ubutton, False, False, 0);
+        buttonbox.set_child_secondary (self.ubutton, True) 
 
-        self.prepare_pat_options (pat_rb)
-
-        lalign.add (self.lbox)
-        lalign.set_padding (5, 5, 5, 5)
-        lframe.add (lalign)
-        lframe.set_size_request (-1, 120)
-
+        self.options_box   = Gtk.VBox.new  (False, 5)
+        options_align  = Gtk.Alignment.new (0.1, 0.1, 1.0, 0.0)
+        options_align.add (self.options_box)
+        options_align.set_padding (0, 0, 10, 10)
+        options_align.set_size_request (-1, 150) 
+        
         #Popup Menu for available patterns
-        self.pat_popup  = gtk.Menu ()
-        pat_fname   = gtk.MenuItem ('/filename/')
-        pat_dir     = gtk.MenuItem ('/dir/')
-        pat_name    = gtk.MenuItem ('/name/')
-        pat_ext     = gtk.MenuItem ('/ext/')
-        pat_day     = gtk.MenuItem ('/day/')
-        pat_date    = gtk.MenuItem ('/date/')
-        pat_month   = gtk.MenuItem ('/month/')
-        pat_year    = gtk.MenuItem ('/year/')
-        pat_dname   = gtk.MenuItem ('/dayname/')
-        pat_dsimp   = gtk.MenuItem ('/daysimp/')
-        pat_mname   = gtk.MenuItem ('/monthname/')
-        pat_msimp   = gtk.MenuItem ('/monthsimp/')
-        pat_num1    = gtk.MenuItem ('/num2/')
-        pat_num2    = gtk.MenuItem ('/num3+0/')
-        pat_rand    = gtk.MenuItem ('/rand10-99/')
+        self.pattern_popup  = Gtk.Menu ()
+        pattern_fname   = Gtk.MenuItem ('/filename/')
+        pattern_dir     = Gtk.MenuItem ('/dir/')
+        pattern_name    = Gtk.MenuItem ('/name/')
+        pattern_ext     = Gtk.MenuItem ('/ext/')
+        pattern_day     = Gtk.MenuItem ('/day/')
+        pattern_date    = Gtk.MenuItem ('/date/')
+        pattern_month   = Gtk.MenuItem ('/month/')
+        pattern_year    = Gtk.MenuItem ('/year/')
+        pattern_dname   = Gtk.MenuItem ('/dayname/')
+        pattern_dsimp   = Gtk.MenuItem ('/daysimp/')
+        pattern_mname   = Gtk.MenuItem ('/monthname/')
+        pattern_msimp   = Gtk.MenuItem ('/monthsimp/')
+        pattern_num1    = Gtk.MenuItem ('/num2/')
+        pattern_num2    = Gtk.MenuItem ('/num3+0/')
+        pattern_rand    = Gtk.MenuItem ('/rand10-99/')
+        pattern_offset  = Gtk.MenuItem ('/filename:0:3/')
         
-        pat_fname.set_tooltip_text  (_("Original filename"))
-        pat_dir.set_tooltip_text    (_("Parent directory"))
-        pat_name.set_tooltip_text   (_("Filename without extenstion"))
-        pat_ext.set_tooltip_text    (_("File extension"))
-        pat_day.set_tooltip_text    (_("Day of month"))
-        pat_date.set_tooltip_text   (_("Full date, e.g., 24Sep2008"))
-        pat_month.set_tooltip_text  (_("Numerical month of year"))
-        pat_year.set_tooltip_text   (_("Year, e.g., 1990"))
-        pat_mname.set_tooltip_text  (_("Full month name, e.g., August"))
-        pat_msimp.set_tooltip_text  (_("Simple month name, e.g., Aug"))
-        pat_dname.set_tooltip_text  (_("Full day name, e.g., Monday"))
-        pat_dsimp.set_tooltip_text  (_("Simple dayname, e.g., Mon"))
-        pat_num1.set_tooltip_text   (_("{num5} => 00001, 00002, 00003 , ..."))
-        pat_num2.set_tooltip_text   (_("{num5+5} => 00005, 00006, 00007 , ..."))
-        pat_rand.set_tooltip_text (_("A random number from 10 to 99"))
+        pattern_fname.set_tooltip_text  (_("Original filename"))
+        pattern_dir.set_tooltip_text    (_("Parent directory"))
+        pattern_name.set_tooltip_text   (_("Filename without extenstion"))
+        pattern_ext.set_tooltip_text    (_("File extension"))
+        pattern_day.set_tooltip_text    (_("Day of month"))
+        pattern_date.set_tooltip_text   (_("Full date, e.g., 24Sep2008"))
+        pattern_month.set_tooltip_text  (_("Numerical month of year"))
+        pattern_year.set_tooltip_text   (_("Year, e.g., 1990"))
+        pattern_mname.set_tooltip_text  (_("Full month name, e.g., August"))
+        pattern_msimp.set_tooltip_text  (_("Simple month name, e.g., Aug"))
+        pattern_dname.set_tooltip_text  (_("Full day name, e.g., Monday"))
+        pattern_dsimp.set_tooltip_text  (_("Simple dayname, e.g., Mon"))
+        pattern_num1.set_tooltip_text   (_("{num5} => 00001, 00002, 00003 , ..."))
+        pattern_num2.set_tooltip_text   (_("{num5+5} => 00005, 00006, 00007 , ..."))
+        pattern_rand.set_tooltip_text   (_("A random number from 10 to 99"))
+        pattern_offset.set_tooltip_text (_("The first three letters of filename."))
         
-        self.pat_popup.attach (pat_fname,   0, 1, 0, 1)
-        self.pat_popup.attach (pat_dir,     1, 2, 0, 1)
-        self.pat_popup.attach (pat_name,    0, 1, 1, 2)
-        self.pat_popup.attach (pat_ext,     1, 2, 1, 2)
-        self.pat_popup.attach (pat_day,     0, 1, 2, 3)
-        self.pat_popup.attach (pat_date,    1, 2, 2, 3)
-        self.pat_popup.attach (pat_month,   0, 1, 3, 4)
-        self.pat_popup.attach (pat_year,    1, 2, 3, 4)
-        self.pat_popup.attach (pat_dname,   0, 1, 4, 5)
-        self.pat_popup.attach (pat_dsimp,   1, 2, 4, 5)
-        self.pat_popup.attach (pat_mname,   0, 1, 5, 6)
-        self.pat_popup.attach (pat_msimp,   1, 2, 5, 6)
-        self.pat_popup.attach (pat_num1,    0, 1, 6, 7)
-        self.pat_popup.attach (pat_num2,    1, 2, 6, 7)
-        self.pat_popup.attach (pat_rand,     0, 1, 7, 8)
+        self.pattern_popup.attach (pattern_fname,   0, 1, 0, 1)
+        self.pattern_popup.attach (pattern_dir,     1, 2, 0, 1)
+        self.pattern_popup.attach (pattern_name,    0, 1, 1, 2)
+        self.pattern_popup.attach (pattern_ext,     1, 2, 1, 2)
+        self.pattern_popup.attach (pattern_day,     0, 1, 2, 3)
+        self.pattern_popup.attach (pattern_date,    1, 2, 2, 3)
+        self.pattern_popup.attach (pattern_month,   0, 1, 3, 4)
+        self.pattern_popup.attach (pattern_year,    1, 2, 3, 4)
+        self.pattern_popup.attach (pattern_dname,   0, 1, 4, 5)
+        self.pattern_popup.attach (pattern_dsimp,   1, 2, 4, 5)
+        self.pattern_popup.attach (pattern_mname,   0, 1, 5, 6)
+        self.pattern_popup.attach (pattern_msimp,   1, 2, 5, 6)
+        self.pattern_popup.attach (pattern_num1,    0, 1, 6, 7)
+        self.pattern_popup.attach (pattern_num2,    1, 2, 6, 7)
+        self.pattern_popup.attach (pattern_rand,    0, 1, 7, 8)
+        self.pattern_popup.attach (pattern_offset,  1, 2, 7, 8)
+        self.pattern_popup.show_all () 
 
-        self.pat_popup.show_all ()
+        # Two checkboxs at the bottoms
+        self.extension_cb   = Gtk.CheckButton.new_with_mnemonic (_("_Extension"))
+        self.recursive_cb   = Gtk.CheckButton.new_with_mnemonic (_("_Recursive"))
+        self.extension_cb.set_tooltip_text (_("Also operate on extensions"))
+        self.recursive_cb.set_tooltip_text (_("Also operate on subfolders and files"))
 
-        ubox.attach (pat_rb, 0, 1, 0, 1, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 0)
-        ubox.attach (sub_rb, 1, 2, 0, 1, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 0)
-        ubox.attach (cas_rb, 0, 1, 1, 2, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 0)
-        ubox.attach (und_rb, 1, 2, 1, 2, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 0)
-
-        self.dialog = gtk.Dialog ("Renamer", None, gtk.DIALOG_NO_SEPARATOR,
-                                  (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
-
-        self.ext_cb   = gtk.CheckButton (_("_Extension"), True)
-        self.recur_cb = gtk.CheckButton (_("_Recursive"), True)
-        self.ext_cb.set_tooltip_text (_("Also operate on extensions"))
-        self.recur_cb.set_tooltip_text (_("Also operate on subfolders and files"))
-
-        refresh       = gtk.Button (_("Refresh Previe_w"))
-
-        brbox   = gtk.HBox (False, 5);
-        brbox.pack_end (self.recur_cb, False, False, 0)
-        brbox.pack_end (self.ext_cb, False, False, 0)
-
-        ralign = gtk.Alignment (1.0, 0.5, 0.0, 0.0)
+        brbox   = Gtk.HBox.new (False, 5);
+        brbox.pack_end (self.recursive_cb, False, False, 0)
+        brbox.pack_end (self.extension_cb, False, False, 0)
+        ralign = Gtk.Alignment.new (1.0, 0.5, 0.0, 0.0)
         ralign.add (brbox)
-        
-        bbox    = gtk.HBox (False, 5)
-        bbox.pack_start (refresh, False, False, 0)
+
+        refresh_btn     = Gtk.Button.new_with_mnemonic (_("Refresh Previe_w"))
+        bbox    = Gtk.HBox.new (False, 5)
+        bbox.pack_start (refresh_btn, False, False, 0)
         bbox.pack_end (ralign, False, False, 0)
         
         # Preview
-        pbox    = gtk.HBox (False, 5)
-        view    = gtk.TreeView (self.pmodel)
+        preview_box    = Gtk.HBox.new (False, 5)
+        view    = Gtk.TreeView.new_with_model (self.pmodel)
         view.set_rules_hint (True)
-        view.set_size_request ( -1, PREVIEW_HEIGHT)
         
-        cell    = gtk.CellRendererText ()
+        cell    = Gtk.CellRendererText.new ()
         cell.set_property ('scale', 0.8)
-        cell.set_property ('width', DEFAULT_WIDTH/2)
-        cell.set_property ('ellipsize', pango.ELLIPSIZE_MIDDLE)
-        column  = gtk.TreeViewColumn (_("Original Name"), cell, text=0)
-        column.set_property ('sizing', gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+        cell.set_property ('width', 280)
+        cell.set_property ('ellipsize', Pango.EllipsizeMode.MIDDLE)
+        column  = Gtk.TreeViewColumn (_("Original Name"), cell, text=0)
+        column.set_property ('sizing', Gtk.TreeViewColumnSizing.AUTOSIZE)
         column.set_property ('resizable', True)
         view.append_column (column)
-        
-        
-        cell    = gtk.CellRendererText ()
+        cell    = Gtk.CellRendererText.new ()
         cell.set_property ('scale', 0.8)
-        cell.set_property ('width', DEFAULT_WIDTH/2 )
-        cell.set_property ('ellipsize', pango.ELLIPSIZE_MIDDLE)
-        column  = gtk.TreeViewColumn (_("New Name"), cell, text=1)
-        column.set_property ('sizing', gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+        cell.set_property ('width', 280)
+        cell.set_property ('ellipsize', Pango.EllipsizeMode.MIDDLE)
+        column  = Gtk.TreeViewColumn (_("New Name"), cell, text=1)
+        column.set_property ('sizing', Gtk.TreeViewColumnSizing.AUTOSIZE)
         column.set_property ('resizable', True)
         view.append_column (column) 
-        
-        scrollwin   = gtk.ScrolledWindow ()
-        scrollwin.set_policy (gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+
+        scrollwin   = Gtk.ScrolledWindow.new (None, None)
+        scrollwin.set_policy (Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        scrollwin.set_size_request (-1, PREVIEW_HEIGHT)
         scrollwin.add (view)
-        
-        expander = gtk.Expander (_("Pre_view"))
-        expander.set_use_underline (True)        
-        expander.add (scrollwin)
-        
-        mbox    = gtk.VBox ( False, 10)
-        mbox.pack_start (ubox, False, False, 0)
-        mbox.pack_start (lframe, True, True, 0)
-        mbox.pack_start (expander, True, True, 0)
-        mbox.pack_start (gtk.HSeparator(), False, False, 0)
-        mbox.pack_end   (bbox, False, False, 0)
 
-        malign = gtk.Alignment (0.0, 0.0, 1.0, 0.0)
-        malign.set_padding (10, 10, 10, 10)
+        preview_align  = Gtk.Alignment.new (0.1, 0.1, 1.0, 0.0)
+        preview_align.add (scrollwin)
+        preview_align.set_padding (0, 0, 10, 10)
+        
+        expander = Gtk.Expander.new_with_mnemonic (_("Pre_view"))
+        expander.set_use_underline (True)
+        expander.set_spacing (5)
+        expander.add (preview_align)
+        
+        main_box    = Gtk.VBox.new ( False, 8)
+        main_box.pack_start (buttonbox, False, False, 0)
+        main_box.pack_start (options_align, False, False, 0)
+        main_box.pack_start (expander, True, True, 0)
+        main_box.pack_start (Gtk.HSeparator(), False, False, 0)
+        main_box.pack_end   (bbox, False, False, 0)
+        main_align = Gtk.Alignment.new (0.0, 0.0, 1.0, 0.0)
+        main_align.set_padding (10, 10, 10, 10)
+        main_align.add (main_box)
 
-        malign.add (mbox)
-        self.dialog.vbox.add (malign)
+        self.dialog = Gtk.Dialog ("Renamer", None, Gtk.DialogFlags.MODAL,
+                                  (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK))
+        self.dialog.vbox.add (main_align)
 
         self.dialog.set_default_size (DEFAULT_WIDTH, DEFAULT_HEIGHT)
-        self.dialog.set_icon_name (gtk.STOCK_EDIT)
+        self.dialog.set_icon_name (Gtk.STOCK_EDIT)
         self.dialog.show_all ()
-                
-        pat_rb.connect ('toggled', self.prepare_pat_options)
-        sub_rb.connect ('toggled', self.prepare_sub_options)
-        cas_rb.connect ('toggled', self.prepare_cas_options)
-        und_rb.connect ('toggled', self.prepare_und_options)
 
-        pat_dir.connect   ('activate', self.on_popup_activate)
-        pat_ext.connect   ('activate', self.on_popup_activate)
-        pat_day.connect   ('activate', self.on_popup_activate)
-        pat_date.connect  ('activate', self.on_popup_activate)
-        pat_name.connect  ('activate', self.on_popup_activate)
-        pat_year.connect  ('activate', self.on_popup_activate)
-        pat_fname.connect ('activate', self.on_popup_activate)
-        pat_month.connect ('activate', self.on_popup_activate)
-        pat_dname.connect ('activate', self.on_popup_activate)
-        pat_dsimp.connect ('activate', self.on_popup_activate)
-        pat_mname.connect ('activate', self.on_popup_activate)
-        pat_msimp.connect ('activate', self.on_popup_activate)
-        pat_num1.connect ('activate', self.on_popup_activate)
-        pat_num2.connect ('activate', self.on_popup_activate)
-        pat_rand.connect ('activate', self.on_popup_activate)
+        self.pbutton.connect ('clicked', self.pattern_options_cb)
+        self.sbutton.connect ('clicked', self.substitute_options_cb)
+        self.cbutton.connect ('clicked', self.case_options_cb)
+        self.ubutton.connect ('clicked', self.undo_options_cb)
+
+        pattern_dir.connect   ('activate', self.on_popup_activate)
+        pattern_ext.connect   ('activate', self.on_popup_activate)
+        pattern_day.connect   ('activate', self.on_popup_activate)
+        pattern_date.connect  ('activate', self.on_popup_activate)
+        pattern_name.connect  ('activate', self.on_popup_activate)
+        pattern_year.connect  ('activate', self.on_popup_activate)
+        pattern_fname.connect ('activate', self.on_popup_activate)
+        pattern_month.connect ('activate', self.on_popup_activate)
+        pattern_dname.connect ('activate', self.on_popup_activate)
+        pattern_dsimp.connect ('activate', self.on_popup_activate)
+        pattern_mname.connect ('activate', self.on_popup_activate)
+        pattern_msimp.connect ('activate', self.on_popup_activate)
+        pattern_num1.connect ('activate', self.on_popup_activate)
+        pattern_num2.connect ('activate', self.on_popup_activate)
+        pattern_rand.connect ('activate', self.on_popup_activate)
+        pattern_offset.connect ('activate', self.on_popup_activate)
         
         expander.connect ('notify::expanded', self.expander_cb)        
-        refresh.connect ('clicked', self.prepare_preview)
+        refresh_btn.connect ('clicked', self.prepare_preview)
 
-    def prepare_pat_options (self, button, data=None):
+        self.prepare_pattern_options (self.pbutton)
+        self.prepare_substitute_options (self.sbutton)
+        self.prepare_case_options (self.cbutton)
+        self.prepare_undo_options (self.ubutton)
+        self.prepare_cap_after_options (self.ubutton)
 
-        if not button.get_active():
-            return
+    def pattern_options_cb (self, button, data=None):
+        self.options_box.foreach (self.remove, None)
+        self.options_box.pack_start (self.pattern_label, True, True, 0)
+        self.options_box.pack_start (self.pattern_box, True, True, 0)
+        self.options_box.show_all ()
 
-        self.lbox.foreach (self.remove)
-        self._read_recent_pats ()
-
-        hbox    = gtk.HBox (False, 5)
-
-        combo   = gtk.ComboBoxEntry (self.pats, 0)
-        self.pat_entry  = combo.child
-        button  = gtk.Button (" _?", None, True)
         
-        label   = gtk.Label ()
-        label.set_line_wrap (True)
-        label.set_alignment ( 0.1, -1)
-        label.set_markup (_("<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for available pattens.</span>"))        
+    def prepare_pattern_options (self, button, data=None):
+        ''' Prepare widgets & options for pattern on startup '''
+        self._read_recent_pats ()
+        self.pattern_box    = Gtk.HBox (False, 5)
+        pattern_combo   = Gtk.ComboBoxText.new_with_entry ()
+        self.pats.foreach (lambda m, p, i, d: pattern_combo.append_text (m[i][0]), None)
+            
+        self.pattern_entry  = pattern_combo.get_child()
+        button  = Gtk.Button.new_with_mnemonic (" _?")
+        
+        self.pattern_entry.label = _("Enter the pattern here ... ")
+        self.prepare_entry (self.pattern_entry)
 
-        self.pat_entry.label = _("Enter the pattern here ... ")
-        self.prepare_entry (self.pat_entry)
+        self.pattern_box.pack_start (pattern_combo, True, True, 0)
+        self.pattern_box.pack_start (button, False, False, 0)
 
-        hbox.pack_start (combo, True, True, 0)
-        hbox.pack_start (button, False, False, 0)
-
+        pattern_combo.connect ('changed', self.combo_box_changed )
+        self.pattern_entry.connect ('activate', self.pattern_entry_activate)
         button.connect ('button-press-event', lambda button, event:
-                            self.pat_popup.popup (None, None, None, event.button, event.time))
+                            self.pattern_popup.popup (None, None, None, None, event.button, event.time))
 
-        combo.connect ('changed', self.combo_box_changed )
-                              
-        self.pat_entry.connect ('activate', self.pat_entry_activate)
+        self.pattern_label = Gtk.Label.new (_("Enter the base pattern to rename. Click '?' for available patterns."))
+        self.pattern_label.set_alignment (0.04, 0.5)
 
-        self.lbox.pack_start (label, True, True, 0)
-        self.lbox.pack_start (hbox, True, True, 0)
-        self.lbox.show_all ()
+        self.pattern_options_cb (self, button)
 
-        self.action = PATTERNIZE
+    def substitute_options_cb (self, button, data=None):
+        self.options_box.foreach (self.remove, None)
+        self.options_box.pack_start (self.sub_label, True, True, 0)
+        self.options_box.pack_start (self.sub_replee, True, True, 0)
+        self.options_box.pack_start (self.sub_repler, True, True, 0)
+        self.options_box.show_all ()
+        self.undo_p = False
+        
+    def prepare_substitute_options (self, button, data=None):
 
-    def prepare_sub_options (self, button, data=None):
-
-        if not button.get_active():
-            return
-
-        self.lbox.foreach (self.remove)
-
-        self.sub_replee = gtk.Entry ()
+        self.sub_label  = Gtk.Label.new (_("Delete or replace multiple characters and words..."))
+        self.sub_label.set_alignment (0.02, 0.5)
+        
+        self.sub_replee = Gtk.Entry.new ()
         self.sub_replee.label =  _("Words to be replaced separated by \"/\", e.g., 1/2 ...")
         self.prepare_entry (self.sub_replee)
 
-        self.sub_repler = gtk.Entry ()
+        self.sub_repler = Gtk.Entry.new ()
         self.sub_repler.label = _("Corresponding words to replace with, e.g., one/two ...")
         self.prepare_entry (self.sub_repler)
 
-        self.sub_replee.set_tooltip_text (_("Enter the words (regular expressions) to be replaced, separated by '/'"))
+        self.sub_replee.set_tooltip_text (_("Enter the characters or words to be replaced, separated by '/'"))
         self.sub_repler.set_tooltip_text (_("Enter the corresponding words to replace with"))
 
-        self.lbox.pack_start (self.sub_replee, True, True, 0)
-        self.lbox.pack_start (self.sub_repler, True, True, 0)
+    def case_options_cb (self, button, data=None):
+        self.options_box.foreach (self.remove, None)
+        self.options_box.pack_start (self.case_box, True, True, 0)
+        self.options_box.show_all ()
+        self.undo_p = False
+        
+    def prepare_case_options (self, button, data=None):
+        store   = Gtk.ListStore ('gboolean', str, int)
+        store.append([True,  _("Keep Original Case"), CASE_NONE])
+        store.append([False,  _("ALL IN CAPITALS"), CASE_ALL_CAP])
+        store.append([False, _("all in lower case"), CASE_ALL_LOW])
+        store.append([False, _("First letter upper case"), CASE_FIRST_CAP])
+        store.append([False, _("Title Case"), CASE_EACH_CAP])
+        store.append([False, _("Capital Case After ..."), CASE_CAP_AFTER])
 
-        self.lbox.show_all ()
-
-        self.action = SUBSTITUTE         
-
-    def prepare_cas_options (self, button, data=None):
-
-        if not button.get_active ():
-            return
-
-        self.lbox.foreach (self.remove)
-
-        store   = gtk.ListStore ('gboolean', str, int)
-
-        store.append([True,  _("ALL IN CAPITALS"), ALL_CAP])
-        store.append([False, _("all in lower case"), ALL_LOW])
-        store.append([False, _("First letter upper case"), FIRST_CAP])
-        store.append([False, _("Title Case"), EACH_CAP])
-        store.append([False, _("Capital Case After ..."), CAP_AFTER])
-
-        self.view   = gtk.TreeView (store)
+        self.view   = Gtk.TreeView.new_with_model (store)
         self.view.set_rules_hint (True)
-
-        cell    = gtk.CellRendererToggle ()
+        self.view.connect ('cursor-changed', self.cursor_changed)
+        
+        cell    = Gtk.CellRendererToggle.new ()
         cell.set_radio (True)
         cell.set_property ('xalign', 0.1)
 
-        column  = gtk.TreeViewColumn ()
+        column  = Gtk.TreeViewColumn.new ()
         column.pack_start (cell, False)
-        column.set_sizing (gtk.TREE_VIEW_COLUMN_FIXED)
+        column.set_sizing (Gtk.TreeViewColumnSizing.FIXED)
         column.set_fixed_width (40)
         column.add_attribute (cell, 'active', 0)
-
         self.view.append_column (column)
 
-        cell    = gtk.CellRendererText ()
+        cell    = Gtk.CellRendererText.new ()
         cell.set_property ('scale', 0.8)
 
-        column  = gtk.TreeViewColumn(_("Choose One"))
+        column  = Gtk.TreeViewColumn.new ()
+        column.set_title (_("Choose One"))
         column.pack_start (cell, True)
         column.add_attribute (cell, 'text', 1)
-
         self.view.append_column (column)
-
-        self.scroll_win  = gtk.ScrolledWindow()
-        self.scroll_win.set_policy (gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        
+        self.scroll_win  = Gtk.ScrolledWindow()
+        self.scroll_win.set_policy (Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.scroll_win.add(self.view)
+        self.scroll_win.set_size_request (-1, 120)
 
-        self.view.connect ('cursor-changed', self.cursor_changed)
-        self.lbox.pack_start (self.scroll_win, True, True, 0)
-        self.lbox.show_all ()
+        self.case_label = Gtk.Label.new (_("Choose the casing style you want to apply."))
+        self.case_label.set_alignment (0.02, 0.5)
+        
+        self.case_box   = Gtk.VBox (False, 5)
+        self.case_box.pack_start (self.case_label, False, False, 0);
+        self.case_box.pack_start (self.scroll_win, True, True, 0);
 
-        self.action  = CASING        
-
-    def prepare_und_options (self, button, data=None):
-
-        if not button.get_active ():
-            return
-
-        self.lbox.foreach (self.remove)
-
-        und_label = gtk.Label ()
-        und_label.set_line_wrap (True)
-        und_label.set_alignment (0.1, -1)        
+    def undo_options_cb (self, button, data=None):
+        self.options_box.foreach (self.remove, None)
+        self.options_box.pack_start (self.undo_label, True, True, 0)
+        self.options_box.show_all ()
+        self.undo_p = True
+        
+    def prepare_undo_options (self, button, data=None):
+        self.undo_label = Gtk.Label ()
+        self.undo_label.set_line_wrap (True)
+        self.undo_label.set_alignment (0.1, -1)        
         
         if self.log_file_p():
-            und_label.set_markup (_("<b>Undo the last operation inside this folder.</b>\n\n <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"))
+            self.undo_label.set_markup (_("<b>Undo the last operation inside this folder.</b>\n\n <span " +
+                                         "size='small'>Note: You cannot undo an undo. ;)</span>"))
         else: 
-            und_label.set_markup (_("<span color='red' weight='bold'>No log file is found in this folder.</span>\n\n<span color='grey' size='small'>Note: When it renames files, Renamer writes a log file, in the folder it was launched, which is used for Undo.</span>"))
+            self.undo_label.set_markup (_("<span color='red' weight='bold'>No log file is found in this folder." +
+                                         "</span>\n\n<span size='small'>Note: When it renames files," +
+                                         "Renamer writes a log file, in the folder it was launched, which is used for Undo.</span>"))
 
-        self.lbox.pack_start (und_label, True, True, 0)
-        self.lbox.show_all ()
-
-        self.action = UNDO
-    
-    def prepare_cap_after_options (self):
+    def cap_after_options_cb (self):
+        self.options_box.foreach (self.remove, None)
+        self.options_box.pack_start (self.cap_box, True, True, 0)
+        self.options_box.show_all ()
         
-        self.scroll_win.remove (self.view)
-        self.lbox.remove (self.scroll_win)
-
-        cap_label = gtk.Label (_("Capitalize after: "))
-
-        self.cap_entry = gtk.Entry ()
-        self.cap_entry.set_text (' /-/_/[/(')
-        self.cap_first = gtk.CheckButton (_("_First Letter"), True)        
+    def prepare_cap_after_options (self, button):
+        cap_label = Gtk.Label.new_with_mnemonic (_("Enter a list of letters or words, seperated by '/'."))
+        cap_label.set_alignment (0.02, 0.5)
+        cap_label.set_line_wrap (True)
+        
+        self.cap_entry = Gtk.Entry.new ()
+        self.cap_entry.set_text ('-/_/ /[/]/(/)/{/}')
+        desc	= self.cap_entry.get_pango_context().get_font_description()
+        desc.set_size (SMALL_FONT_SIZE)
+        self.cap_entry.modify_font (desc)
+        
+        self.cap_first = Gtk.CheckButton.new_with_mnemonic (_("_First Letter"))
         self.cap_first.set_active (False)
-        
-        cbox    = gtk.Table (3, 2, False)
-        cbox.attach (cap_label, 0, 1, 0, 1, 0)
-        cbox.attach (self.cap_entry, 1, 2, 0, 1, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 2, 5)
-        cbox.attach (self.cap_first, 1, 2, 1, 2, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL)
-
-        self.lbox.pack_start (cbox, True, True, 0)
-
-        self.cap_entry.set_tooltip_text (_("Enter the list of sequences, to capitalize the letter after each of it, separated by '/'"))
+        self.cap_entry.set_tooltip_text (_("A list of sequences, separated by '/'. The letters after them will be capitalized."))
         self.cap_first.set_tooltip_text (_("Capitalize the first letter"))
-        self.lbox.show_all ()
-        
-    def prepare_entry (self, entry):
-        """ Helper function for preparing entries in our dialog """
-        entry.set_text (entry.label)
-        entry.clr_on_focus = True   # Clear current text when the entry is focused
-        self.modify_entry_style_grey_italic (entry)
-                        
-        entry.connect ('focus-in-event',  self.entry_focus_in)
-        entry.connect ('focus-out-event', self.entry_focus_out)
 
-    def modify_entry_style_grey_italic (self, entry):
-        """ Make the text in entry grey and italic"""        
-        desc	= entry.get_pango_context().get_font_description()
-        desc.set_style (pango.STYLE_ITALIC)
-        entry.modify_font (desc)
-        entry.modify_text(gtk.STATE_NORMAL, gtk.gdk.Color('grey'))        
-    
-    def restore_entry_style (self, entry):
-        """ Make the text in entry back to black and normal style"""        
-        desc	= entry.get_pango_context().get_font_description()
-        desc.set_style (pango.STYLE_NORMAL)
-        entry.modify_font (desc)
-        entry.modify_text(gtk.STATE_NORMAL, gtk.gdk.Color('black'))        
+        temp_alignment = Gtk.Alignment.new (1.0, 0.5, 0, 0)
+        temp_alignment.add (self.cap_first)
         
+        self.cap_box = Gtk.VBox (False, 5)
+        self.cap_box.pack_start (cap_label, False, False, 0) 
+        self.cap_box.pack_start (self.cap_entry, False, False, 0)
+        self.cap_box.pack_start (temp_alignment, False, False, 0)
+
     def entry_focus_in (self, widget, event, data=None):
-        """ When the entriy is focused for the first time, clear the label text, and reset text style."""
+        ''' When the entriy is focused for the first time, clear the label text, and reset text style.'''
         if widget.clr_on_focus:
             widget.set_text ("")
             widget.clr_on_focus = False            
-            self.restore_entry_style (widget)
-        
+            
     def entry_focus_out (self, widget, event, data=None):
-        """ When the entry focus is out without any changes, restore label text and color."""
+        ''' When the entry focus is out without any changes, restore label text and color.'''
         if widget.get_text () == "":
             widget.set_text (widget.label)
-            widget.clr_on_focus = True   # Clear current text when the entry is focused            
-            self.modify_entry_style_grey_italic (widget)
+            widget.clr_on_focus = True   # Clear current text when the entry is focused
+            
+    def prepare_entry (self, entry):
+        ''' Helper function for preparing entries in our dialog '''
+        entry.set_text (entry.label)
+        entry.clr_on_focus = True   # Clear current text when the entry is focused
 
+        #Make the text in entry small
+        desc	= entry.get_pango_context().get_font_description()
+        desc.set_size (SMALL_FONT_SIZE)
+        entry.modify_font (desc)
+                
+        entry.connect ('focus-in-event',  self.entry_focus_in)
+        entry.connect ('focus-out-event', self.entry_focus_out)
+        
     def combo_box_changed (self, combo, data=None):
         "When patten combo box entry is changed, restore text style"
-        self.pat_entry.clr_on_focus = False
-        self.restore_entry_style (combo.child)
+        self.pattern_entry.clr_on_focus = False
 
-    def pat_entry_activate (self, entry, data=None):
+    def pattern_entry_activate (self, entry, data=None):
         "When Return is pressed on pattern entry"
         self.rename (files)
         self.dialog.destroy ()
                         
     def expander_cb (self, widget, data):
-        """ When expander state is changed """
+        ''' When expander state is changed '''
         if widget.get_expanded ():
             # When preview is expanded, resize the dialog a litter bigger.
-            self.dialog.resize (DEFAULT_WIDTH + 150 , DEFAULT_HEIGHT + PREVIEW_HEIGHT)
+            self.dialog.resize (DEFAULT_WIDTH + 100 , DEFAULT_HEIGHT + PREVIEW_HEIGHT)
             self.prepare_preview (widget)
         else:
             # When preview is hidden, restore normal size
@@ -471,26 +450,26 @@ class Application():
             self.dialog.resize (DEFAULT_WIDTH, DEFAULT_HEIGHT)
 
     def on_popup_activate (self, item, data=None):
-        """ When a menutitem on patterns popup menu is clicked, append the label to pattern entry. """
-        self.entry_focus_in (self.pat_entry, None, None)
-        self.pat_entry.set_text (self.pat_entry.get_text() + item.get_property('label'))
+        ''' When a menutitem on patterns popup menu is clicked, append the label to pattern entry. '''
+        self.entry_focus_in (self.pattern_entry, None, None)
+        self.pattern_entry.set_text (self.pattern_entry.get_text() + item.get_property('label'))
 
     def cursor_changed (self, treeview, data=None):
-        """ When selected row in CASE tree view is changed, update the tree model. """
+        ''' When selected row in CASE tree view is changed, update the tree model. '''
         model, iter = treeview.get_selection().get_selected ()
-        model.foreach (lambda model, path, iter: model.set (iter, 0, False))
+        model.foreach (lambda model, path, iter, data: model.set (iter, 0, False), None)
         model.set (iter, 0, True)
         self.case_opt = model.get_value (iter, 2)
         
-        if self.case_opt == CAP_AFTER:
-            self.prepare_cap_after_options ()
+        if self.case_opt == CASE_CAP_AFTER:
+            self.cap_after_options_cb ()
     
-    def remove (self, child):
-        """ callback to remove a child from lbox """
-        self.lbox.remove (child)
+    def remove (self, child, user_data):
+        ''' callback to remove a child from options_box '''
+        self.options_box.remove (child)
 
     def build_preview_model (self, path, vpath=''):
-        " Base function for building list store for preview "        
+        ''' Base function for building list store for preview '''
         parent, name = os.path.split (path)
         newName = self._get_new_name(name)
         
@@ -516,7 +495,7 @@ class Application():
         " Wrapper around build_preview_model. Prepare and validate settings."
         self.pmodel.clear ()
         
-        if self.action == UNDO and self.log_file_p():
+        if self.undo_p and self.log_file_p():
             logFile = open (UNDO_LOG_FILE, 'rb')
             
             for i in xrange(5): logFile.readline () #Skip 5 lines of header
@@ -540,56 +519,55 @@ class Application():
                 return
         
     def prepare_data_from_dialog (self):
-        """ Initialize data require for rename and preview from dailog
-            Report and return False.on errors"""
+        ''' Initialize data require for rename and preview from dailog
+            Report and return False.on errors'''
 
-        self.recur = self.recur_cb.get_active ()
-        self.ext   = self.ext_cb.get_active ()
+        self.recur = self.recursive_cb.get_active ()
+        self.ext   = self.extension_cb.get_active ()
 
-        if self.action != UNDO and not files:
+        if not self.undo_p and not files:
             # If it is not undo, and no selected files
             return False
         
-        if self.action == PATTERNIZE:
-            # prepare patternize related options, and check for possible errors
-            self.pattern = self.pat_entry.get_text ()
-            self.num = 0
+        # prepare patternize related options, and check for possible errors
+        self.pattern = self.pattern_entry.get_text ()
+        self.num = 0
 
-            if self.pattern == '' or self.pattern == self.pat_entry.label:
-                show_error (_("Empty Pattern"), _("Please, enter a valid pattern."))
-                return False
+        if self.pattern == '' or self.pattern == self.pattern_entry.label:
+            #show_error (_("Empty Pattern"), _("Please, enter a valid pattern."))
+            self.pattern = '/filename/'
             
-            if self.num_pat.search(self.pattern):
+        if self.num_pat.search(self.pattern):
                 #if the pattern contains /num*/ or /num*+*/, disable recursion
-                self.recur = False
+            self.recur = False
             
-            if self.ran_pat.search(self.pattern):
+        if self.ran_pat.search(self.pattern):
                 # If a random pattern is found, prepare sequence of random numbers
-                tmp = self.ran_pat.search(self.pattern).group()
-                range = tmp[5:-1] # Extract 10-99 from /rand10-99/
-                start, end = range.split ('-') # Split 10-99 to 10 and 99                
-                self.ran_seq = [x for x in xrange (int(start), int(end))]
+            tmp = self.ran_pat.search(self.pattern).group()
+            range = tmp[5:-1] # Extract 10-99 from /rand10-99/
+            start, end = range.split ('-') # Split 10-99 to 10 and 99                
+            self.ran_seq = [x for x in xrange (int(start), int(end) + 1)]
+#            print self.ran_seq
 
-        elif self.action == SUBSTITUTE:
-            # prepare substitute related options, and check for possible errors
-            replee = self.sub_replee.get_text ()
-            repler = self.sub_repler.get_text ()
+        # prepare substitute related options, and check for possible errors
+        replee = self.sub_replee.get_text ()
+        repler = self.sub_repler.get_text ()
 
-            if replee == self.sub_replee.label or replee == '':
-                show_error (_("Empty Word"), _("Please enter a valid word to be replaced."))
-                return False
-
-            if repler == self.sub_repler.label:
+        self.substitute_p = True
+        if replee == self.sub_replee.label or replee == '':
+            # no need to substitute
+            self.substitute_p = False
+            
+        if repler == self.sub_repler.label:
                repler = ''
 
-            self.replees = replee.split ('/')
-            self.replers = repler.split ('/')
-                
+        self.replees = replee.split ('/')
+        self.replers = repler.split ('/')
         return True
     
     def rename (self, files):
-        """ Wrapper around _rename (). Prepare and validate settings, and write logs."""
-        if self.action == UNDO:
+        ''' Wrapper around _rename (). Prepare and validate settings, and write logs.'''
+        if self.undo_p:
             self.undo ()
             return True
 
@@ -608,19 +586,17 @@ class Application():
             app._rename(file)
 
         self.close_log ()
-        
-        if self.action == PATTERNIZE:
-            self._write_recent_pats ()
+        self._write_recent_pats ()
 
         self.notify(_("Rename successful"),\
                     _("renamed %d files successfully.") % self.filesRenamed,\
-                     gtk.STOCK_APPLY,NOTIFICATION_TIMEOUT)
+                     Gtk.STOCK_APPLY)
 
         return True
 
     def _rename (self, path, oldPath=''):
-        """ Base function to rename files
-            If self.recur is set, also renames file recursively"""
+        ''' Base function to rename files
+            If self.recur is set, also renames file recursively'''
         parent, oldName = os.path.split (path)
         newName = self._get_new_name (oldName)
         
@@ -645,22 +621,23 @@ class Application():
                 self._rename (os.path.join (newPath, file), oldPath)
                 
     def _write_recent_pats (self):
-        """ Store recent patterns """
+        ''' Store recent patterns '''
         if not os.path.exists(CONFIG_DIR):
             os.makedirs (CONFIG_DIR)
 
         with open (os.path.join (CONFIG_DIR, REC_FILE), 'w') as file:
             i = 1
-            cpat = self.pat_entry.get_text()
-            file.write (cpat + '\n' ) 
+            cpat = self.pattern_entry.get_text()
+            if cpat != self.pattern_entry.label: # Don't write 'Enter pattern' label ...
+                file.write (cpat + '\n' ) 
             for pat in self.pats:
                 if i < REC_PATS and not pat[0] == cpat:
                     file.write (pat[0] + '\n')
                     i = i + 1
 
     def _read_recent_pats (self):
-        """ Read recent patterns """
-        self.pats = gtk.ListStore (gobject.TYPE_STRING)
+        ''' Read recent patterns '''
+        self.pats = Gtk.ListStore (GObject.TYPE_STRING)
 
         try:
             with open (os.path.join (CONFIG_DIR, REC_FILE), 'r') as file:
@@ -670,179 +647,166 @@ class Application():
             pass
             
     def _get_new_name (self, oldName):
-        """ return a new name, based on the old name, and settings from our dialog. """
+        ''' return a new name, based on the old name, and settings from our dialog. '''
+        newName = self.pattern
 
-        if self.action == SUBSTITUTE:
-            if self.ext:
-                newName = oldName
+        ### START PATTERNIZE OPTIONS ###
+        #for number substiution
+        for match in self.num_pat.finditer (newName):
+            tmp = match.group()
+            #print tmp
+            #if /num?/
+            if len(tmp)== 6:
+                substitute = str(self.num).zfill(int(tmp[4]))
+                newName    = self.num_pat.sub(substitute, newName, 1)
+                self.num   = self.num + 1
+            #if /num?+?/
+            elif len(tmp) > 7:
+                substitute = str(self.num+int(tmp[6:(len(tmp)-1)])).zfill(int(tmp[4]))
+                newName    = self.num_pat.sub(substitute, newName, 1)
+                self.num   = self.num + 1
+
+        # for random number insertion
+        for match in self.ran_pat.finditer (newName):
+            if not self.ran_seq:
+                # if random number sequence is None
+                print "Not Enought Random Number Range"
+                show_error (_("Not Enough Random Number Range"), _("Please, use a larger range"))
+                self.exit ()
+                #return False
+
+            randint = random.choice (self.ran_seq)
+            self.ran_seq.remove (randint)
+            newName = self.ran_pat.sub (str(randint), newName, 1)
+
+        dir, file = os.path.split (os.path.abspath(oldName))
+        name, ext = os.path.splitext (file)
+        dirname = os.path.basename(dir)
+
+        #replace filename related Tags
+        newName = newName.replace('/filename/',oldName)
+        newName = newName.replace('/dir/', dirname)
+        newName = newName.replace('/name/', name)
+        newName = newName.replace('/ext/', ext)
+
+        #for /name:offset(:length)/
+        for match in self.name_slice.finditer (newName):
+            tmp = match.group ()
+            tmp = tmp[:-1].split (':')
+
+            if len(tmp) ==  2:
+                tmp, offset = tmp
+                offset = int(offset)
+                substitute = name[offset:] 
             else:
-                name, ext = os.path.splitext (oldName)
-                newName = name
+                tmp, offset, length = tmp
+                offset = int(offset)
+                length = int(length)
+                if length < 0:
+                    if offset  == 0:
+                        substitute = name[offset+length:]
+                    else:
+                        substitute = name[offset+length:offset]
+                else:
+                    if (len(name[offset:]) > length):
+                        substitute = name[offset:offset+length]
+                    else:
+                        substitute = name[offset:]
 
+            newName    = self.name_slice.sub (substitute, newName, 1)
+
+        #for /filename:offset(:length)/
+        for match in self.filename_slice.finditer (newName):
+            tmp = match.group ()
+            tmp = tmp[:-1].split (':')
+
+            if len(tmp) ==  2:
+                tmp, offset = tmp
+                offset = int(offset)
+                substitute = oldName[offset:] 
+            else:
+                tmp, offset, length = tmp
+                offset = int(offset)
+                length = int(length)
+                if length < 0:
+                    if offset  == 0:
+                        substitute = oldName[offset+length:]
+                    else:
+                        substitute = oldName[offset+length:offset]
+                else:
+                    if (len(name[offset:]) > length):
+                        substitute = name[offset:offset+length]
+                    else:
+                        substitute = name[offset:]
+
+            newName    = self.filename_slice.sub(substitute, newName, 1)
+
+        #Some Time/Date Replacements
+        newName = newName.replace('/date/', time.strftime('%d%b%Y', time.localtime()))
+        newName = newName.replace('/year/', time.strftime('%Y', time.localtime()))
+        newName = newName.replace('/month/', time.strftime('%m', time.localtime()))
+        newName = newName.replace('/monthname/', time.strftime('%B', time.localtime()))
+        newName = newName.replace('/monthsimp/', time.strftime('%b', time.localtime()))
+        newName = newName.replace('/day/', time.strftime('%d', time.localtime()))
+        newName = newName.replace('/dayname/', time.strftime('%A', time.localtime()))
+        newName = newName.replace('/daysimp/', time.strftime('%a', time.localtime()))
+        ### END PATTERNIZE OPTIONS ###
+        
+        if not self.ext:
+            name, ext = os.path.splitext (newName)
+        else:
+            name = newName
+            
+        # Handle Substitute
+        if self.substitute_p:
             for i in xrange (0, len(self.replees)):
-                # print self.replees[i], self.replers[i] 
-                pattern = re.compile (self.replees[i])
+                # print self.replees[i], self.replers[i]
+                print self.replees
                 if i < len (self.replers):
-                    newName = pattern.sub (self.replers[i], newName)
+                    name = name.replace (self.replees[i], self.replers[i])
                 else:
                     # if there is no corresponding word to replace, use the last one
-                    newName = pattern.sub (self.replers[-1], newName)
+                    name = name.replace (self.replees[i], self.replers[-1])
+                # pattern = re.compile (self.replees[i])
+                # if i < len (self.replers):
+                #     name = pattern.sub (self.replers[i], name)
+                # else:
+                #     name = pattern.sub (self.replers[-1], name)
 
-            if self.ext:
-                return newName
-            else:
-                return newName + ext               
+        # Handle Case
+        if self.case_opt == CASE_ALL_CAP:
+            name = name.upper ()
 
-        if self.action == CASING:
-            if self.ext:
-                name = oldName
-            else:
-                name, ext = os.path.splitext (oldName)
+        elif self.case_opt == CASE_ALL_LOW:
+            name = name.lower()
 
-            if self.case_opt == ALL_CAP:
-                name = name.upper ()
+        elif self.case_opt == CASE_FIRST_CAP:
+            name = name.capitalize()
 
-            elif self.case_opt == ALL_LOW:
-                name = name.lower()
-                
-            elif self.case_opt == FIRST_CAP:
+        elif self.case_opt == CASE_EACH_CAP:
+            name = name.title ()
+
+        elif self.case_opt == CASE_CAP_AFTER:
+            if self.cap_first.get_active():
                 name = name.capitalize()
 
-            elif self.case_opt == EACH_CAP:
-                name = name.title ()
-                
-            elif self.case_opt == CAP_AFTER:
-                
-                if self.cap_first.get_active():
-                    name = name.capitalize()
-            
-                seps  = self.cap_entry.get_text ()
-
-                for sep in seps.split ('/'):
+            seps  = self.cap_entry.get_text ()
+#            print name, seps
+            for sep in seps.split ('/'):
+                if not sep == '':
                     lst = [ l for l in name.split(sep)]
-                    for i in xrange(1, len(lst)):
-                        if lst[i] is not '':
-                            lst[i] = lst[i][0].upper() + lst[i][1:]
-                    name = sep.join (lst)
+                for i in xrange(1, len(lst)):
+                    if lst[i] is not '':
+                        lst[i] = lst[i][0].upper() + lst[i][1:]
+                name = sep.join (lst)
         
-            if self.ext:
-                return name
-            else:
-                return name + ext
-
-
-        if self.action == PATTERNIZE:
-            
-            if not self.pattern:
-                return oldName
-
-            newName = self.pattern
-            
-            #for number substiution
-            for match in self.num_pat.finditer (newName):
-                tmp = match.group()
-                #print tmp
-                #if /num?/
-                if len(tmp)== 6:
-                    substitute = str(self.num).zfill(int(tmp[4]))
-                    newName    = self.num_pat.sub(substitute, newName, 1)
-                    self.num   = self.num + 1
-                #if /num?+?/
-                elif len(tmp) > 7:
-                    substitute = str(self.num+int(tmp[6:(len(tmp)-1)])).zfill(int(tmp[4]))
-                    newName    = self.num_pat.sub(substitute, newName, 1)
-                    self.num   = self.num + 1
-            
-            # for random number insertion
-            for match in self.ran_pat.finditer (newName):
-                if not self.ran_seq:
-                    # if random number sequence is None
-                    print "Not Enought Random Number Range"
-                    show_error (_("Not Enough Random Number Range"), _("Please, use a larger range"))
-                    self.exit ()
-                    #return False
-                    
-                randint = random.choice (self.ran_seq)
-                self.ran_seq.remove (randint)
-                newName = self.ran_pat.sub (str(randint), newName, 1)
-                
-            dir, file = os.path.split (os.path.abspath(oldName))
-            name, ext = os.path.splitext (file)
-            dirname = os.path.basename(dir)
-
-            #replace filename related Tags
-            newName = newName.replace('/filename/',oldName)
-            newName = newName.replace('/dir/', dirname)
-            newName = newName.replace('/name/', name)
-            newName = newName.replace('/ext/', ext)
-
-            #for /name:offset(:length)/
-            for match in self.name_slice.finditer (newName):
-                tmp = match.group ()
-                tmp = tmp[:-1].split (':')
-
-                if len(tmp) ==  2:
-                    tmp, offset = tmp
-                    offset = int(offset)
-                    substitute = name[offset:] 
-                else:
-                    tmp, offset, length = tmp
-                    offset = int(offset)
-                    length = int(length)
-                    if length < 0:
-                        if offset  == 0:
-                            substitute = name[offset+length:]
-                        else:
-                            substitute = name[offset+length:offset]
-                    else:
-                        if (len(name[offset:]) > length):
-                            substitute = name[offset:offset+length]
-                        else:
-                            substitute = name[offset:]
-                            
-                newName    = self.name_slice.sub (substitute, newName, 1)
-                
-            #for /filename:offset(:length)/
-            for match in self.filename_slice.finditer (newName):
-                tmp = match.group ()
-                tmp = tmp[:-1].split (':')
-
-                if len(tmp) ==  2:
-                    tmp, offset = tmp
-                    offset = int(offset)
-                    substitute = oldName[offset:] 
-                else:
-                    tmp, offset, length = tmp
-                    offset = int(offset)
-                    length = int(length)
-                    if length < 0:
-                        if offset  == 0:
-                            substitute = oldName[offset+length:]
-                        else:
-                            substitute = oldName[offset+length:offset]
-                    else:
-                        if (len(name[offset:]) > length):
-                            substitute = name[offset:offset+length]
-                        else:
-                            substitute = name[offset:]
-                            
-                newName    = self.filename_slice.sub(substitute, newName, 1)
-
-
-            #Some Time/Date Replacements
-            newName = newName.replace('/date/', time.strftime('%d%b%Y', time.localtime()))
-            newName = newName.replace('/year/', time.strftime('%Y', time.localtime()))
-            newName = newName.replace('/month/', time.strftime('%m', time.localtime()))
-            newName = newName.replace('/monthname/', time.strftime('%B', time.localtime()))
-            newName = newName.replace('/monthsimp/', time.strftime('%b', time.localtime()))
-            newName = newName.replace('/day/', time.strftime('%d', time.localtime()))
-            newName = newName.replace('/dayname/', time.strftime('%A', time.localtime()))
-            newName = newName.replace('/daysimp/', time.strftime('%a', time.localtime()))
-            
-            return newName
+        if self.ext:
+            return name
+        else:
+            return name + ext
 
     def undo (self):
-        """ Restore previously renamed files back according to the log file. """
+        ''' Restore previously renamed files back according to the log file. '''
         if not self.log_file_p ():
             show_error (_("Undo Failed"), _("Log file not found"))
             self.exit()
@@ -862,15 +826,15 @@ class Application():
         os.remove (UNDO_LOG_FILE)
         self.notify(_("Undo successful"),\
                     _("%d files restored.") % self.filesRenamed, \
-                    gtk.STOCK_APPLY,5000)
+                    Gtk.STOCK_APPLY)
         
     def log_file_p (self):
-        """ Check for log file in current folder, 
-            return True if found, else False """
+        ''' Check for log file in current folder, 
+            return True if found, else False '''
         return os.path.exists (UNDO_LOG_FILE) and True or False
     
     def start_log (self):
-        """ Open log and write header. """
+        ''' Open log and write header. '''
         self.logFile = open (UNDO_LOG_FILE, 'wb', 1)
 
         self.logFile.write (' Renamer Log '.center (80, '#'))
@@ -883,7 +847,7 @@ class Application():
         self.logFile.write ('\n\n')
 
     def close_log (self):
-        """ Close log file, and insert total files renamed."""
+        ''' Close log file, and insert total files renamed.'''
         if not self.logFile:
             return
         
@@ -901,51 +865,54 @@ class Application():
             m.close ()
     
     def exit (self):
-        """ Exit Application if there is an error."""
+        ''' Exit Application if there is an error.'''
         self.close_log ()
-        
-        if self.action == PATTERNIZE:
-            self._write_recent_pats ()
+        self._write_recent_pats ()
         
         sys.exit (1)
         
-    def notify(self, title,text,iconpath,time):
-        """ Wrapper to display notifications with timeout time. """
-        if not pynotify.init("Renamer"):
-            self.exit ()
-
-        n = pynotify.Notification(title,text,iconpath)
-        n.set_timeout(time)
-
-        if not n.show():
-            print "Failed to send notification"
-            self.exit ()
+    def notify(self, title,text,icon):
+        ''' Wrapper to display notifications with timeout time. '''
+        # if not Notify.init("Renamer"):
+        #     self.exit ()
+        # n = Notify.Notification.new (summary=title,body=text,icon=icon)
+        # n.set_timeout(5 * 1000)
+        # if not n.show():
+        #     print "Failed to send notification"
+        #     self.exit ()
+        # Notify.uninit ()
+        
+        import shlex, subprocess
+        print locals()
+        command = 'notify-send -t 5000 -u normal -i "%(icon)s" "%(title)s" "%(text)s"' %locals ()
+        args = shlex.split (command)
+        subprocess.Popen (args)
 
 
 def show_error (title, message):
     "help function to show an error dialog"
-    dialog = gtk.MessageDialog (type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE)
+    dialog = Gtk.MessageDialog (type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE)
     dialog.set_markup ("<b>%s</b>\n\n%s"%(title, message))
     dialog.run ()
     dialog.destroy ()
 
 def init_gettext ():
+    PO_DIR = None
+    if os.path.exists(os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')):
+        # po dir, when it is installed as a user script
+        PO_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')
 
-	gettext.bindtextdomain(APP, PO_DIR)
-	gettext.textdomain(APP) 
-	
-	lang = gettext.translation (APP, PO_DIR, fallback=True)
-	_ = lang.gettext
-	gettext.install (APP, PO_DIR)
+    gettext.bindtextdomain(APP, PO_DIR)
+    gettext.textdomain(APP) 
+    lang = gettext.translation (APP, PO_DIR, fallback=True)
+    _ = lang.gettext
+    gettext.install (APP, PO_DIR)
 	
 if __name__ == '__main__':
-	
 	init_gettext ()
-	
 	files = [file for file in sys.argv[1:]]
+        app = RenameApplication ()
             
-        app = Application ()
-            
-        while (app.dialog.run () == gtk.RESPONSE_OK):
+        while (app.dialog.run () == Gtk.ResponseType.OK):
             if app.rename (files):
                 break
