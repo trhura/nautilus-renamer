@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 04:56+0000\n"
+"X-Launchpad-Export-Date: 2012-01-12 06:07+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
@@ -267,66 +267,3 @@ msgstr "Pomyślnie cofnięto."
 #, python-format
 msgid "%d files restored."
 msgstr "%d plików przywrócono."
-
-#~ msgid "Options"
-#~ msgstr "Opcje"
-
-#~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
-#~ "available pattens.</span>"
-#~ msgstr ""
-#~ "<span size='small'>Zmień nazwa plików, bazując na wzorze. Kliknij na "
-#~ "<b>?</b>, aby zobaczyć dostępne wzory.</span>"
-
-#~ msgid ""
-#~ "Enter the words (regular expressions) to be replaced, separated by '/'"
-#~ msgstr ""
-#~ "Wprowadź słowa (wyrażenia regularne), któ¶e zostaną zamienione, oddzielone "
-#~ "znakiem \"/\""
-
-#~ msgid "Capitalize after: "
-#~ msgstr "Duże litery po: "
-
-#~ msgid "Please, enter a valid pattern."
-#~ msgstr "Proszę, wprowadź prawidłowy wzór."
-
-#~ msgid "Empty Pattern"
-#~ msgstr "Pusty wzór"
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
-#~ "a log file, in the folder it was launched, which is used for Undo.</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>Nie znaleziono pliku logu w tym "
-#~ "folderze.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Info: Kiedy trwa operacja zmiany nazw, "
-#~ "Renamer zapisuje plik logu w folderze - w którym został włączony - używany "
-#~ "do cofnięcia operacji .</span>"
-
-#~ msgid ""
-#~ "<b>Undo the last operation inside this folder.</b>\n"
-#~ "\n"
-#~ " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
-#~ msgstr ""
-#~ "<b>Cofnij ostatnią operację w tym folderze.</b>\n"
-#~ "\n"
-#~ " <span color='grey' size='small'>Info: Nie możesz cofnąć cofnięcia. ;)</span>"
-
-#~ msgid "Please enter a valid word to be replaced."
-#~ msgstr "Wpisz poprawne słowo, które ma zostać zamienione"
-
-#~ msgid "Empty Word"
-#~ msgstr "Puste słowo"
-
-#~ msgid "_Patternize"
-#~ msgstr "_wzoruj"
-
-#~ msgid ""
-#~ "Enter the list of sequences, to capitalize the letter after each of it, "
-#~ "separated by '/'"
-#~ msgstr ""
-#~ "Wprowadź listę sekwencji do zmiany dużej litery następującej po każdej "
-#~ "sekwencji, oddzielone znakiem \"/\""

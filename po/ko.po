@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 04:55+0000\n"
+"X-Launchpad-Export-Date: 2012-01-12 06:07+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
@@ -267,59 +267,3 @@ msgstr "성공적으로 되돌렸습니다."
 #, python-format
 msgid "%d files restored."
 msgstr "%d 개 파일이 복구되었습니다."
-
-#~ msgid "_Patternize"
-#~ msgstr "기본틀 조합"
-
-#~ msgid "Options"
-#~ msgstr "설정"
-
-#~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
-#~ "available pattens.</span>"
-#~ msgstr ""
-#~ "<span size='small'>기본 틀을 이용하여 파일이름을 수정합니다. <b>?</b>를 클릭하여 사용가능한 기본 틀을 "
-#~ "확인하세요.</span>"
-
-#~ msgid ""
-#~ "Enter the words (regular expressions) to be replaced, separated by '/'"
-#~ msgstr "검색 단어(정규식표현)를 입력하세요. 서로 다른 단어는 \"/\"로 구분합니다"
-
-#~ msgid ""
-#~ "Enter the list of sequences, to capitalize the letter after each of it, "
-#~ "separated by '/'"
-#~ msgstr "기입한 문자 다음에 올 글자를 대문자로 바꿉니다. \"/\"로 구분하여 기입할 문자를 입력하십시오."
-
-#~ msgid "Please, enter a valid pattern."
-#~ msgstr "올바른 형식으로 입력하여 주십시오."
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
-#~ "a log file, in the folder it was launched, which is used for Undo.</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>이 폴더에서 log file를 찾을 수 없습니다.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>참고: 파일이름을 바꾸면, Renamer는 log file를 작업한 폴더안에 "
-#~ "작성합니다. 이 것은 되돌리기를 할 때 사용됩니다.</span>"
-
-#~ msgid ""
-#~ "<b>Undo the last operation inside this folder.</b>\n"
-#~ "\n"
-#~ " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
-#~ msgstr ""
-#~ "<b>이 폴더에서 했던 처리를 되돌립니다.</b>\n"
-#~ " <span color='grey' size='small'>참고 :한 번 되돌린 처리는 다시 취소할 수 없습니다. ;)</span>"
-
-#~ msgid "Empty Pattern"
-#~ msgstr "형식이 기입되지 않았습니다."
-
-#~ msgid "Please enter a valid word to be replaced."
-#~ msgstr "바꾸실 단어를 기입해주십시오."
-
-#~ msgid "Empty Word"
-#~ msgstr "단어가 기입되지 않았습니다."
-
-#~ msgid "Capitalize after: "
-#~ msgstr "이 낱말 다음은 대문자로 "

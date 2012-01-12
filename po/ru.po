@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 04:56+0000\n"
+"X-Launchpad-Export-Date: 2012-01-12 06:07+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
@@ -267,65 +267,3 @@ msgstr "Отмена успешно"
 #, python-format
 msgid "%d files restored."
 msgstr "%d файлы восстановлены."
-
-#~ msgid "Options"
-#~ msgstr "Параметры"
-
-#~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
-#~ "available pattens.</span>"
-#~ msgstr ""
-#~ "<span size='small'>Переименовать файлы, на основе шаблонов. Нажмите на "
-#~ "<b>?</b> для просмотра шаблонов.</span>"
-
-#~ msgid ""
-#~ "Enter the words (regular expressions) to be replaced, separated by '/'"
-#~ msgstr ""
-#~ "Введите слова (регулярные выражения) для замещения, разделив их \"/\""
-
-#~ msgid ""
-#~ "<b>Undo the last operation inside this folder.</b>\n"
-#~ "\n"
-#~ " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
-#~ msgstr ""
-#~ "<b>Отменить последнюю операция внутри этой папки.</b>\n"
-#~ " <span color='grey' size='small'>Примечание: Вы не можете отменять и "
-#~ "отменять. ;)</span>"
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
-#~ "a log file, in the folder it was launched, which is used for Undo.</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>Не обнаружено log файлов в этой "
-#~ "папке</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Примечание: Во время переименовывания, "
-#~ "Renamer записывает log файл в папке, которой был запущен. Этот файл "
-#~ "используется для Отмены.</span>"
-
-#~ msgid "Capitalize after: "
-#~ msgstr "Заглавные буквы после: "
-
-#~ msgid "Please, enter a valid pattern."
-#~ msgstr "Пожалуйста, введите допустимый шаблон."
-
-#~ msgid "Empty Pattern"
-#~ msgstr "Пустой шаблон"
-
-#~ msgid "Empty Word"
-#~ msgstr "Пустое слово"
-
-#~ msgid "Please enter a valid word to be replaced."
-#~ msgstr "Пожалуйста, введите правильное слово для замены."
-
-#~ msgid "_Patternize"
-#~ msgstr "_По шаблону"
-
-#~ msgid ""
-#~ "Enter the list of sequences, to capitalize the letter after each of it, "
-#~ "separated by '/'"
-#~ msgstr ""
-#~ "Введите список последовательностей для изменения буквы в верхний регистр "
-#~ "после каждого элемента разделенные '/'"

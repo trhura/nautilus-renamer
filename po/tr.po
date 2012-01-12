@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 04:56+0000\n"
+"X-Launchpad-Export-Date: 2012-01-12 06:07+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
@@ -267,66 +267,3 @@ msgstr "Geri Alma başarılı"
 #, python-format
 msgid "%d files restored."
 msgstr "%d adet dosya eski haline getirildi."
-
-#~ msgid "_Patternize"
-#~ msgstr "_Biçimlendir"
-
-#~ msgid "Options"
-#~ msgstr "Seçenekler:"
-
-#~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
-#~ "available pattens.</span>"
-#~ msgstr ""
-#~ "<span size='small'>Dosyaları bir temel alarak yeniden adlandır.  <b>?</b> "
-#~ "'ne basarak olanaklı biçemleri görebilirsiniz.</span>"
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
-#~ "a log file, in the folder it was launched, which is used for Undo.</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>Bu dizinde bir log dosyası "
-#~ "bulunamadı.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Not: Renamer isim değiştirirken, Geri Alma "
-#~ "işleminde kullanılmak üzere çalıştırıldığı dizin içerisinde bir log dosyası "
-#~ "oluşturur.</span>"
-
-#~ msgid ""
-#~ "Enter the words (regular expressions) to be replaced, separated by '/'"
-#~ msgstr ""
-#~ "Değiştirilecek sözcükleri (kurallı ifadeler) '/' ile ayrılmış şekilde girin"
-
-#~ msgid ""
-#~ "<b>Undo the last operation inside this folder.</b>\n"
-#~ "\n"
-#~ " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
-#~ msgstr ""
-#~ "<b>Bu dizindeki son işlemi geri al.</b>\n"
-#~ "\n"
-#~ " <span color='grey' size='small'>Not: Geri alınan işlemi tekrar geri "
-#~ "alamazsınız. ;)</span>"
-
-#~ msgid "Capitalize after: "
-#~ msgstr "Sonrasında büyük harf haline getir: "
-
-#~ msgid "Please, enter a valid pattern."
-#~ msgstr "Lütfen geçerli bir şablon seçin."
-
-#~ msgid "Please enter a valid word to be replaced."
-#~ msgstr "Lütfen değiştirmek için geçerli bir sözcük seçin."
-
-#~ msgid "Empty Word"
-#~ msgstr "Boş Sözcük"
-
-#~ msgid "Empty Pattern"
-#~ msgstr "Boş Şablon"
-
-#~ msgid ""
-#~ "Enter the list of sequences, to capitalize the letter after each of it, "
-#~ "separated by '/'"
-#~ msgstr ""
-#~ "Sonrasındaki harfin büyük harf yapılacağı dizilerin listesini '/' ile "
-#~ "ayrılmış şekilde girin."

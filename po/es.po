@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 04:56+0000\n"
+"X-Launchpad-Export-Date: 2012-01-12 06:07+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
@@ -267,65 +267,3 @@ msgstr "Se ha deshecho con éxito"
 #, python-format
 msgid "%d files restored."
 msgstr "%d archivos restaurados."
-
-#~ msgid "_Patternize"
-#~ msgstr "_Patrón"
-
-#~ msgid "Options"
-#~ msgstr "Opciones"
-
-#~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> for "
-#~ "available pattens.</span>"
-#~ msgstr ""
-#~ "<span size='small'>Renombra archivos, según un patrón. Click en <b>?</b> "
-#~ "para ver patrones disponibles.</span>"
-
-#~ msgid ""
-#~ "Enter the words (regular expressions) to be replaced, separated by '/'"
-#~ msgstr "Ingrese las palabras a ser reemplazadas, separadas por '/'"
-
-#~ msgid "Capitalize after: "
-#~ msgstr "Mayúsculas luego de: "
-
-#~ msgid ""
-#~ "Enter the list of sequences, to capitalize the letter after each of it, "
-#~ "separated by '/'"
-#~ msgstr ""
-#~ "La letra siguiente al símbolo o letra que ingrese cambiará a Mayúscula. Use "
-#~ "'/' para separar."
-
-#~ msgid "Empty Pattern"
-#~ msgstr "Patrón vacío"
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer writes "
-#~ "a log file, in the folder it was launched, which is used for Undo.</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>No hay archivo de registro en este "
-#~ "directorio.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Nota: Cuando renombra archivos, Renamer "
-#~ "escribe un archivo de registro en el directorio en que se está trabajando, "
-#~ "que es utilizado para la operación de Deshacer.</span>"
-
-#~ msgid ""
-#~ "<b>Undo the last operation inside this folder.</b>\n"
-#~ "\n"
-#~ " <span color='grey' size='small'>Note: You cannot undo an undo. ;)</span>"
-#~ msgstr ""
-#~ "<b>Deshace la última operación dentro de éste directorio.</b>\n"
-#~ "\n"
-#~ " <span color='grey' size='small'>Nota: Una vez que deshizo, no se puede "
-#~ "volver a deshacer . ;)</span>"
-
-#~ msgid "Please, enter a valid pattern."
-#~ msgstr "Debe ingresar algún patrón válido"
-
-#~ msgid "Please enter a valid word to be replaced."
-#~ msgstr "Debe ingresar palabras para reemplazar"
-
-#~ msgid "Empty Word"
-#~ msgstr "No ingresó palabras"
