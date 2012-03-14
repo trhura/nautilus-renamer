@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-01-11 09:36+0630\n"
-"PO-Revision-Date: 2012-03-09 04:23+0000\n"
-"Last-Translator: Ivan Camilo Quintero Santacruz <Unknown>\n"
+"PO-Revision-Date: 2012-03-14 00:29+0000\n"
+"Last-Translator: Beto1917 <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-10 05:01+0000\n"
-"X-Generator: Launchpad (build 14914)\n"
+"X-Launchpad-Export-Date: 2012-03-14 04:51+0000\n"
+"X-Generator: Launchpad (build 14933)\n"
 
 #: nautilus-renamer.py:76
 msgid "_Pattern"
@@ -162,7 +162,7 @@ msgstr "Ingrese las correspondientes palabras de reemplazo"
 
 #: nautilus-renamer.py:316
 msgid "Keep Original Case"
-msgstr ""
+msgstr "Conservar mayúsculas y minúsculas originales"
 
 #: nautilus-renamer.py:317
 msgid "ALL IN CAPITALS"
@@ -190,7 +190,7 @@ msgstr "Elija una"
 
 #: nautilus-renamer.py:352
 msgid "Choose the casing style you want to apply."
-msgstr ""
+msgstr "Elija el estilo de mayúsculas/minúsculas que desee aplicar."
 
 #: nautilus-renamer.py:371
 msgid ""
@@ -198,10 +198,14 @@ msgid ""
 "\n"
 " <span "
 msgstr ""
+"<b>Deshacer la última operación dentro de esta carpeta.</b>\n"
+"\n"
+" <span "
 
 #: nautilus-renamer.py:374
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
 msgstr ""
+"<span color='red' weight='bold'>No se encontró archivo de log en la carpeta."
 
 #: nautilus-renamer.py:384
 msgid "Enter a list of letters or words, seperated by '/'."
@@ -216,6 +220,8 @@ msgid ""
 "A list of sequences, separated by '/'. The letters after them will be "
 "capitalized."
 msgstr ""
+"Una lista de secuencias, separadas por '/'. Las letras después de ellas se "
+"volverán mayúsculas."
 
 #: nautilus-renamer.py:397
 msgid "Capitalize the first letter"
