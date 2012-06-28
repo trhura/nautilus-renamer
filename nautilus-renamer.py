@@ -21,7 +21,6 @@ import sys
 import re
 import time
 import mmap
-import string
 import random
 import glib
 import locale, gettext
@@ -53,6 +52,7 @@ CONFIG_DIR = os.path.join (glib.get_user_data_dir (), 'nautilus-renamer')
 APP = 'nautilus-renamer'
 
 class RenameApplication(Gtk.Application):
+    """ The main application """
     def __init__(self):
 
         self.case_opt = CASE_NONE
@@ -80,10 +80,10 @@ class RenameApplication(Gtk.Application):
 
         buttonbox = Gtk.ButtonBox.new (Gtk.Orientation.HORIZONTAL)
         buttonbox.set_layout (Gtk.ButtonBoxStyle.START) 
-        buttonbox.pack_start (self.pbutton, False, False, 0);
-        buttonbox.pack_start (self.sbutton, False, False, 0);
-        buttonbox.pack_start (self.cbutton, False, False, 0);
-        buttonbox.pack_start (self.ubutton, False, False, 0);
+        buttonbox.pack_start (self.pbutton, False, False, 0)
+        buttonbox.pack_start (self.sbutton, False, False, 0)
+        buttonbox.pack_start (self.cbutton, False, False, 0)
+        buttonbox.pack_start (self.ubutton, False, False, 0)
         buttonbox.set_child_secondary (self.ubutton, True) 
 
         self.options_box   = Gtk.VBox.new  (False, 5)
@@ -152,7 +152,7 @@ class RenameApplication(Gtk.Application):
         self.extension_cb.set_tooltip_text (_("Also operate on extensions"))
         self.recursive_cb.set_tooltip_text (_("Also operate on subfolders and files"))
 
-        brbox   = Gtk.HBox.new (False, 5);
+        brbox   = Gtk.HBox.new (False, 5)
         brbox.pack_end (self.recursive_cb, False, False, 0)
         brbox.pack_end (self.extension_cb, False, False, 0)
         ralign = Gtk.Alignment.new (1.0, 0.5, 0.0, 0.0)
@@ -306,12 +306,14 @@ class RenameApplication(Gtk.Application):
         self.sub_repler.set_tooltip_text (_("Enter the corresponding words to replace with"))
 
     def case_options_cb (self, button, data=None):
+        """ callback when case button is clicked """
         self.options_box.foreach (self.remove, None)
         self.options_box.pack_start (self.case_box, True, True, 0)
         self.options_box.show_all ()
         self.undo_p = False
         
     def prepare_case_options (self, button, data=None):
+        """ prepare widgets & settings for case options """
         store   = Gtk.ListStore ('gboolean', str, int)
         store.append([True,  _("Keep Original Case"), CASE_NONE])
         store.append([False,  _("ALL IN CAPITALS"), CASE_ALL_CAP])
@@ -353,8 +355,8 @@ class RenameApplication(Gtk.Application):
         self.case_label.set_alignment (0.02, 0.5)
         
         self.case_box   = Gtk.VBox (False, 5)
-        self.case_box.pack_start (self.case_label, False, False, 0);
-        self.case_box.pack_start (self.scroll_win, True, True, 0);
+        self.case_box.pack_start (self.case_label, False, False, 0)
+        self.case_box.pack_start (self.scroll_win, True, True, 0)
 
     def undo_options_cb (self, button, data=None):
         self.options_box.foreach (self.remove, None)
@@ -559,7 +561,7 @@ class RenameApplication(Gtk.Application):
             self.substitute_p = False
             
         if repler == self.sub_repler.label:
-               repler = ''
+            repler = ''
 
         self.replees = replee.split ('/')
         self.replers = repler.split ('/')
@@ -588,8 +590,8 @@ class RenameApplication(Gtk.Application):
         self.close_log ()
         self._write_recent_pats ()
 
-        self.notify(_("Rename successful"),\
-                    _("renamed %d files successfully.") % self.filesRenamed,\
+        self.notify(_("Rename successful"),
+                    _("renamed %d files successfully.") % self.filesRenamed,
                      Gtk.STOCK_APPLY)
 
         return True
@@ -824,8 +826,8 @@ class RenameApplication(Gtk.Application):
         logFile.close ()
 
         os.remove (UNDO_LOG_FILE)
-        self.notify(_("Undo successful"),\
-                    _("%d files restored.") % self.filesRenamed, \
+        self.notify(_("Undo successful"),
+                    _("%d files restored.") % self.filesRenamed,
                     Gtk.STOCK_APPLY)
         
     def log_file_p (self):
@@ -884,7 +886,7 @@ class RenameApplication(Gtk.Application):
         
         import shlex, subprocess
         print locals()
-        command = 'notify-send -t 5000 -u normal -i "%(icon)s" "%(title)s" "%(text)s"' %locals ()
+        command = 'notify-send -t 5000 -u normal -i "%(icon)s" "%(title)s" "%(text)s"' % locals ()
         args = shlex.split (command)
         subprocess.Popen (args)
 
@@ -909,10 +911,10 @@ def init_gettext ():
     gettext.install (APP, PO_DIR)
 	
 if __name__ == '__main__':
-	init_gettext ()
-	files = [file for file in sys.argv[1:]]
-        app = RenameApplication ()
-            
-        while (app.dialog.run () == Gtk.ResponseType.OK):
-            if app.rename (files):
-                break
+    init_gettext ()
+    files = [file for file in sys.argv[1:]]
+    app = RenameApplication ()
+
+    while (app.dialog.run () == Gtk.ResponseType.OK):
+        if app.rename (files):
+            break

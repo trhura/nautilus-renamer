@@ -9,6 +9,6 @@ Homepage: https://launchpad.net/nautilus-renamer
 
 Package: nautilus-renamer
 Architecture: all
-Depends: python, python-gobject, python-nautilus
+Depends: python, python-gobject, python-nautilus, gir1.2-notify-0.7
 Description: nautilus-renamer
  Mass rename files in nautilus
