@@ -6,20 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-01-11 09:36+0630\n"
-"PO-Revision-Date: 2010-12-28 11:42+0000\n"
-"Last-Translator: Lightbuster <herramienta.vx2@gmail.com>\n"
+"PO-Revision-Date: 2012-03-14 00:29+0000\n"
+"Last-Translator: Beto1917 <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
-"X-Generator: Launchpad (build 14640)\n"
+"X-Launchpad-Export-Date: 2012-03-15 04:55+0000\n"
+"X-Generator: Launchpad (build 14933)\n"
 
 #: nautilus-renamer.py:76
-#, fuzzy
 msgid "_Pattern"
 msgstr "_Patrón"
 
@@ -97,7 +95,7 @@ msgstr "Número al azar del 10 al 99"
 
 #: nautilus-renamer.py:129
 msgid "The first three letters of filename."
-msgstr ""
+msgstr "Las tres primeras letras del archivo."
 
 #: nautilus-renamer.py:150
 msgid "_Extension"
@@ -138,10 +136,12 @@ msgstr "Ingrese el patrón aquí ... "
 #: nautilus-renamer.py:279
 msgid "Enter the base pattern to rename. Click '?' for available patterns."
 msgstr ""
+"Introduzca el patron base a renombrar. Haga click en '?' para ver los "
+"patrones disponibles."
 
 #: nautilus-renamer.py:294
 msgid "Delete or replace multiple characters and words..."
-msgstr ""
+msgstr "Borre o reemplace múltiples caracteres y palabras..."
 
 #: nautilus-renamer.py:298
 msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
@@ -152,18 +152,17 @@ msgid "Corresponding words to replace with, e.g., one/two ..."
 msgstr "Palabras de reemplazo separadas por \"/\", ej., uno/dos ..."
 
 #: nautilus-renamer.py:305
-#, fuzzy
 msgid "Enter the characters or words to be replaced, separated by '/'"
-msgstr "Ingrese las palabras a ser reemplazadas, separadas por '/'"
+msgstr ""
+"Inserte los caracteres o palabras a reemplazar, separados mediante '/'"
 
 #: nautilus-renamer.py:306
 msgid "Enter the corresponding words to replace with"
 msgstr "Ingrese las correspondientes palabras de reemplazo"
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Keep Original Case"
-msgstr "Nombre Original"
+msgstr "Conservar mayúsculas y minúsculas originales"
 
 #: nautilus-renamer.py:317
 msgid "ALL IN CAPITALS"
@@ -191,30 +190,26 @@ msgstr "Elija una"
 
 #: nautilus-renamer.py:352
 msgid "Choose the casing style you want to apply."
-msgstr ""
+msgstr "Elija el estilo de mayúsculas/minúsculas que desee aplicar."
 
 #: nautilus-renamer.py:371
-#, fuzzy
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
 " <span "
 msgstr ""
-"<b>Deshace la última operación dentro de éste directorio.</b>\n"
+"<b>Deshacer la última operación dentro de esta carpeta.</b>\n"
 "\n"
-" <span color='grey' size='small'>Nota: Una vez que deshizo, no se puede "
-"volver a deshacer . ;)</span>"
+" <span "
 
 #: nautilus-renamer.py:374
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
 msgstr ""
+"<span color='red' weight='bold'>No se encontró archivo de log en la carpeta."
 
 #: nautilus-renamer.py:384
-#, fuzzy
 msgid "Enter a list of letters or words, seperated by '/'."
-msgstr ""
-"La letra siguiente al símbolo o letra que ingrese cambiará a Mayúscula. Use "
-"'/' para separar."
+msgstr "Introduzca una lista de letras o palabras, separadas por '/'."
 
 #: nautilus-renamer.py:394
 msgid "_First Letter"
@@ -225,6 +220,8 @@ msgid ""
 "A list of sequences, separated by '/'. The letters after them will be "
 "capitalized."
 msgstr ""
+"Una lista de secuencias, separadas por '/'. Las letras después de ellas se "
+"volverán mayúsculas."
 
 #: nautilus-renamer.py:397
 msgid "Capitalize the first letter"
@@ -279,43 +276,3 @@ msgstr "Se ha deshecho con éxito"
 #, python-format
 msgid "%d files restored."
 msgstr "%d archivos restaurados."
-
-#~ msgid "Options"
-#~ msgstr "Opciones"
-
-#~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> "
-#~ "for available pattens.</span>"
-#~ msgstr ""
-#~ "<span size='small'>Renombra archivos, según un patrón. Click en <b>?</b> "
-#~ "para ver patrones disponibles.</span>"
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</"
-#~ "span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer "
-#~ "writes a log file, in the folder it was launched, which is used for Undo."
-#~ "</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>No hay archivo de registro en este "
-#~ "directorio.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Nota: Cuando renombra archivos, Renamer "
-#~ "escribe un archivo de registro en el directorio en que se está "
-#~ "trabajando, que es utilizado para la operación de Deshacer.</span>"
-
-#~ msgid "Capitalize after: "
-#~ msgstr "Mayúsculas luego de: "
-
-#~ msgid "Empty Pattern"
-#~ msgstr "Patrón vacío"
-
-#~ msgid "Please, enter a valid pattern."
-#~ msgstr "Debe ingresar algún patrón válido"
-
-#~ msgid "Empty Word"
-#~ msgstr "No ingresó palabras"
-
-#~ msgid "Please enter a valid word to be replaced."
-#~ msgstr "Debe ingresar palabras para reemplazar"

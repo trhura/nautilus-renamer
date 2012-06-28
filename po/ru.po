@@ -6,22 +6,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-01-11 09:36+0630\n"
 "PO-Revision-Date: 2011-02-28 22:55+0000\n"
 "Last-Translator: Eugene Babiy <eugene.babiy@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
+"X-Launchpad-Export-Date: 2012-01-12 06:07+0000\n"
 "X-Generator: Launchpad (build 14640)\n"
 
 #: nautilus-renamer.py:76
-#, fuzzy
 msgid "_Pattern"
-msgstr "_По шаблону"
+msgstr ""
 
 #: nautilus-renamer.py:77
 msgid "_Substitute"
@@ -152,18 +150,16 @@ msgid "Corresponding words to replace with, e.g., one/two ..."
 msgstr "Соответствующие слова замещаются, например, один/два ..."
 
 #: nautilus-renamer.py:305
-#, fuzzy
 msgid "Enter the characters or words to be replaced, separated by '/'"
-msgstr "Введите слова (регулярные выражения) для замещения, разделив их \"/\""
+msgstr ""
 
 #: nautilus-renamer.py:306
 msgid "Enter the corresponding words to replace with"
 msgstr "Введите соответствующие слова для замены"
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Keep Original Case"
-msgstr "Первоначальное название"
+msgstr ""
 
 #: nautilus-renamer.py:317
 msgid "ALL IN CAPITALS"
@@ -194,26 +190,19 @@ msgid "Choose the casing style you want to apply."
 msgstr ""
 
 #: nautilus-renamer.py:371
-#, fuzzy
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
 " <span "
 msgstr ""
-"<b>Отменить последнюю операция внутри этой папки.</b>\n"
-" <span color='grey' size='small'>Примечание: Вы не можете отменять и "
-"отменять. ;)</span>"
 
 #: nautilus-renamer.py:374
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
 msgstr ""
 
 #: nautilus-renamer.py:384
-#, fuzzy
 msgid "Enter a list of letters or words, seperated by '/'."
 msgstr ""
-"Введите список последовательностей для изменения буквы в верхний регистр "
-"после каждого элемента разделенные '/'"
 
 #: nautilus-renamer.py:394
 msgid "_First Letter"
@@ -278,43 +267,3 @@ msgstr "Отмена успешно"
 #, python-format
 msgid "%d files restored."
 msgstr "%d файлы восстановлены."
-
-#~ msgid "Options"
-#~ msgstr "Параметры"
-
-#~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> "
-#~ "for available pattens.</span>"
-#~ msgstr ""
-#~ "<span size='small'>Переименовать файлы, на основе шаблонов. Нажмите на "
-#~ "<b>?</b> для просмотра шаблонов.</span>"
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</"
-#~ "span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer "
-#~ "writes a log file, in the folder it was launched, which is used for Undo."
-#~ "</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'>Не обнаружено log файлов в этой папке</"
-#~ "span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Примечание: Во время переименовывания, "
-#~ "Renamer записывает log файл в папке, которой был запущен. Этот файл "
-#~ "используется для Отмены.</span>"
-
-#~ msgid "Capitalize after: "
-#~ msgstr "Заглавные буквы после: "
-
-#~ msgid "Empty Pattern"
-#~ msgstr "Пустой шаблон"
-
-#~ msgid "Please, enter a valid pattern."
-#~ msgstr "Пожалуйста, введите допустимый шаблон."
-
-#~ msgid "Empty Word"
-#~ msgstr "Пустое слово"
-
-#~ msgid "Please enter a valid word to be replaced."
-#~ msgstr "Пожалуйста, введите правильное слово для замены."

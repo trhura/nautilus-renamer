@@ -6,25 +6,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-01-11 09:36+0630\n"
-"PO-Revision-Date: 2011-12-03 13:46+0000\n"
-"Last-Translator: Vojta Staněk <Unknown>\n"
+"PO-Revision-Date: 2012-05-23 09:41+0000\n"
+"Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
-"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
-"X-Generator: Launchpad (build 14640)\n"
+"X-Launchpad-Export-Date: 2012-05-24 11:44+0000\n"
+"X-Generator: Launchpad (build 15288)\n"
 
 #: nautilus-renamer.py:76
 msgid "_Pattern"
-msgstr ""
+msgstr "_Vzorek"
 
 #: nautilus-renamer.py:77
 msgid "_Substitute"
-msgstr ""
+msgstr "_Nahradit"
 
 #: nautilus-renamer.py:78
 msgid "C_ase"
@@ -32,23 +31,23 @@ msgstr ""
 
 #: nautilus-renamer.py:79
 msgid "_Undo"
-msgstr ""
+msgstr "_Zpět"
 
 #: nautilus-renamer.py:114
 msgid "Original filename"
-msgstr ""
+msgstr "Původní název souboru"
 
 #: nautilus-renamer.py:115
 msgid "Parent directory"
-msgstr ""
+msgstr "Nadřazený adresář"
 
 #: nautilus-renamer.py:116
 msgid "Filename without extenstion"
-msgstr ""
+msgstr "Jméno souboru bez přípony"
 
 #: nautilus-renamer.py:117
 msgid "File extension"
-msgstr ""
+msgstr "Přípona souboru"
 
 #: nautilus-renamer.py:118
 msgid "Day of month"
@@ -72,15 +71,15 @@ msgstr "Plné jméno měsíce, např. Aulgust"
 
 #: nautilus-renamer.py:123
 msgid "Simple month name, e.g., Aug"
-msgstr ""
+msgstr "Zkrácené jméno měsíce, např. Srp"
 
 #: nautilus-renamer.py:124
 msgid "Full day name, e.g., Monday"
-msgstr ""
+msgstr "Celý název dne, např. Pondělí"
 
 #: nautilus-renamer.py:125
 msgid "Simple dayname, e.g., Mon"
-msgstr ""
+msgstr "Zkrácený název dne, např. Pon"
 
 #: nautilus-renamer.py:126
 msgid "{num5} => 00001, 00002, 00003 , ..."
@@ -92,31 +91,31 @@ msgstr ""
 
 #: nautilus-renamer.py:128
 msgid "A random number from 10 to 99"
-msgstr ""
+msgstr "Náhodné číslo od 10 do 99"
 
 #: nautilus-renamer.py:129
 msgid "The first three letters of filename."
-msgstr ""
+msgstr "První tři písmena názvu souboru"
 
 #: nautilus-renamer.py:150
 msgid "_Extension"
-msgstr ""
+msgstr "_Přípona"
 
 #: nautilus-renamer.py:151
 msgid "_Recursive"
-msgstr ""
+msgstr "_Rekurzivně"
 
 #: nautilus-renamer.py:152
 msgid "Also operate on extensions"
-msgstr ""
+msgstr "Má vliv i na přípony"
 
 #: nautilus-renamer.py:153
 msgid "Also operate on subfolders and files"
-msgstr ""
+msgstr "Má vliv také na podsložky a soubory"
 
 #: nautilus-renamer.py:161
 msgid "Refresh Previe_w"
-msgstr ""
+msgstr "Obnovit náhle_d"
 
 #: nautilus-renamer.py:175
 msgid "Original Name"
@@ -132,15 +131,17 @@ msgstr "Ná_hled"
 
 #: nautilus-renamer.py:268
 msgid "Enter the pattern here ... "
-msgstr ""
+msgstr "Zadejte vzor zde ... "
 
 #: nautilus-renamer.py:279
 msgid "Enter the base pattern to rename. Click '?' for available patterns."
 msgstr ""
+"Zadejte základní vzor, který chcete přejmenovat. Klikněte na \"?\" s "
+"dostupnými vzory."
 
 #: nautilus-renamer.py:294
 msgid "Delete or replace multiple characters and words..."
-msgstr ""
+msgstr "Odstranit nebo nahradit několik znaků a slov..."
 
 #: nautilus-renamer.py:298
 msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
@@ -148,20 +149,19 @@ msgstr ""
 
 #: nautilus-renamer.py:302
 msgid "Corresponding words to replace with, e.g., one/two ..."
-msgstr ""
+msgstr "Odpovídající slova nahradit, např. jeden / dva"
 
 #: nautilus-renamer.py:305
 msgid "Enter the characters or words to be replaced, separated by '/'"
-msgstr ""
+msgstr "Zadejte znaky nebo slova, která budou nahrazena, oddělena '/'"
 
 #: nautilus-renamer.py:306
 msgid "Enter the corresponding words to replace with"
 msgstr ""
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Keep Original Case"
-msgstr "Původní název"
+msgstr "Zachovat původní nadpis"
 
 #: nautilus-renamer.py:317
 msgid "ALL IN CAPITALS"
@@ -169,7 +169,7 @@ msgstr "VŠE VELKÝMI PÍSMENY"
 
 #: nautilus-renamer.py:318
 msgid "all in lower case"
-msgstr ""
+msgstr "vše malými písmeny"
 
 #: nautilus-renamer.py:319
 msgid "First letter upper case"
@@ -177,7 +177,7 @@ msgstr "První písmeno velké"
 
 #: nautilus-renamer.py:320
 msgid "Title Case"
-msgstr ""
+msgstr "Velikost písma v nadpise"
 
 #: nautilus-renamer.py:321
 msgid "Capital Case After ..."
@@ -189,7 +189,7 @@ msgstr "Vyberte jeden"
 
 #: nautilus-renamer.py:352
 msgid "Choose the casing style you want to apply."
-msgstr ""
+msgstr "Vyberte styl nadpisu, který chcete použít."
 
 #: nautilus-renamer.py:371
 msgid ""
@@ -197,6 +197,9 @@ msgid ""
 "\n"
 " <span "
 msgstr ""
+"<b>Vrátit poslední operaci uvnitř této složky.</b>\n"
+"\n"
+" <span "
 
 #: nautilus-renamer.py:374
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
@@ -204,7 +207,7 @@ msgstr ""
 
 #: nautilus-renamer.py:384
 msgid "Enter a list of letters or words, seperated by '/'."
-msgstr ""
+msgstr "Zadejte seznam písmen nebo slov, oddělených '/'."
 
 #: nautilus-renamer.py:394
 msgid "_First Letter"
@@ -230,42 +233,42 @@ msgstr "Prosím prvně vyberte nějaké soubory."
 
 #: nautilus-renamer.py:591
 msgid "Rename successful"
-msgstr ""
+msgstr "Přejmenování proběhlo úspěšně"
 
 #: nautilus-renamer.py:592
 #, python-format
 msgid "renamed %d files successfully."
-msgstr ""
+msgstr "přejmenování %d souborů bylo úspěšné."
 
 #: nautilus-renamer.py:612
 msgid "File Already Exists"
-msgstr ""
+msgstr "Soubor již existuje"
 
 #: nautilus-renamer.py:612
 msgid " already exists. Use Undo to revert."
-msgstr ""
+msgstr " již existuje. Použijte Zpět k návratu."
 
 #: nautilus-renamer.py:674
 msgid "Not Enough Random Number Range"
-msgstr ""
+msgstr "Není dostatečný rozsah náhodných čísel"
 
 #: nautilus-renamer.py:674
 msgid "Please, use a larger range"
-msgstr ""
+msgstr "Použijte, prosím, větší rozsah"
 
 #: nautilus-renamer.py:811
 msgid "Undo Failed"
-msgstr ""
+msgstr "Návrat se nezdařil"
 
 #: nautilus-renamer.py:811
 msgid "Log file not found"
-msgstr ""
+msgstr "Log nebyl nalezen"
 
 #: nautilus-renamer.py:827
 msgid "Undo successful"
-msgstr ""
+msgstr "Návrat se zdařil"
 
 #: nautilus-renamer.py:828
 #, python-format
 msgid "%d files restored."
-msgstr ""
+msgstr "%d souborů obnoveno."

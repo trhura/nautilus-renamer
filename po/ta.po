@@ -6,22 +6,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-01-11 09:36+0630\n"
-"PO-Revision-Date: 2011-12-27 15:11+0000\n"
-"Last-Translator: Vigneshwaran P <Unknown>\n"
+"PO-Revision-Date: 2012-01-20 13:05+0000\n"
+"Last-Translator: Surya Prakash <Unknown>\n"
 "Language-Team: Tamil <ta@li.org>\n"
-"Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 02:36+0000\n"
-"X-Generator: Launchpad (build 14640)\n"
+"X-Launchpad-Export-Date: 2012-01-21 06:12+0000\n"
+"X-Generator: Launchpad (build 14700)\n"
 
 #: nautilus-renamer.py:76
-#, fuzzy
 msgid "_Pattern"
-msgstr "வடிவமைமாக்குதல்"
+msgstr "maatiri"
 
 #: nautilus-renamer.py:77
 msgid "_Substitute"
@@ -97,7 +95,7 @@ msgstr "10 முதல் 99 வரை ஒரு ரேண்டம் எண�
 
 #: nautilus-renamer.py:129
 msgid "The first three letters of filename."
-msgstr ""
+msgstr "கொப்புபெயரின் முதல் மூன்று வார்தைகல்"
 
 #: nautilus-renamer.py:150
 msgid "_Extension"
@@ -152,18 +150,16 @@ msgid "Corresponding words to replace with, e.g., one/two ..."
 msgstr "இவ்வார்தைகளை இவ்வாரு மாற்ற வேண்டும், எ.கா., one/two ..."
 
 #: nautilus-renamer.py:305
-#, fuzzy
 msgid "Enter the characters or words to be replaced, separated by '/'"
-msgstr "மாற்ற வேண்டிய வார்தைகளை (regular expressions)  '/' கொண்டு பிரிது உள்ளிடவும்,"
+msgstr ""
 
 #: nautilus-renamer.py:306
 msgid "Enter the corresponding words to replace with"
 msgstr "மாற்ற வேண்டிய வார்தைகளை உள்ளிடவம்."
 
 #: nautilus-renamer.py:316
-#, fuzzy
 msgid "Keep Original Case"
-msgstr "நிஜப் பெயர்"
+msgstr ""
 
 #: nautilus-renamer.py:317
 msgid "ALL IN CAPITALS"
@@ -194,26 +190,19 @@ msgid "Choose the casing style you want to apply."
 msgstr ""
 
 #: nautilus-renamer.py:371
-#, fuzzy
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
 " <span "
 msgstr ""
-"<b>இந்த கோப்புறை உள்ளே கடைசியாக செய்த செயலை நீக்குக.</ப்>\n"
-" <span color='grey' size='small'> குறிப்பு : முன்பு நீக்கிய செயலை மறு செயலாக்க "
-"இயலாது . ;)</span>"
 
 #: nautilus-renamer.py:374
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
 msgstr ""
 
 #: nautilus-renamer.py:384
-#, fuzzy
 msgid "Enter a list of letters or words, seperated by '/'."
 msgstr ""
-"ஏவற்றின் பின் வரும் எழுத்துகளை பெரிய எழுத்துகளாக்க வெண்டும் என்பதை '/' கொண்டு பிரித்து "
-"வரிசை பட்டியலை உள்ளிடவும்."
 
 #: nautilus-renamer.py:394
 msgid "_First Letter"
@@ -278,43 +267,3 @@ msgstr "செயல் நீக்கம் வெற்றி கரமாக
 #, python-format
 msgid "%d files restored."
 msgstr "%d கோப்புகள் புதுப்பிக்கபட்டது."
-
-#~ msgid "Options"
-#~ msgstr "விருப்பங்கள்"
-
-#~ msgid ""
-#~ "<span size='small'>Rename files, based on a pattern. Click on <b>?</b> "
-#~ "for available pattens.</span>"
-#~ msgstr ""
-#~ "<span size='small'> கோப்புகளை வடிவத்தை (பட்டெர்ன்) அடிப்படையாக கொண்டு பெயர் மாற்றம் "
-#~ "செய்க. ஆணைத்து வடிவத்துக்கு <ப்>?</ப்>ஐ சொடுக்கவும்.</span>"
-
-#~ msgid ""
-#~ "<span color='red' weight='bold'>No log file is found in this folder.</"
-#~ "span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>Note: When it renames files, Renamer "
-#~ "writes a log file, in the folder it was launched, which is used for Undo."
-#~ "</span>"
-#~ msgstr ""
-#~ "<span color='red' weight='bold'> எந்த பதிவு கோப்புகளும் இப்கோப்புரையில் காணப்பட "
-#~ "வில்லை.</span>\n"
-#~ "\n"
-#~ "<span color='grey' size='small'>  குறிப்பு : Renamer பெயர் மற்றம் செய்யும் "
-#~ "பொழுது தன் செய்யல்களை பதிவு கோப்புகளில் பதிந்து கொண்டு செயல் நீக்கம் பொழுது "
-#~ "பயன்படுத்திகொல்லும். </span>"
-
-#~ msgid "Capitalize after: "
-#~ msgstr "இதன் பிறகு பெரிய எழுத்துகளாக்க்கு: "
-
-#~ msgid "Empty Pattern"
-#~ msgstr "காலியான வடிவம்"
-
-#~ msgid "Please, enter a valid pattern."
-#~ msgstr "தயவு செய்து,  சரியான வடிவத்தை உள்ளிடவம்."
-
-#~ msgid "Empty Word"
-#~ msgstr "காலியான வார்தை"
-
-#~ msgid "Please enter a valid word to be replaced."
-#~ msgstr "தயவு செய்து மாற்ற வேண்டிய சரியான வார்த்தைகளை உள்ளிடவம்."
