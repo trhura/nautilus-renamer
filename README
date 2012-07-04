@@ -14,11 +14,11 @@ Report here.
 Available Patterns
 ==================
 
-This pattern, /num*/, is not recursive meaning does not work for sub-folders/files ...
-/num3/		for 001  , 002  , 003 ...
-/num5/		for 00001, 00002, 00003 , ...
-/num3+10/	for 010  , 011  , 012 ...
-/num5+100/	for 00100, 00101, 00102 ...
+This pattern, /num,*/, is not recursive meaning does not work for sub-folders/files ...
+/num,3/		for 001  , 002  , 003 ...
+/num,5/		for 00001, 00002, 00003 , ...
+/num,3+10/	for 010  , 011  , 012 ...
+/num,5+100/	for 00100, 00101, 00102 ...
 
 To use original filename or the parent filename ...
 /filename/	Original File Name
@@ -36,13 +36,13 @@ To use Current time in filenames,
 /dayname/	Wednesday
 /daysimp/	Wed
 
-You can also slice /filename/ and /name/, using /name:offset:length/. Length is optional, and both offset and length can be negative. When they are negative, they are manipulated backwards (from end).
+You can also slice /filename/ and /name/, using /name,offset:length/. Length is optional, and both offset and length can be negative. When they are negative, they are manipulated backwards (from end).
 
-"123abc.jpg" => /filename:3/ => "abc.jpg"
-"123abc.jpg" => /name:-3/  => "abc"
-"123abc.jpg" => /name:0:-3/  => "abc"
-"123abc.jpg" => /name:-3:3/  => "abc"
-"123abc.jpg" => /name:-3:-3/ => "123"
-"123abc.jpg" => /name:-3:100/ => "abc"
-"123abc.jpg" => /name:-3:-100/ => "123"
+"123abc.jpg" => /filename,3/ => "abc.jpg"
+"123abc.jpg" => /name,-3/  => "abc"
+"123abc.jpg" => /name,0:-3/  => "abc"
+"123abc.jpg" => /name,-3:3/  => "abc"
+"123abc.jpg" => /name,-3:-3/ => "123"
+"123abc.jpg" => /name,-3:100/ => "abc"
+"123abc.jpg" => /name,-3:-100/ => "123"
 

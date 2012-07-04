@@ -60,7 +60,6 @@ lang = gettext.translation (APP, PO_DIR, fallback=True)
 _ = lang.gettext
 gettext.install (APP, PO_DIR)
 
-
 class RenameApplication(Gtk.Application):
     """ The main application """
     def __init__(self):
@@ -550,7 +549,7 @@ class RenameApplication(Gtk.Application):
             self.pattern = '/filename/'
 
         if self.num_pat.search(self.pattern):
-                #if the pattern contains /num*/ or /num*+*/, disable recursion
+                #if the pattern contains /num,*/ or /num,*+*/, disable recursion
             self.recur = False
 
         if self.ran_pat.search(self.pattern):
@@ -890,7 +889,6 @@ class RenameApplication(Gtk.Application):
         command = 'notify-send -t 5000 -u normal -i "%(icon)s" "%(title)s" "%(text)s"' % locals ()
         args = shlex.split (command)
         subprocess.Popen (args)
-
 
 def show_error (title, message):
     "help function to show an error dialog"
