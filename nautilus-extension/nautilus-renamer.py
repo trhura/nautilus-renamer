@@ -7,6 +7,13 @@ import os
 import subprocess
 import urllib
 import sys
+import gettext
+
+APP = 'nautilus-renamer'
+gettext.bindtextdomain(APP)
+gettext.textdomain(APP)
+lang = gettext.translation (APP, None, fallback=True)
+_ = lang.gettext
 
 class MassRename(GObject.GObject, Nautilus.MenuProvider):
     def __init__(self):
@@ -35,8 +42,8 @@ class MassRename(GObject.GObject, Nautilus.MenuProvider):
 
         RenameMenuItem = Nautilus.MenuItem(
             name="RenameMenuItem::Rename",
-            label="Mass Rename",
-            tip="Mass Rename"
+            label=_("Mass Rename"),
+            tip=_("Mass Rename")
         )
         RenameMenuItem.connect('activate', self.rename_run, files)
 
