@@ -5,4 +5,3 @@ TODO
 * More features
 * Remove matching prefix /name#word/, /name##word/
 * Remove matching suffix /name%word/, /name%%word/
-* Convert to nautilus plugin ?
