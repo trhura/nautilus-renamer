@@ -23,21 +23,18 @@ import time
 import mmap
 import random
 import glib
-import locale, gettext
+import gettext
 
 from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GObject
-from gi.repository import Notify
 
 # Configuration
 DEFAULT_WIDTH   = 550                   # Dialog's default width at startup
 DEFAULT_HEIGHT  = 350                   # Dialog's default height at startup
 PREVIEW_HEIGHT  = 150                   # Height of preview area
 UNDO_LOG_FILE   = '.rlog'               # Name used for Log file
-DATA_DIR        = '.rdata/'             # 
+DATA_DIR        = '.rdata/'             #
 LOG_SEP         = ' is converted to '   # Log file separator
 REC_PATS        = 5                     # Remember up to 5 recent patterns
 REC_FILE        = 'recent_patterns'     # filename for recent patterns
@@ -47,25 +44,38 @@ SMALL_FONT_SIZE = Pango.SCALE * 10
 # Fake Enums
 CASE_NONE, CASE_ALL_CAP, CASE_ALL_LOW, CASE_FIRST_CAP, CASE_EACH_CAP, CASE_CAP_AFTER = range (6)
 
-# dir to store application state, recent patterns ... 
+# dir to store application state, recent patterns ...
 CONFIG_DIR = os.path.join (glib.get_user_data_dir (), 'nautilus-renamer')
 APP = 'nautilus-renamer'
+
+## init gettext
+PO_DIR = None
+if os.path.exists(os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')):
+    # po dir, when it is installed as a user script
+    PO_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')
+
+gettext.bindtextdomain(APP, PO_DIR)
+gettext.textdomain(APP)
+lang = gettext.translation (APP, PO_DIR, fallback=True)
+_ = lang.gettext
+gettext.install (APP, PO_DIR)
+
 
 class RenameApplication(Gtk.Application):
     """ The main application """
     def __init__(self):
 
         self.case_opt = CASE_NONE
-        self.recur    = False  
+        self.recur    = False
         self.ext      = False
         self.pattern  = None
         self.logFile  = None
         self.num = 0
-        self.num_pat = re.compile(r'\/num\d+(\+\d+)?\/')
-        self.ran_pat = re.compile (r'\/rand\d+-\d+\/')
-        self.name_slice = re.compile (r'\/name:-?\d+(:-?\d+)?\/')
-        self.filename_slice = re.compile (r'\/filename:-?\d+(:-?\d+)?\/') 
-        self.filename_delete = re.compile (r'\/filename-.*/')
+        self.num_pat = re.compile(r'\/num,\d+(\+\d+)?\/')
+        self.ran_pat = re.compile (r'\/rand,\d+-\d+\/')
+        self.name_slice = re.compile (r'\/name,-?\d+(:-?\d+)?\/')
+        self.filename_slice = re.compile (r'\/filename,-?\d+(:-?\d+)?\/')
+        #self.filename_delete = re.compile (r'\/filename-.*/')
         self.a_pattern = re.compile (r'\/.*\/') #used to check invalid patterns
         self.ran_seq = []
         self.filesRenamed = 0
@@ -79,19 +89,19 @@ class RenameApplication(Gtk.Application):
         self.ubutton = Gtk.Button.new_with_mnemonic (_("_Undo"))
 
         buttonbox = Gtk.ButtonBox.new (Gtk.Orientation.HORIZONTAL)
-        buttonbox.set_layout (Gtk.ButtonBoxStyle.START) 
+        buttonbox.set_layout (Gtk.ButtonBoxStyle.START)
         buttonbox.pack_start (self.pbutton, False, False, 0)
         buttonbox.pack_start (self.sbutton, False, False, 0)
         buttonbox.pack_start (self.cbutton, False, False, 0)
         buttonbox.pack_start (self.ubutton, False, False, 0)
-        buttonbox.set_child_secondary (self.ubutton, True) 
+        buttonbox.set_child_secondary (self.ubutton, True)
 
         self.options_box   = Gtk.VBox.new  (False, 5)
         options_align  = Gtk.Alignment.new (0.1, 0.1, 1.0, 0.0)
         options_align.add (self.options_box)
         options_align.set_padding (0, 0, 10, 10)
-        options_align.set_size_request (-1, 150) 
-        
+        options_align.set_size_request (-1, 150)
+
         #Popup Menu for available patterns
         self.pattern_popup  = Gtk.Menu ()
         pattern_fname   = Gtk.MenuItem ('/filename/')
@@ -106,11 +116,11 @@ class RenameApplication(Gtk.Application):
         pattern_dsimp   = Gtk.MenuItem ('/daysimp/')
         pattern_mname   = Gtk.MenuItem ('/monthname/')
         pattern_msimp   = Gtk.MenuItem ('/monthsimp/')
-        pattern_num1    = Gtk.MenuItem ('/num2/')
-        pattern_num2    = Gtk.MenuItem ('/num3+0/')
-        pattern_rand    = Gtk.MenuItem ('/rand10-99/')
-        pattern_offset  = Gtk.MenuItem ('/filename:0:3/')
-        
+        pattern_num1    = Gtk.MenuItem ('/num,2/')
+        pattern_num2    = Gtk.MenuItem ('/num,3+0/')
+        pattern_rand    = Gtk.MenuItem ('/rand,10-99/')
+        pattern_offset  = Gtk.MenuItem ('/filename,0:3/')
+
         pattern_fname.set_tooltip_text  (_("Original filename"))
         pattern_dir.set_tooltip_text    (_("Parent directory"))
         pattern_name.set_tooltip_text   (_("Filename without extenstion"))
@@ -123,11 +133,11 @@ class RenameApplication(Gtk.Application):
         pattern_msimp.set_tooltip_text  (_("Simple month name, e.g., Aug"))
         pattern_dname.set_tooltip_text  (_("Full day name, e.g., Monday"))
         pattern_dsimp.set_tooltip_text  (_("Simple dayname, e.g., Mon"))
-        pattern_num1.set_tooltip_text   (_("{num5} => 00001, 00002, 00003 , ..."))
-        pattern_num2.set_tooltip_text   (_("{num5+5} => 00005, 00006, 00007 , ..."))
+        pattern_num1.set_tooltip_text   (_("/num,5/ => 00001, 00002, 00003 , ..."))
+        pattern_num2.set_tooltip_text   (_("/num,3+5/ => 005, 006, 007 , ..."))
         pattern_rand.set_tooltip_text   (_("A random number from 10 to 99"))
         pattern_offset.set_tooltip_text (_("The first three letters of filename."))
-        
+
         self.pattern_popup.attach (pattern_fname,   0, 1, 0, 1)
         self.pattern_popup.attach (pattern_dir,     1, 2, 0, 1)
         self.pattern_popup.attach (pattern_name,    0, 1, 1, 2)
@@ -144,7 +154,7 @@ class RenameApplication(Gtk.Application):
         self.pattern_popup.attach (pattern_num2,    1, 2, 6, 7)
         self.pattern_popup.attach (pattern_rand,    0, 1, 7, 8)
         self.pattern_popup.attach (pattern_offset,  1, 2, 7, 8)
-        self.pattern_popup.show_all () 
+        self.pattern_popup.show_all ()
 
         # Two checkboxs at the bottoms
         self.extension_cb   = Gtk.CheckButton.new_with_mnemonic (_("_Extension"))
@@ -162,12 +172,12 @@ class RenameApplication(Gtk.Application):
         bbox    = Gtk.HBox.new (False, 5)
         bbox.pack_start (refresh_btn, False, False, 0)
         bbox.pack_end (ralign, False, False, 0)
-        
+
         # Preview
-        preview_box    = Gtk.HBox.new (False, 5)
+        #preview_box    = Gtk.HBox.new (False, 5)
         view    = Gtk.TreeView.new_with_model (self.pmodel)
         view.set_rules_hint (True)
-        
+
         cell    = Gtk.CellRendererText.new ()
         cell.set_property ('scale', 0.8)
         cell.set_property ('width', 280)
@@ -183,7 +193,7 @@ class RenameApplication(Gtk.Application):
         column  = Gtk.TreeViewColumn (_("New Name"), cell, text=1)
         column.set_property ('sizing', Gtk.TreeViewColumnSizing.AUTOSIZE)
         column.set_property ('resizable', True)
-        view.append_column (column) 
+        view.append_column (column)
 
         scrollwin   = Gtk.ScrolledWindow.new (None, None)
         scrollwin.set_policy (Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -193,12 +203,12 @@ class RenameApplication(Gtk.Application):
         preview_align  = Gtk.Alignment.new (0.1, 0.1, 1.0, 0.0)
         preview_align.add (scrollwin)
         preview_align.set_padding (0, 0, 10, 10)
-        
+
         expander = Gtk.Expander.new_with_mnemonic (_("Pre_view"))
         expander.set_use_underline (True)
         expander.set_spacing (5)
         expander.add (preview_align)
-        
+
         main_box    = Gtk.VBox.new ( False, 8)
         main_box.pack_start (buttonbox, False, False, 0)
         main_box.pack_start (options_align, False, False, 0)
@@ -238,8 +248,8 @@ class RenameApplication(Gtk.Application):
         pattern_num2.connect ('activate', self.on_popup_activate)
         pattern_rand.connect ('activate', self.on_popup_activate)
         pattern_offset.connect ('activate', self.on_popup_activate)
-        
-        expander.connect ('notify::expanded', self.expander_cb)        
+
+        expander.connect ('notify::expanded', self.expander_cb)
         refresh_btn.connect ('clicked', self.prepare_preview)
 
         self.prepare_pattern_options (self.pbutton)
@@ -254,17 +264,17 @@ class RenameApplication(Gtk.Application):
         self.options_box.pack_start (self.pattern_box, True, True, 0)
         self.options_box.show_all ()
 
-        
+
     def prepare_pattern_options (self, button, data=None):
         ''' Prepare widgets & options for pattern on startup '''
         self._read_recent_pats ()
         self.pattern_box    = Gtk.HBox (False, 5)
         pattern_combo   = Gtk.ComboBoxText.new_with_entry ()
         self.pats.foreach (lambda m, p, i, d: pattern_combo.append_text (m[i][0]), None)
-            
+
         self.pattern_entry  = pattern_combo.get_child()
         button  = Gtk.Button.new_with_mnemonic (" _?")
-        
+
         self.pattern_entry.label = _("Enter the pattern here ... ")
         self.prepare_entry (self.pattern_entry)
 
@@ -288,12 +298,12 @@ class RenameApplication(Gtk.Application):
         self.options_box.pack_start (self.sub_repler, True, True, 0)
         self.options_box.show_all ()
         self.undo_p = False
-        
+
     def prepare_substitute_options (self, button, data=None):
 
         self.sub_label  = Gtk.Label.new (_("Delete or replace multiple characters and words..."))
         self.sub_label.set_alignment (0.02, 0.5)
-        
+
         self.sub_replee = Gtk.Entry.new ()
         self.sub_replee.label =  _("Words to be replaced separated by \"/\", e.g., 1/2 ...")
         self.prepare_entry (self.sub_replee)
@@ -311,7 +321,7 @@ class RenameApplication(Gtk.Application):
         self.options_box.pack_start (self.case_box, True, True, 0)
         self.options_box.show_all ()
         self.undo_p = False
-        
+
     def prepare_case_options (self, button, data=None):
         """ prepare widgets & settings for case options """
         store   = Gtk.ListStore ('gboolean', str, int)
@@ -325,7 +335,7 @@ class RenameApplication(Gtk.Application):
         self.view   = Gtk.TreeView.new_with_model (store)
         self.view.set_rules_hint (True)
         self.view.connect ('cursor-changed', self.cursor_changed)
-        
+
         cell    = Gtk.CellRendererToggle.new ()
         cell.set_radio (True)
         cell.set_property ('xalign', 0.1)
@@ -345,7 +355,7 @@ class RenameApplication(Gtk.Application):
         column.pack_start (cell, True)
         column.add_attribute (cell, 'text', 1)
         self.view.append_column (column)
-        
+
         self.scroll_win  = Gtk.ScrolledWindow()
         self.scroll_win.set_policy (Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.scroll_win.add(self.view)
@@ -353,7 +363,7 @@ class RenameApplication(Gtk.Application):
 
         self.case_label = Gtk.Label.new (_("Choose the casing style you want to apply."))
         self.case_label.set_alignment (0.02, 0.5)
-        
+
         self.case_box   = Gtk.VBox (False, 5)
         self.case_box.pack_start (self.case_label, False, False, 0)
         self.case_box.pack_start (self.scroll_win, True, True, 0)
@@ -363,16 +373,16 @@ class RenameApplication(Gtk.Application):
         self.options_box.pack_start (self.undo_label, True, True, 0)
         self.options_box.show_all ()
         self.undo_p = True
-        
+
     def prepare_undo_options (self, button, data=None):
         self.undo_label = Gtk.Label ()
         self.undo_label.set_line_wrap (True)
-        self.undo_label.set_alignment (0.1, -1)        
-        
+        self.undo_label.set_alignment (0.1, -1)
+
         if self.log_file_p():
             self.undo_label.set_markup (_("<b>Undo the last operation inside this folder.</b>\n\n <span " +
                                          "size='small'>Note: You cannot undo an undo. ;)</span>"))
-        else: 
+        else:
             self.undo_label.set_markup (_("<span color='red' weight='bold'>No log file is found in this folder." +
                                          "</span>\n\n<span size='small'>Note: When it renames files," +
                                          "Renamer writes a log file, in the folder it was launched, which is used for Undo.</span>"))
@@ -381,18 +391,18 @@ class RenameApplication(Gtk.Application):
         self.options_box.foreach (self.remove, None)
         self.options_box.pack_start (self.cap_box, True, True, 0)
         self.options_box.show_all ()
-        
+
     def prepare_cap_after_options (self, button):
         cap_label = Gtk.Label.new_with_mnemonic (_("Enter a list of letters or words, seperated by '/'."))
         cap_label.set_alignment (0.02, 0.5)
         cap_label.set_line_wrap (True)
-        
+
         self.cap_entry = Gtk.Entry.new ()
         self.cap_entry.set_text ('-/_/ /[/]/(/)/{/}')
         desc	= self.cap_entry.get_pango_context().get_font_description()
         desc.set_size (SMALL_FONT_SIZE)
         self.cap_entry.modify_font (desc)
-        
+
         self.cap_first = Gtk.CheckButton.new_with_mnemonic (_("_First Letter"))
         self.cap_first.set_active (False)
         self.cap_entry.set_tooltip_text (_("A list of sequences, separated by '/'. The letters after them will be capitalized."))
@@ -400,9 +410,9 @@ class RenameApplication(Gtk.Application):
 
         temp_alignment = Gtk.Alignment.new (1.0, 0.5, 0, 0)
         temp_alignment.add (self.cap_first)
-        
+
         self.cap_box = Gtk.VBox (False, 5)
-        self.cap_box.pack_start (cap_label, False, False, 0) 
+        self.cap_box.pack_start (cap_label, False, False, 0)
         self.cap_box.pack_start (self.cap_entry, False, False, 0)
         self.cap_box.pack_start (temp_alignment, False, False, 0)
 
@@ -410,14 +420,14 @@ class RenameApplication(Gtk.Application):
         ''' When the entriy is focused for the first time, clear the label text, and reset text style.'''
         if widget.clr_on_focus:
             widget.set_text ("")
-            widget.clr_on_focus = False            
-            
+            widget.clr_on_focus = False
+
     def entry_focus_out (self, widget, event, data=None):
         ''' When the entry focus is out without any changes, restore label text and color.'''
         if widget.get_text () == "":
             widget.set_text (widget.label)
             widget.clr_on_focus = True   # Clear current text when the entry is focused
-            
+
     def prepare_entry (self, entry):
         ''' Helper function for preparing entries in our dialog '''
         entry.set_text (entry.label)
@@ -427,10 +437,10 @@ class RenameApplication(Gtk.Application):
         desc	= entry.get_pango_context().get_font_description()
         desc.set_size (SMALL_FONT_SIZE)
         entry.modify_font (desc)
-                
+
         entry.connect ('focus-in-event',  self.entry_focus_in)
         entry.connect ('focus-out-event', self.entry_focus_out)
-        
+
     def combo_box_changed (self, combo, data=None):
         "When patten combo box entry is changed, restore text style"
         self.pattern_entry.clr_on_focus = False
@@ -439,7 +449,7 @@ class RenameApplication(Gtk.Application):
         "When Return is pressed on pattern entry"
         self.rename (files)
         self.dialog.destroy ()
-                        
+
     def expander_cb (self, widget, data):
         ''' When expander state is changed '''
         if widget.get_expanded ():
@@ -462,10 +472,10 @@ class RenameApplication(Gtk.Application):
         model.foreach (lambda model, path, iter, data: model.set (iter, 0, False), None)
         model.set (iter, 0, True)
         self.case_opt = model.get_value (iter, 2)
-        
+
         if self.case_opt == CASE_CAP_AFTER:
             self.cap_after_options_cb ()
-    
+
     def remove (self, child, user_data):
         ''' callback to remove a child from options_box '''
         self.options_box.remove (child)
@@ -474,52 +484,52 @@ class RenameApplication(Gtk.Application):
         ''' Base function for building list store for preview '''
         parent, name = os.path.split (path)
         newName = self._get_new_name(name)
-        
+
         if not newName:
             # If there is any error getting new name, return False
             print "build preview error ...."
             return False
-        
+
         newPath = os.path.join (os.path.split(vpath)[0],newName)
-        
+
         if not path == newPath:
             self.pmodel.append ([path, newPath])
-        
+
         if  os.path.isdir(path) and self.recur:
             for subdir in os.listdir (path):
                 if not self.build_preview_model (os.path.join(path, subdir), os.path.join(newPath, subdir)):
                     # If there is any error
                     return False
-        
+
         return True
-        
+
     def prepare_preview (self, widget):
         " Wrapper around build_preview_model. Prepare and validate settings."
         self.pmodel.clear ()
-        
+
         if self.undo_p and self.log_file_p():
             logFile = open (UNDO_LOG_FILE, 'rb')
-            
+
             for i in xrange(5): logFile.readline () #Skip 5 lines of header
-            
+
             for line in logFile:
                 oldpath, newpath = line.split('\n')[0].split(LOG_SEP)
-                oldp = os.path.join(os.path.dirname(oldpath), os.path.basename(newpath))
-                newp = os.path.join(os.path.dirname(newpath), os.path.basename(oldpath))
+                #oldp = os.path.join(os.path.dirname(oldpath), os.path.basename(newpath))
+                #newp = os.path.join(os.path.dirname(newpath), os.path.basename(oldpath))
                 self.pmodel.append ([newpath, oldpath])
-                
+
             logFile.close ()
             return
-            
+
         if not self.prepare_data_from_dialog():
         # if there is any error, return
             return
-                
+
         for file in files:
             if not self.build_preview_model (file):
                 # if there is any error
                 return
-        
+
     def prepare_data_from_dialog (self):
         ''' Initialize data require for rename and preview from dailog
             Report and return False.on errors'''
@@ -530,7 +540,7 @@ class RenameApplication(Gtk.Application):
         if not self.undo_p and not files:
             # If it is not undo, and no selected files
             return False
-        
+
         # prepare patternize related options, and check for possible errors
         self.pattern = self.pattern_entry.get_text ()
         self.num = 0
@@ -538,16 +548,16 @@ class RenameApplication(Gtk.Application):
         if self.pattern == '' or self.pattern == self.pattern_entry.label:
             #show_error (_("Empty Pattern"), _("Please, enter a valid pattern."))
             self.pattern = '/filename/'
-            
+
         if self.num_pat.search(self.pattern):
                 #if the pattern contains /num*/ or /num*+*/, disable recursion
             self.recur = False
-            
+
         if self.ran_pat.search(self.pattern):
                 # If a random pattern is found, prepare sequence of random numbers
             tmp = self.ran_pat.search(self.pattern).group()
-            range = tmp[5:-1] # Extract 10-99 from /rand10-99/
-            start, end = range.split ('-') # Split 10-99 to 10 and 99                
+            range = tmp[6:-1] # Extract 10-99 from /rand,10-99/
+            start, end = range.split ('-') # Split 10-99 to 10 and 99
             self.ran_seq = [x for x in xrange (int(start), int(end) + 1)]
 #            print self.ran_seq
 
@@ -559,14 +569,14 @@ class RenameApplication(Gtk.Application):
         if replee == self.sub_replee.label or replee == '':
             # no need to substitute
             self.substitute_p = False
-            
+
         if repler == self.sub_repler.label:
             repler = ''
 
         self.replees = replee.split ('/')
         self.replers = repler.split ('/')
         return True
-    
+
     def rename (self, files):
         ''' Wrapper around _rename (). Prepare and validate settings, and write logs.'''
         if self.undo_p:
@@ -577,7 +587,7 @@ class RenameApplication(Gtk.Application):
             # No files to rename
             show_error (_("No file selected"), _("Please, select some files first."))
             self.exit ()
-            
+
         if not self.prepare_data_from_dialog():
             # if there is any error, return
             return False
@@ -601,10 +611,10 @@ class RenameApplication(Gtk.Application):
             If self.recur is set, also renames file recursively'''
         parent, oldName = os.path.split (path)
         newName = self._get_new_name (oldName)
-        
+
         if not newName:
             self.exit ()
-            
+
         newPath = os.path.join (parent, newName)
         oldPath = os.path.join (oldPath, oldName)
 
@@ -621,7 +631,7 @@ class RenameApplication(Gtk.Application):
         if  os.path.isdir(newPath) and self.recur:
             for file in os.listdir (newPath):
                 self._rename (os.path.join (newPath, file), oldPath)
-                
+
     def _write_recent_pats (self):
         ''' Store recent patterns '''
         if not os.path.exists(CONFIG_DIR):
@@ -631,7 +641,7 @@ class RenameApplication(Gtk.Application):
             i = 1
             cpat = self.pattern_entry.get_text()
             if cpat != self.pattern_entry.label: # Don't write 'Enter pattern' label ...
-                file.write (cpat + '\n' ) 
+                file.write (cpat + '\n' )
             for pat in self.pats:
                 if i < REC_PATS and not pat[0] == cpat:
                     file.write (pat[0] + '\n')
@@ -647,7 +657,7 @@ class RenameApplication(Gtk.Application):
                     self.pats.append ([pat[:-1]])
         except:
             pass
-            
+
     def _get_new_name (self, oldName):
         ''' return a new name, based on the old name, and settings from our dialog. '''
         newName = self.pattern
@@ -656,15 +666,15 @@ class RenameApplication(Gtk.Application):
         #for number substiution
         for match in self.num_pat.finditer (newName):
             tmp = match.group()
-            #print tmp
-            #if /num?/
-            if len(tmp)== 6:
-                substitute = str(self.num).zfill(int(tmp[4]))
+            print tmp
+            #if /num,?/
+            if len(tmp)== 7:
+                substitute = str(self.num).zfill(int(tmp[5]))
                 newName    = self.num_pat.sub(substitute, newName, 1)
                 self.num   = self.num + 1
-            #if /num?+?/
-            elif len(tmp) > 7:
-                substitute = str(self.num+int(tmp[6:(len(tmp)-1)])).zfill(int(tmp[4]))
+            #if /num,?+?/
+            elif len(tmp) > 8:
+                substitute = str(self.num+int(tmp[7:(len(tmp)-1)])).zfill(int(tmp[5]))
                 newName    = self.num_pat.sub(substitute, newName, 1)
                 self.num   = self.num + 1
 
@@ -691,17 +701,17 @@ class RenameApplication(Gtk.Application):
         newName = newName.replace('/name/', name)
         newName = newName.replace('/ext/', ext)
 
-        #for /name:offset(:length)/
+        #for /name,offset(:length)/
         for match in self.name_slice.finditer (newName):
             tmp = match.group ()
-            tmp = tmp[:-1].split (':')
+            tmp = tmp[6:-1] # get x:y from /name,x:y/
+            tmp = tmp.split (':')
 
-            if len(tmp) ==  2:
-                tmp, offset = tmp
-                offset = int(offset)
-                substitute = name[offset:] 
+            if len(tmp) == 1:
+                offset = int(tmp[0])
+                substitute = oldName[offset:]
             else:
-                tmp, offset, length = tmp
+                offset, length = tmp
                 offset = int(offset)
                 length = int(length)
                 if length < 0:
@@ -717,17 +727,17 @@ class RenameApplication(Gtk.Application):
 
             newName    = self.name_slice.sub (substitute, newName, 1)
 
-        #for /filename:offset(:length)/
+        #for /filename,offset(:length)/
         for match in self.filename_slice.finditer (newName):
             tmp = match.group ()
-            tmp = tmp[:-1].split (':')
+            tmp = tmp[10:-1] # get x:y from /filename,x:y/
+            tmp = tmp.split (':')
 
-            if len(tmp) ==  2:
-                tmp, offset = tmp
-                offset = int(offset)
-                substitute = oldName[offset:] 
+            if len(tmp) == 1:
+                offset = int(tmp[0])
+                substitute = oldName[offset:]
             else:
-                tmp, offset, length = tmp
+                offset, length = tmp
                 offset = int(offset)
                 length = int(length)
                 if length < 0:
@@ -753,12 +763,12 @@ class RenameApplication(Gtk.Application):
         newName = newName.replace('/dayname/', time.strftime('%A', time.localtime()))
         newName = newName.replace('/daysimp/', time.strftime('%a', time.localtime()))
         ### END PATTERNIZE OPTIONS ###
-        
+
         if not self.ext:
             name, ext = os.path.splitext (newName)
         else:
             name = newName
-            
+
         # Handle Substitute
         if self.substitute_p:
             for i in xrange (0, len(self.replees)):
@@ -801,7 +811,7 @@ class RenameApplication(Gtk.Application):
                     if lst[i] is not '':
                         lst[i] = lst[i][0].upper() + lst[i][1:]
                 name = sep.join (lst)
-        
+
         if self.ext:
             return name
         else:
@@ -812,8 +822,8 @@ class RenameApplication(Gtk.Application):
         if not self.log_file_p ():
             show_error (_("Undo Failed"), _("Log file not found"))
             self.exit()
-        
-        logFile = open (UNDO_LOG_FILE, 'rb')    
+
+        logFile = open (UNDO_LOG_FILE, 'rb')
         for i in range(5): logFile.readline () #Skip 5 lines of header
 
         for line in logFile:
@@ -829,12 +839,12 @@ class RenameApplication(Gtk.Application):
         self.notify(_("Undo successful"),
                     _("%d files restored.") % self.filesRenamed,
                     Gtk.STOCK_APPLY)
-        
+
     def log_file_p (self):
-        ''' Check for log file in current folder, 
+        ''' Check for log file in current folder,
             return True if found, else False '''
         return os.path.exists (UNDO_LOG_FILE) and True or False
-    
+
     def start_log (self):
         ''' Open log and write header. '''
         self.logFile = open (UNDO_LOG_FILE, 'wb', 1)
@@ -852,7 +862,7 @@ class RenameApplication(Gtk.Application):
         ''' Close log file, and insert total files renamed.'''
         if not self.logFile:
             return
-        
+
         self.logFile.close ()
 
         with open (UNDO_LOG_FILE, 'r+b') as file:
@@ -865,25 +875,16 @@ class RenameApplication(Gtk.Application):
             m[(o+l) : ] = m [o : s]
             m[o : (o+l)] = str
             m.close ()
-    
+
     def exit (self):
         ''' Exit Application if there is an error.'''
         self.close_log ()
         self._write_recent_pats ()
-        
+
         sys.exit (1)
-        
+
     def notify(self, title,text,icon):
         ''' Wrapper to display notifications with timeout time. '''
-        # if not Notify.init("Renamer"):
-        #     self.exit ()
-        # n = Notify.Notification.new (summary=title,body=text,icon=icon)
-        # n.set_timeout(5 * 1000)
-        # if not n.show():
-        #     print "Failed to send notification"
-        #     self.exit ()
-        # Notify.uninit ()
-        
         import shlex, subprocess
         print locals()
         command = 'notify-send -t 5000 -u normal -i "%(icon)s" "%(title)s" "%(text)s"' % locals ()
@@ -898,20 +899,7 @@ def show_error (title, message):
     dialog.run ()
     dialog.destroy ()
 
-def init_gettext ():
-    PO_DIR = None
-    if os.path.exists(os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')):
-        # po dir, when it is installed as a user script
-        PO_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')
-
-    gettext.bindtextdomain(APP, PO_DIR)
-    gettext.textdomain(APP) 
-    lang = gettext.translation (APP, PO_DIR, fallback=True)
-    _ = lang.gettext
-    gettext.install (APP, PO_DIR)
-	
 if __name__ == '__main__':
-    init_gettext ()
     files = [file for file in sys.argv[1:]]
     app = RenameApplication ()
 
