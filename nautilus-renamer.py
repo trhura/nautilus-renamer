@@ -15,7 +15,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 '''
-
 import os
 import sys
 import re
@@ -71,12 +70,13 @@ class RenameApplication(Gtk.Application):
         self.pattern  = None
         self.logFile  = None
         self.nums = {}
-        self.num_pat = re.compile (r'\/num,(?P<fill>\d+)(\+(?P<start>\d+))?\/') #(r'\/num,\d+(\+\d+)?\/')
-        self.ran_pat = re.compile (r'\/rand,(?P<start>\d+)-(?P<end>\d+)\/')
-        self.name_slice = re.compile (r'\/name,(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/')
-        self.filename_slice = re.compile (r'\/filename,(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/') #-?\d+(:-?\d+)?\/')
+        self.num_pat = re.compile (r'\/num\|(?P<fill>\d+)(\+(?P<start>\d+))?\/') #(r'\/num,\d+(\+\d+)?\/')
+        self.ran_pat = re.compile (r'\/rand\|(?P<start>\d+)-(?P<end>\d+)\/')
+        self.name_slice = re.compile (r'\/name\|(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/')
+        self.filename_slice = re.compile (r'\/filename\|(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/') #-?\d+(:-?\d+)?\/')
         self.a_pattern = re.compile (r'\/.*\/') #used to check invalid patterns
         self.ran_seq = {}
+        self.ran_fill = {}
         self.filesRenamed = 0
         self.undo_p = False
         self.pmodel = Gtk.ListStore.new ([GObject.TYPE_STRING, GObject.TYPE_STRING])
@@ -115,10 +115,10 @@ class RenameApplication(Gtk.Application):
         pattern_dsimp   = Gtk.MenuItem ('/daysimp/')
         pattern_mname   = Gtk.MenuItem ('/monthname/')
         pattern_msimp   = Gtk.MenuItem ('/monthsimp/')
-        pattern_num1    = Gtk.MenuItem ('/num,5/')
-        pattern_num2    = Gtk.MenuItem ('/num,3+5/')
-        pattern_rand    = Gtk.MenuItem ('/rand,10-99/')
-        pattern_offset  = Gtk.MenuItem ('/filename,0:3/')
+        pattern_num1    = Gtk.MenuItem ('/num|5/')
+        pattern_num2    = Gtk.MenuItem ('/num|3+5/')
+        pattern_rand    = Gtk.MenuItem ('/rand|10-99/')
+        pattern_offset  = Gtk.MenuItem ('/filename|0:3/')
 
         pattern_fname.set_tooltip_text  (_("Original filename"))
         pattern_dir.set_tooltip_text    (_("Parent directory"))
@@ -132,8 +132,8 @@ class RenameApplication(Gtk.Application):
         pattern_msimp.set_tooltip_text  (_("Simple month name, e.g., Aug"))
         pattern_dname.set_tooltip_text  (_("Full day name, e.g., Monday"))
         pattern_dsimp.set_tooltip_text  (_("Simple dayname, e.g., Mon"))
-        pattern_num1.set_tooltip_text   (_("/num,5/ => 00001, 00002, 00003 , ..."))
-        pattern_num2.set_tooltip_text   (_("/num,3+5/ => 005, 006, 007 , ..."))
+        pattern_num1.set_tooltip_text   (_("/num|5/ => 00001, 00002, 00003 , ..."))
+        pattern_num2.set_tooltip_text   (_("/num|3+5/ => 005, 006, 007 , ..."))
         pattern_rand.set_tooltip_text   (_("A random number from 10 to 99"))
         pattern_offset.set_tooltip_text (_("The first three letters of filename."))
 
@@ -549,7 +549,7 @@ class RenameApplication(Gtk.Application):
             self.pattern = '/filename/'
 
         if self.num_pat.search(self.pattern):
-                #if the pattern contains /num,*/ or /num,*+*/, disable recursion
+            #if the pattern contains /num|*/ or /num|*+*/, disable recursion
             self.recur = False
 
         for index, match in enumerate(self.ran_pat.finditer (self.pattern)):
@@ -557,8 +557,8 @@ class RenameApplication(Gtk.Application):
             start = match.groupdict ().get ('start')
             end = match.groupdict ().get ('end')
             #tmp = self.ran_pat.search(self.pattern).group()
+            self.ran_fill[str(index)] = len(str(end))
             self.ran_seq[str(index)] = [x for x in xrange (int(start), int(end) + 1)]
-
 
         # prepare substitute related options, and check for possible errors
         replee = self.sub_replee.get_text ()
@@ -667,6 +667,7 @@ class RenameApplication(Gtk.Application):
             number = self.nums.get (str(index), 0)
             start = match.groupdict ().get ('start')
             fill  = match.groupdict ().get ('fill')
+            #print start, fill
 
             if start == None:
                 start = 1
@@ -686,7 +687,8 @@ class RenameApplication(Gtk.Application):
 
             randint = random.choice (self.ran_seq[str(index)])
             self.ran_seq[str(index)].remove (randint)
-            newName = self.ran_pat.sub (str(randint), newName, 1)
+            subst = str(randint).zfill(self.ran_fill[str(index)])
+            newName = self.ran_pat.sub (subst, newName, 1)
 
         dir, file = os.path.split (os.path.abspath(oldName))
         name, ext = os.path.splitext (file)
@@ -721,17 +723,15 @@ class RenameApplication(Gtk.Application):
                         substitute = name[offset:]
             newName    = self.name_slice.sub (substitute, newName, 1)
 
-        #for /filename,offset(:length)/
+        #for /filename|offset(:length)/
         for match in self.filename_slice.finditer (newName):
-            tmp = match.group ()
-            tmp = tmp[10:-1] # get x:y from /filename,x:y/
-            tmp = tmp.split (':')
+            offset = match.groupdict ().get ('offset')
+            length = match.groupdict ().get ('length')
 
-            if len(tmp) == 1:
-                offset = int(tmp[0])
+            if length == None:
+                offset = int(offset)
                 substitute = oldName[offset:]
             else:
-                offset, length = tmp
                 offset = int(offset)
                 length = int(length)
                 if length < 0:

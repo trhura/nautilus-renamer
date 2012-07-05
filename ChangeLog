@@ -4,6 +4,8 @@
 	- change patterns
 	- make multiple /num,***/ patterns work
 	- make multiple /rand,/ patterns work
+	- zero fill /rand,/ patterns
+* update Notifications to use gir Notify
 * added unit tests
 * make nautilus extension translatable
 
