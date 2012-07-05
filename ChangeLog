@@ -1,3 +1,12 @@
+3.1
+-----------------
+* fix patternize option bugs,
+	- change patterns
+	- make multiple /num,***/ patterns work
+	- make multiple /rand,/ patterns work
+* added unit tests
+* make nautilus extension translatable
+
 3.0 (10 Jan 2012)
 -----------------
 * Ported to GObject Introspection/Gtk3
@@ -20,7 +29,7 @@
 
 2.2 (17 Sep 2010)
 -----------------
-* Fixed bug #641191 
+* Fixed bug #641191
 * Report errors on preview
 
 2.1 (17 Sep 2010)
@@ -91,4 +100,4 @@
 ----
 * GUI Added ...
 * Fix some bugs ...
-* Planning to add more functions 
+* Planning to add more functions

@@ -73,11 +73,10 @@ class RenameApplication(Gtk.Application):
         self.nums = {}
         self.num_pat = re.compile (r'\/num,(?P<fill>\d+)(\+(?P<start>\d+))?\/') #(r'\/num,\d+(\+\d+)?\/')
         self.ran_pat = re.compile (r'\/rand,(?P<start>\d+)-(?P<end>\d+)\/')
-        self.name_slice = re.compile (r'\/name,-?\d+(:-?\d+)?\/')
-        self.filename_slice = re.compile (r'\/filename,-?\d+(:-?\d+)?\/')
-        #self.filename_delete = re.compile (r'\/filename-.*/')
+        self.name_slice = re.compile (r'\/name,(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/')
+        self.filename_slice = re.compile (r'\/filename,(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/') #-?\d+(:-?\d+)?\/')
         self.a_pattern = re.compile (r'\/.*\/') #used to check invalid patterns
-        self.ran_seq = []
+        self.ran_seq = {}
         self.filesRenamed = 0
         self.undo_p = False
         self.pmodel = Gtk.ListStore.new ([GObject.TYPE_STRING, GObject.TYPE_STRING])
@@ -117,7 +116,7 @@ class RenameApplication(Gtk.Application):
         pattern_mname   = Gtk.MenuItem ('/monthname/')
         pattern_msimp   = Gtk.MenuItem ('/monthsimp/')
         pattern_num1    = Gtk.MenuItem ('/num,5/')
-        pattern_num2    = Gtk.MenuItem ('/num,3+0/')
+        pattern_num2    = Gtk.MenuItem ('/num,3+5/')
         pattern_rand    = Gtk.MenuItem ('/rand,10-99/')
         pattern_offset  = Gtk.MenuItem ('/filename,0:3/')
 
@@ -553,13 +552,13 @@ class RenameApplication(Gtk.Application):
                 #if the pattern contains /num,*/ or /num,*+*/, disable recursion
             self.recur = False
 
-        if self.ran_pat.search(self.pattern):
+        for index, match in enumerate(self.ran_pat.finditer (self.pattern)):
             # If a random pattern is found, prepare sequence of random numbers
-            tmp = self.ran_pat.search(self.pattern).group()
-            range = tmp[6:-1] # Extract 10-99 from /rand,10-99/
-            start, end = range.split ('-') # Split 10-99 to 10 and 99
-            self.ran_seq = [x for x in xrange (int(start), int(end) + 1)]
-#            print self.ran_seq
+            start = match.groupdict ().get ('start')
+            end = match.groupdict ().get ('end')
+            #tmp = self.ran_pat.search(self.pattern).group()
+            self.ran_seq[str(index)] = [x for x in xrange (int(start), int(end) + 1)]
+
 
         # prepare substitute related options, and check for possible errors
         replee = self.sub_replee.get_text ()
@@ -677,16 +676,16 @@ class RenameApplication(Gtk.Application):
             self.nums[str(index)]  = number + 1
 
         # for random number insertion
-        for match in self.ran_pat.finditer (newName):
-            if not self.ran_seq:
+        for index, match in enumerate(self.ran_pat.finditer (newName)):
+            if not self.ran_seq[str(index)]:
                 # if random number sequence is None
                 print "Not Enought Random Number Range"
                 show_error (_("Not Enough Random Number Range"), _("Please, use a larger range"))
                 self.exit ()
                 #return False
 
-            randint = random.choice (self.ran_seq)
-            self.ran_seq.remove (randint)
+            randint = random.choice (self.ran_seq[str(index)])
+            self.ran_seq[str(index)].remove (randint)
             newName = self.ran_pat.sub (str(randint), newName, 1)
 
         dir, file = os.path.split (os.path.abspath(oldName))
@@ -701,15 +700,13 @@ class RenameApplication(Gtk.Application):
 
         #for /name,offset(:length)/
         for match in self.name_slice.finditer (newName):
-            tmp = match.group ()
-            tmp = tmp[6:-1] # get x:y from /name,x:y/
-            tmp = tmp.split (':')
+            offset = match.groupdict ().get ('offset')
+            length = match.groupdict ().get ('length')
 
-            if len(tmp) == 1:
-                offset = int(tmp[0])
-                substitute = oldName[offset:]
+            if length == None:
+                offset = int(offset)
+                substitute = name[offset:]
             else:
-                offset, length = tmp
                 offset = int(offset)
                 length = int(length)
                 if length < 0:
@@ -722,7 +719,6 @@ class RenameApplication(Gtk.Application):
                         substitute = name[offset:offset+length]
                     else:
                         substitute = name[offset:]
-
             newName    = self.name_slice.sub (substitute, newName, 1)
 
         #for /filename,offset(:length)/
