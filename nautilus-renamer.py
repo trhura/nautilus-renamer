@@ -72,7 +72,7 @@ class RenameApplication(Gtk.Application):
         self.logFile  = None
         self.nums = {}
         self.num_pat = re.compile (r'\/num,(?P<fill>\d+)(\+(?P<start>\d+))?\/') #(r'\/num,\d+(\+\d+)?\/')
-        self.ran_pat = re.compile (r'\/rand,\d+-\d+\/')
+        self.ran_pat = re.compile (r'\/rand,(?P<start>\d+)-(?P<end>\d+)\/')
         self.name_slice = re.compile (r'\/name,-?\d+(:-?\d+)?\/')
         self.filename_slice = re.compile (r'\/filename,-?\d+(:-?\d+)?\/')
         #self.filename_delete = re.compile (r'\/filename-.*/')
@@ -554,7 +554,7 @@ class RenameApplication(Gtk.Application):
             self.recur = False
 
         if self.ran_pat.search(self.pattern):
-                # If a random pattern is found, prepare sequence of random numbers
+            # If a random pattern is found, prepare sequence of random numbers
             tmp = self.ran_pat.search(self.pattern).group()
             range = tmp[6:-1] # Extract 10-99 from /rand,10-99/
             start, end = range.split ('-') # Split 10-99 to 10 and 99
@@ -770,8 +770,6 @@ class RenameApplication(Gtk.Application):
         # Handle Substitute
         if self.substitute_p:
             for i in xrange (0, len(self.replees)):
-                # print self.replees[i], self.replers[i]
-                print self.replees
                 if i < len (self.replers):
                     name = name.replace (self.replees[i], self.replers[i])
                 else:
