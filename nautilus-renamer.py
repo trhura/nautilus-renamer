@@ -28,6 +28,7 @@ import gettext
 from gi.repository import Gtk
 from gi.repository import Pango
 from gi.repository import GObject
+from gi.repository import Notify
 
 # Configuration
 DEFAULT_WIDTH   = 550                   # Dialog's default width at startup
@@ -69,8 +70,8 @@ class RenameApplication(Gtk.Application):
         self.ext      = False
         self.pattern  = None
         self.logFile  = None
-        self.num = 0
-        self.num_pat = re.compile(r'\/num,\d+(\+\d+)?\/')
+        self.nums = {}
+        self.num_pat = re.compile (r'\/num,(?P<fill>\d+)(\+(?P<start>\d+))?\/') #(r'\/num,\d+(\+\d+)?\/')
         self.ran_pat = re.compile (r'\/rand,\d+-\d+\/')
         self.name_slice = re.compile (r'\/name,-?\d+(:-?\d+)?\/')
         self.filename_slice = re.compile (r'\/filename,-?\d+(:-?\d+)?\/')
@@ -115,7 +116,7 @@ class RenameApplication(Gtk.Application):
         pattern_dsimp   = Gtk.MenuItem ('/daysimp/')
         pattern_mname   = Gtk.MenuItem ('/monthname/')
         pattern_msimp   = Gtk.MenuItem ('/monthsimp/')
-        pattern_num1    = Gtk.MenuItem ('/num,2/')
+        pattern_num1    = Gtk.MenuItem ('/num,5/')
         pattern_num2    = Gtk.MenuItem ('/num,3+0/')
         pattern_rand    = Gtk.MenuItem ('/rand,10-99/')
         pattern_offset  = Gtk.MenuItem ('/filename,0:3/')
@@ -542,7 +543,7 @@ class RenameApplication(Gtk.Application):
 
         # prepare patternize related options, and check for possible errors
         self.pattern = self.pattern_entry.get_text ()
-        self.num = 0
+        self.nums = {}
 
         if self.pattern == '' or self.pattern == self.pattern_entry.label:
             #show_error (_("Empty Pattern"), _("Please, enter a valid pattern."))
@@ -663,19 +664,17 @@ class RenameApplication(Gtk.Application):
 
         ### START PATTERNIZE OPTIONS ###
         #for number substiution
-        for match in self.num_pat.finditer (newName):
-            tmp = match.group()
-            print tmp
-            #if /num,?/
-            if len(tmp)== 7:
-                substitute = str(self.num).zfill(int(tmp[5]))
-                newName    = self.num_pat.sub(substitute, newName, 1)
-                self.num   = self.num + 1
-            #if /num,?+?/
-            elif len(tmp) > 8:
-                substitute = str(self.num+int(tmp[7:(len(tmp)-1)])).zfill(int(tmp[5]))
-                newName    = self.num_pat.sub(substitute, newName, 1)
-                self.num   = self.num + 1
+        for index, match in enumerate(self.num_pat.finditer (newName)):
+            number = self.nums.get (str(index), 0)
+            start = match.groupdict ().get ('start')
+            fill  = match.groupdict ().get ('fill')
+
+            if start == None:
+                start = 1
+
+            substitute = str(number+int(start)).zfill(int(fill))
+            newName    = self.num_pat.sub(substitute, newName, 1)
+            self.nums[str(index)]  = number + 1
 
         # for random number insertion
         for match in self.ran_pat.finditer (newName):
@@ -884,11 +883,10 @@ class RenameApplication(Gtk.Application):
 
     def notify(self, title,text,icon):
         ''' Wrapper to display notifications with timeout time. '''
-        import shlex, subprocess
-        print locals()
-        command = 'notify-send -t 5000 -u normal -i "%(icon)s" "%(title)s" "%(text)s"' % locals ()
-        args = shlex.split (command)
-        subprocess.Popen (args)
+        notification = Notify.Notification.new (text, title, icon)
+        notification.set_timeout (3 * 1000)
+        notification.set_urgency (Notify.Urgency.CRITICAL)
+        notification.show ()
 
 def show_error (title, message):
     "help function to show an error dialog"
@@ -901,6 +899,7 @@ if __name__ == '__main__':
     files = [file for file in sys.argv[1:]]
     app = RenameApplication ()
 
+    Notify.init (APP)
     while (app.dialog.run () == Gtk.ResponseType.OK):
         if app.rename (files):
             break

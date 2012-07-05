@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: trhura@gmail.com\n"
-"POT-Creation-Date: 2012-07-04 10:26+0630\n"
+"POT-Creation-Date: 2012-07-04 10:34+0630\n"
 "PO-Revision-Date: 2012-01-20 13:05+0000\n"
 "Last-Translator: Surya Prakash <Unknown>\n"
 "Language-Team: Tamil <ta@li.org>\n"
@@ -270,3 +270,8 @@ msgstr "செயல் நீக்கம் வெற்றி கரமாக
 #, python-format
 msgid "%d files restored."
 msgstr "%d கோப்புகள் புதுப்பிக்கபட்டது."
+
+#: nautilus-extension/nautilus-renamer.py:45
+#: nautilus-extension/nautilus-renamer.py:46
+msgid "Mass Rename"
+msgstr ""

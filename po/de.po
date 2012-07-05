@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.3\n"
 "Report-Msgid-Bugs-To: trhura@gmail.com\n"
-"POT-Creation-Date: 2012-07-04 10:26+0630\n"
+"POT-Creation-Date: 2012-07-04 10:34+0630\n"
 "PO-Revision-Date: 2012-04-16 19:45+0000\n"
 "Last-Translator: Sascha Biermanns <Unknown>\n"
 "Language-Team: German\n"
@@ -284,3 +284,8 @@ msgstr "Erfolgreich rückgängig gemacht"
 #, python-format
 msgid "%d files restored."
 msgstr "%d Dateien wiederhergestellt."
+
+#: nautilus-extension/nautilus-renamer.py:45
+#: nautilus-extension/nautilus-renamer.py:46
+msgid "Mass Rename"
+msgstr ""

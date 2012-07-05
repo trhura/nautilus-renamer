@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: trhura@gmail.com\n"
-"POT-Creation-Date: 2012-07-04 10:26+0630\n"
+"POT-Creation-Date: 2012-07-04 10:34+0630\n"
 "PO-Revision-Date: 2012-03-14 00:29+0000\n"
 "Last-Translator: Beto1917 <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -278,3 +278,8 @@ msgstr "Se ha deshecho con éxito"
 #, python-format
 msgid "%d files restored."
 msgstr "%d archivos restaurados."
+
+#: nautilus-extension/nautilus-renamer.py:45
+#: nautilus-extension/nautilus-renamer.py:46
+msgid "Mass Rename"
+msgstr ""
