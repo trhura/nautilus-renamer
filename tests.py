@@ -33,7 +33,7 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEqual (lst, outfiles)
 
     def test_random (self):
-        self.app.pattern = '/rand|5-8/-/rand|1-2000/-/rand|20-90/-/rand|10-1000/'
+        self.app.pattern = '/random|5-8/-/random|1-2000/-/random|20-90/-/random|10-1000/'
         self.app.substitute_p = False
         for index, match in enumerate(self.app.ran_pat.finditer (self.app.pattern)):
             start = match.groupdict ().get ('start')
@@ -44,15 +44,28 @@ class TestSequenceFunctions(unittest.TestCase):
             #print '\n%s = %s' %(self.app.pattern, item)
             self.assertIsNotNone (re.search ('\d{1}-\d{4}-\d{2}-\d{4}', item))
 
+    def test_alphas (self):
+        self.app.pattern = '/alphabet|4/-/ALPHABET|12/-/alphabet|3/-/ALPHABET|4/'
+        self.app.substitute_p = False
+        for index, match in enumerate(self.app.alpha_pat.finditer (self.app.pattern)):
+            length = match.groupdict ().get ('length')
+            self.app.alphas[str(index)] = renamer.AlphabetLowerSeq (int(length))
+        for index, match in enumerate(self.app.alphau_pat.finditer (self.app.pattern)):
+            length = match.groupdict ().get ('length')
+            self.app.alphaus[str(index)] = renamer.AlphabetUpperSeq (int(length))
+        for item in [self.app._get_new_name (fil) for fil in self.files1]:
+            #print '\n%s = %s' %(self.app.pattern, item)
+            self.assertIsNotNone (re.search ('[a-z]{4}-[A-Z]{12}-[a-z]{3}-[A-Z]{4}', item))
+
     def test_pattern1 (self):
-        self._test_pattern ('/name//num|5//num|3+5//ext/',
+        self._test_pattern ('/name//number|5//number|3+5//ext/',
                             self.files1,
                             ['a00001005.jpg',
                              'b00002006.jpg',
                              'c00003007.jpg',
                              'd00004008.jpg'])
     def test_pattern2 (self):
-        self._test_pattern ('/num|12+100//filename/',
+        self._test_pattern ('/number|12+100//filename/',
                             self.files1,
                             ['000000000100a.jpg',
                              '000000000101b.jpg',
@@ -81,7 +94,7 @@ class TestSequenceFunctions(unittest.TestCase):
                             ])
 
     def test_substitute (self):
-        self._test_substitute ('/name//num|5//num|3+5//ext/',
+        self._test_substitute ('/name//number|5//number|3+5//ext/',
                                '0',
                                'o',
                                self.files1,
@@ -91,7 +104,7 @@ class TestSequenceFunctions(unittest.TestCase):
                                 'doooo4oo8.jpg'])
 
     def test_substitute2 (self):
-        self._test_substitute ('/name//num|5//num|3+5//ext/',
+        self._test_substitute ('/name//number|5//number|3+5//ext/',
                                '0',
                                'o',
                                self.files1,
@@ -101,7 +114,7 @@ class TestSequenceFunctions(unittest.TestCase):
                                 'doooo4oo8.jpg'])
 
     def test_substitute3 (self):
-        self._test_substitute ('/name/-/num|5/-a/ext/',
+        self._test_substitute ('/name/-/number|5/-a/ext/',
                                '-/0/a',
                                '_/o',
                                self.files1,

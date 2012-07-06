@@ -23,6 +23,7 @@ import mmap
 import random
 import glib
 import gettext
+import string
 
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -69,14 +70,18 @@ class RenameApplication(Gtk.Application):
         self.ext      = False
         self.pattern  = None
         self.logFile  = None
-        self.nums = {}
-        self.num_pat = re.compile (r'\/num\|(?P<fill>\d+)(\+(?P<start>\d+))?\/') #(r'\/num,\d+(\+\d+)?\/')
-        self.ran_pat = re.compile (r'\/rand\|(?P<start>\d+)-(?P<end>\d+)\/')
+        self.num_pat = re.compile (r'\/number\|(?P<fill>\d+)(\+(?P<start>\d+))?\/') #(r'\/num,\d+(\+\d+)?\/')
+        self.ran_pat = re.compile (r'\/random\|(?P<start>\d+)-(?P<end>\d+)\/')
         self.name_slice = re.compile (r'\/name\|(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/')
         self.filename_slice = re.compile (r'\/filename\|(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/') #-?\d+(:-?\d+)?\/')
+        self.alpha_pat = re.compile (r'\/alphabet\|(?P<length>\d+)\/')
+        self.alphau_pat = re.compile (r'\/ALPHABET\|(?P<length>\d+)\/')
         self.a_pattern = re.compile (r'\/.*\/') #used to check invalid patterns
+        self.nums = {}
         self.ran_seq = {}
         self.ran_fill = {}
+        self.alphas = {}
+        self.alphaus = {}
         self.filesRenamed = 0
         self.undo_p = False
         self.pmodel = Gtk.ListStore.new ([GObject.TYPE_STRING, GObject.TYPE_STRING])
@@ -115,10 +120,12 @@ class RenameApplication(Gtk.Application):
         pattern_dsimp   = Gtk.MenuItem ('/daysimp/')
         pattern_mname   = Gtk.MenuItem ('/monthname/')
         pattern_msimp   = Gtk.MenuItem ('/monthsimp/')
-        pattern_num1    = Gtk.MenuItem ('/num|5/')
-        pattern_num2    = Gtk.MenuItem ('/num|3+5/')
-        pattern_rand    = Gtk.MenuItem ('/rand|10-99/')
+        pattern_num1    = Gtk.MenuItem ('/number|5/')
+        pattern_num2    = Gtk.MenuItem ('/number|3+5/')
+        pattern_rand    = Gtk.MenuItem ('/random|1-99/')
         pattern_offset  = Gtk.MenuItem ('/filename|0:3/')
+        pattern_alpha   = Gtk.MenuItem ('/alphabet|3/')
+        pattern_alphau  = Gtk.MenuItem ('/ALPHABET|3/')
 
         pattern_fname.set_tooltip_text  (_("Original filename"))
         pattern_dir.set_tooltip_text    (_("Parent directory"))
@@ -132,10 +139,12 @@ class RenameApplication(Gtk.Application):
         pattern_msimp.set_tooltip_text  (_("Simple month name, e.g., Aug"))
         pattern_dname.set_tooltip_text  (_("Full day name, e.g., Monday"))
         pattern_dsimp.set_tooltip_text  (_("Simple dayname, e.g., Mon"))
-        pattern_num1.set_tooltip_text   (_("/num|5/ => 00001, 00002, 00003 , ..."))
-        pattern_num2.set_tooltip_text   (_("/num|3+5/ => 005, 006, 007 , ..."))
-        pattern_rand.set_tooltip_text   (_("A random number from 10 to 99"))
+        pattern_num1.set_tooltip_text   (_("/number|5/ => 00001, 00002, 00003 , ..."))
+        pattern_num2.set_tooltip_text   (_("/number|3+5/ => 005, 006, 007 , ..."))
+        pattern_rand.set_tooltip_text   (_("A random number between 01 and 99"))
         pattern_offset.set_tooltip_text (_("The first three letters of filename."))
+        pattern_alpha.set_tooltip_text  (_("/alphabet|3/ => aaa, aab, ... aaaa, aaab"))
+        pattern_alphau.set_tooltip_text (_("/ALPHABET|3/ => AAA, AAB, ... AAAA, AAAB"))
 
         self.pattern_popup.attach (pattern_fname,   0, 1, 0, 1)
         self.pattern_popup.attach (pattern_dir,     1, 2, 0, 1)
@@ -153,6 +162,8 @@ class RenameApplication(Gtk.Application):
         self.pattern_popup.attach (pattern_num2,    1, 2, 6, 7)
         self.pattern_popup.attach (pattern_rand,    0, 1, 7, 8)
         self.pattern_popup.attach (pattern_offset,  1, 2, 7, 8)
+        self.pattern_popup.attach (pattern_alpha,    0, 1, 8, 9)
+        self.pattern_popup.attach (pattern_alphau,  1, 2, 8, 9)
         self.pattern_popup.show_all ()
 
         # Two checkboxs at the bottoms
@@ -262,7 +273,6 @@ class RenameApplication(Gtk.Application):
         self.options_box.pack_start (self.pattern_label, True, True, 0)
         self.options_box.pack_start (self.pattern_box, True, True, 0)
         self.options_box.show_all ()
-
 
     def prepare_pattern_options (self, button, data=None):
         ''' Prepare widgets & options for pattern on startup '''
@@ -552,11 +562,18 @@ class RenameApplication(Gtk.Application):
             #if the pattern contains /num|*/ or /num|*+*/, disable recursion
             self.recur = False
 
+        for index, match in enumerate(self.alpha_pat.finditer (self.pattern)):
+            length = match.groupdict ().get ('length')
+            self.alphas[str(index)] = AlphabetLowerSeq (int(length))
+
+        for index, match in enumerate(self.alphau_pat.finditer (self.pattern)):
+            length = match.groupdict ().get ('length')
+            self.alphaus[str(index)] = AlphabetUpperSeq (int(length))
+
         for index, match in enumerate(self.ran_pat.finditer (self.pattern)):
             # If a random pattern is found, prepare sequence of random numbers
             start = match.groupdict ().get ('start')
             end = match.groupdict ().get ('end')
-            #tmp = self.ran_pat.search(self.pattern).group()
             self.ran_fill[str(index)] = len(str(end))
             self.ran_seq[str(index)] = [x for x in xrange (int(start), int(end) + 1)]
 
@@ -675,6 +692,16 @@ class RenameApplication(Gtk.Application):
             substitute = str(number+int(start)).zfill(int(fill))
             newName    = self.num_pat.sub(substitute, newName, 1)
             self.nums[str(index)]  = number + 1
+
+        for index, match in enumerate(self.alphau_pat.finditer (self.pattern)):
+            nxt = self.alphaus[str(index)].next ()
+            subst = ''.join (nxt)
+            newName = self.alphau_pat.sub (subst, newName, 1)
+
+        for index, match in enumerate(self.alpha_pat.finditer (self.pattern)):
+            nxt = self.alphas[str(index)].next ()
+            subst = ''.join (nxt)
+            newName = self.alpha_pat.sub (subst, newName, 1)
 
         # for random number insertion
         for index, match in enumerate(self.ran_pat.finditer (newName)):
@@ -882,6 +909,44 @@ class RenameApplication(Gtk.Application):
         notification.set_urgency (Notify.Urgency.CRITICAL)
         notification.show ()
 
+class SequenceIterator (object):
+    def __init__ (self, sequence,length):
+        if len(sequence) > len(set(sequence)): #any(sequence.count(x) > 1 for x in sequence):
+            raise ValueError ('Sequence must be unique.')
+
+        self.seq    = list(sequence)
+        self.first  = sequence[0]
+        self.lastIndex = len(sequence) - 1
+        self.cur    = [self.first for x in range (length)]
+
+    def __iter__ (self):
+        return self
+
+    def next (self):
+        i = 0
+        ret = list(self.cur)
+
+        while i < len(self.cur):
+            index = self.seq.index (self.cur[i])
+            if index < self.lastIndex:
+                self.cur[i] = self.seq[index+1]
+                break
+            self.cur[i] = self.first
+            i += 1
+        else:
+            self.cur.append(self.first)
+
+        return list(reversed(ret))
+
+class AlphabetLowerSeq (SequenceIterator):
+    def __init__ (self, length):
+        super (AlphabetLowerSeq, self).__init__ (string.ascii_lowercase, length)
+
+class AlphabetUpperSeq (SequenceIterator):
+    def __init__ (self, length):
+        super (AlphabetUpperSeq, self).__init__ (string.ascii_uppercase, length)
+
+
 def show_error (title, message):
     "help function to show an error dialog"
     dialog = Gtk.MessageDialog (type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE)
@@ -897,3 +962,5 @@ if __name__ == '__main__':
     while (app.dialog.run () == Gtk.ResponseType.OK):
         if app.rename (files):
             break
+
+
