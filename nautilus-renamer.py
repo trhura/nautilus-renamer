@@ -30,6 +30,11 @@ from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import Notify
 
+try:
+    import roman
+except ImportError:
+    roman = False
+
 # Configuration
 DEFAULT_WIDTH   = 550                   # Dialog's default width at startup
 DEFAULT_HEIGHT  = 350                   # Dialog's default height at startup
@@ -70,14 +75,16 @@ class RenameApplication(Gtk.Application):
         self.ext      = False
         self.pattern  = None
         self.logFile  = None
-        self.num_pat = re.compile (r'\/number\|(?P<fill>\d+)(\+(?P<start>\d+))?\/') #(r'\/num,\d+(\+\d+)?\/')
+        self.num_pat = re.compile (r'\/number\|(?P<fill>\d+)(\+(?P<start>\d+))?\/')
+        self.roman_pat = re.compile (r'\/roman(\|(?P<start>\d+))?\/')
         self.ran_pat = re.compile (r'\/random\|(?P<start>\d+)-(?P<end>\d+)\/')
         self.name_slice = re.compile (r'\/name\|(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/')
-        self.filename_slice = re.compile (r'\/filename\|(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/') #-?\d+(:-?\d+)?\/')
+        self.filename_slice = re.compile (r'\/filename\|(?P<offset>-?\d+)(:(?P<length>-?\d+))?\/')
         self.alpha_pat = re.compile (r'\/alphabet\|(?P<length>\d+)\/')
         self.alphau_pat = re.compile (r'\/ALPHABET\|(?P<length>\d+)\/')
         self.a_pattern = re.compile (r'\/.*\/') #used to check invalid patterns
         self.nums = {}
+        self.romans = {}
         self.ran_seq = {}
         self.ran_fill = {}
         self.alphas = {}
@@ -126,6 +133,7 @@ class RenameApplication(Gtk.Application):
         pattern_offset  = Gtk.MenuItem ('/filename|0:3/')
         pattern_alpha   = Gtk.MenuItem ('/alphabet|3/')
         pattern_alphau  = Gtk.MenuItem ('/ALPHABET|3/')
+        pattern_roman   = Gtk.MenuItem ('/roman/')
 
         pattern_fname.set_tooltip_text  (_("Original filename"))
         pattern_dir.set_tooltip_text    (_("Parent directory"))
@@ -143,8 +151,9 @@ class RenameApplication(Gtk.Application):
         pattern_num2.set_tooltip_text   (_("/number|3+5/ => 005, 006, 007 , ..."))
         pattern_rand.set_tooltip_text   (_("A random number between 01 and 99"))
         pattern_offset.set_tooltip_text (_("The first three letters of filename."))
-        pattern_alpha.set_tooltip_text  (_("/alphabet|3/ => aaa, aab, ... aaaa, aaab"))
-        pattern_alphau.set_tooltip_text (_("/ALPHABET|3/ => AAA, AAB, ... AAAA, AAAB"))
+        pattern_alpha.set_tooltip_text  (_("/alphabet|3/ => aaa, aab, .. aaaa, aaab .."))
+        pattern_alphau.set_tooltip_text (_("/ALPHABET|3/ => AAA, AAB, .. AAAA, AAAB .."))
+        pattern_roman.set_tooltip_text (_("/roman|3/ => III, IV, V ..."))
 
         self.pattern_popup.attach (pattern_fname,   0, 1, 0, 1)
         self.pattern_popup.attach (pattern_dir,     1, 2, 0, 1)
@@ -164,6 +173,8 @@ class RenameApplication(Gtk.Application):
         self.pattern_popup.attach (pattern_offset,  1, 2, 7, 8)
         self.pattern_popup.attach (pattern_alpha,    0, 1, 8, 9)
         self.pattern_popup.attach (pattern_alphau,  1, 2, 8, 9)
+        if roman:
+            self.pattern_popup.attach (pattern_roman,  0, 1, 9, 10)
         self.pattern_popup.show_all ()
 
         # Two checkboxs at the bottoms
@@ -553,13 +564,15 @@ class RenameApplication(Gtk.Application):
         # prepare patternize related options, and check for possible errors
         self.pattern = self.pattern_entry.get_text ()
         self.nums = {}
+        self.romans = {}
 
         if self.pattern == '' or self.pattern == self.pattern_entry.label:
             #show_error (_("Empty Pattern"), _("Please, enter a valid pattern."))
             self.pattern = '/filename/'
 
-        if self.num_pat.search(self.pattern):
-            #if the pattern contains /num|*/ or /num|*+*/, disable recursion
+        if self.num_pat.search(self.pattern) or \
+            self.roman_pat.search(self.pattern):
+            #if the pattern numbering pattern, disable recursion
             self.recur = False
 
         for index, match in enumerate(self.alpha_pat.finditer (self.pattern)):
@@ -684,7 +697,6 @@ class RenameApplication(Gtk.Application):
             number = self.nums.get (str(index), 0)
             start = match.groupdict ().get ('start')
             fill  = match.groupdict ().get ('fill')
-            #print start, fill
 
             if start == None:
                 start = 1
@@ -692,6 +704,22 @@ class RenameApplication(Gtk.Application):
             substitute = str(number+int(start)).zfill(int(fill))
             newName    = self.num_pat.sub(substitute, newName, 1)
             self.nums[str(index)]  = number + 1
+
+        # roman pattern
+        for index, match in enumerate(self.roman_pat.finditer (newName)):
+            if not roman:
+                print "python-roman is not installed."
+                break
+
+            number = self.romans.get (str(index), 0)
+            start = match.groupdict ().get ('start')
+
+            if start == None:
+                start = 1
+
+            substitute = roman.toRoman (number+int(start))
+            newName    = self.roman_pat.sub(substitute, newName, 1)
+            self.romans[str(index)]  = number + 1
 
         for index, match in enumerate(self.alphau_pat.finditer (self.pattern)):
             nxt = self.alphaus[str(index)].next ()

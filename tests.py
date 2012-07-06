@@ -17,10 +17,6 @@ class TestSequenceFunctions(unittest.TestCase):
         # make sure the shuffled sequence does not lose any elements
         self.app.pattern = pattern
         self.app.substitute_p = False
-        for index, match in enumerate(self.app.ran_pat.finditer (self.app.pattern)):
-            start = match.groupdict ().get ('start')
-            end = match.groupdict ().get ('end')
-            self.app.ran_seq[str(index)] = [x for x in xrange (int(start), int(end) + 1)]
         lst = [self.app._get_new_name (fil) for fil in files]
         self.assertEqual (lst, outfiles)
 
@@ -84,6 +80,15 @@ class TestSequenceFunctions(unittest.TestCase):
                             self.files2,
                             ['abc',
                              'cba',
+                            ])
+
+    def test_pattern9 (self):
+        self._test_pattern ('/roman|3//ext/',
+                            self.files1,
+                            ['III.jpg',
+                             'IV.jpg',
+                             'V.jpg',
+                             'VI.jpg'
                             ])
 
     def test_pattern5 (self):
