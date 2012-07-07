@@ -269,6 +269,9 @@ class RenameApplication(Gtk.Application):
         pattern_num2.connect ('activate', self.on_popup_activate)
         pattern_rand.connect ('activate', self.on_popup_activate)
         pattern_offset.connect ('activate', self.on_popup_activate)
+        pattern_alpha.connect  ('activate', self.on_popup_activate)
+        pattern_alphau.connect  ('activate', self.on_popup_activate)
+        pattern_roman.connect  ('activate', self.on_popup_activate)
 
         expander.connect ('notify::expanded', self.expander_cb)
         refresh_btn.connect ('clicked', self.prepare_preview)
@@ -482,9 +485,12 @@ class RenameApplication(Gtk.Application):
             self.dialog.resize (DEFAULT_WIDTH, DEFAULT_HEIGHT)
 
     def on_popup_activate (self, item, data=None):
-        ''' When a menutitem on patterns popup menu is clicked, append the label to pattern entry. '''
+        ''' When a menutitem on patterns popup menu is clicked, insert the label to pattern entry. '''
         self.entry_focus_in (self.pattern_entry, None, None)
-        self.pattern_entry.set_text (self.pattern_entry.get_text() + item.get_property('label'))
+        position = self.pattern_entry.get_position ()
+        position = position == 0 and -1 or position
+        self.pattern_entry.insert_text (item.get_property('label'),
+                                        position)
 
     def cursor_changed (self, treeview, data=None):
         ''' When selected row in CASE tree view is changed, update the tree model. '''

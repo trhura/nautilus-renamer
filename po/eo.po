@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: trhura@gmail.com\n"
-"POT-Creation-Date: 2012-07-04 10:34+0630\n"
+"POT-Creation-Date: 2012-07-07 11:14+0630\n"
 "PO-Revision-Date: 2012-03-09 04:53+0000\n"
 "Last-Translator: Ivan Camilo Quintero Santacruz <Unknown>\n"
 "Language-Team: Esperanto <eo@li.org>\n"
@@ -18,179 +18,191 @@ msgstr ""
 "X-Launchpad-Export-Date: 2012-03-10 05:01+0000\n"
 "X-Generator: Launchpad (build 14914)\n"
 
-#: nautilus-renamer.py:85
+#: nautilus-renamer.py:97
 msgid "_Pattern"
 msgstr "_Modelo"
 
-#: nautilus-renamer.py:86
+#: nautilus-renamer.py:98
 msgid "_Substitute"
 msgstr "Anstataŭigi"
 
-#: nautilus-renamer.py:87
+#: nautilus-renamer.py:99
 msgid "C_ase"
 msgstr ""
 
-#: nautilus-renamer.py:88
+#: nautilus-renamer.py:100
 msgid "_Undo"
 msgstr ""
 
-#: nautilus-renamer.py:123
+#: nautilus-renamer.py:138
 msgid "Original filename"
 msgstr "Originala dosiernomo"
 
-#: nautilus-renamer.py:124
+#: nautilus-renamer.py:139
 msgid "Parent directory"
 msgstr ""
 
-#: nautilus-renamer.py:125
+#: nautilus-renamer.py:140
 msgid "Filename without extenstion"
 msgstr ""
 
-#: nautilus-renamer.py:126
+#: nautilus-renamer.py:141
 msgid "File extension"
 msgstr "Dosiera finaĵo"
 
-#: nautilus-renamer.py:127
+#: nautilus-renamer.py:142
 msgid "Day of month"
 msgstr "Tago de la monato"
 
-#: nautilus-renamer.py:128
+#: nautilus-renamer.py:143
 msgid "Full date, e.g., 24Sep2008"
 msgstr "Plena dato, ekz. 24Sep2008"
 
-#: nautilus-renamer.py:129
+#: nautilus-renamer.py:144
 msgid "Numerical month of year"
 msgstr "Nombra monato de la jaro"
 
-#: nautilus-renamer.py:130
+#: nautilus-renamer.py:145
 msgid "Year, e.g., 1990"
 msgstr "Jaro, ekz., 1990"
 
-#: nautilus-renamer.py:131
+#: nautilus-renamer.py:146
 msgid "Full month name, e.g., August"
 msgstr "Plena monata nomo, ekz., Aŭgusto"
 
-#: nautilus-renamer.py:132
+#: nautilus-renamer.py:147
 msgid "Simple month name, e.g., Aug"
 msgstr "Mallonga monata nomo, ekz., Aŭg"
 
-#: nautilus-renamer.py:133
+#: nautilus-renamer.py:148
 msgid "Full day name, e.g., Monday"
 msgstr "Plena tagnomo, ekz., Lundo"
 
-#: nautilus-renamer.py:134
+#: nautilus-renamer.py:149
 msgid "Simple dayname, e.g., Mon"
 msgstr "Mallonga tagnomo, ekz., Lun"
 
-#: nautilus-renamer.py:135
-msgid "/num,5/ => 00001, 00002, 00003 , ..."
+#: nautilus-renamer.py:150
+msgid "/number|5/ => 00001, 00002, 00003 , ..."
 msgstr ""
 
-#: nautilus-renamer.py:136
-msgid "/num,3+5/ => 005, 006, 007 , ..."
+#: nautilus-renamer.py:151
+msgid "/number|3+5/ => 005, 006, 007 , ..."
 msgstr ""
 
-#: nautilus-renamer.py:137
-msgid "A random number from 10 to 99"
+#: nautilus-renamer.py:152
+msgid "A random number between 01 and 99"
 msgstr ""
 
-#: nautilus-renamer.py:138
+#: nautilus-renamer.py:153
 msgid "The first three letters of filename."
 msgstr "La unuaj tri leteroj de la dosiernomo"
 
-#: nautilus-renamer.py:159
+#: nautilus-renamer.py:154
+msgid "/alphabet|3/ => aaa, aab, .. aaaa, aaab .."
+msgstr ""
+
+#: nautilus-renamer.py:155
+msgid "/ALPHABET|3/ => AAA, AAB, .. AAAA, AAAB .."
+msgstr ""
+
+#: nautilus-renamer.py:156
+msgid "/roman|3/ => III, IV, V ..."
+msgstr ""
+
+#: nautilus-renamer.py:181
 msgid "_Extension"
 msgstr ""
 
-#: nautilus-renamer.py:160
+#: nautilus-renamer.py:182
 msgid "_Recursive"
 msgstr ""
 
-#: nautilus-renamer.py:161
+#: nautilus-renamer.py:183
 msgid "Also operate on extensions"
 msgstr ""
 
-#: nautilus-renamer.py:162
+#: nautilus-renamer.py:184
 msgid "Also operate on subfolders and files"
 msgstr ""
 
-#: nautilus-renamer.py:170
+#: nautilus-renamer.py:192
 msgid "Refresh Previe_w"
 msgstr ""
 
-#: nautilus-renamer.py:184
+#: nautilus-renamer.py:206
 msgid "Original Name"
 msgstr "Originala nomo"
 
-#: nautilus-renamer.py:192
+#: nautilus-renamer.py:214
 msgid "New Name"
 msgstr "Nova nomo"
 
-#: nautilus-renamer.py:206
+#: nautilus-renamer.py:228
 msgid "Pre_view"
 msgstr "Antaŭvidu"
 
-#: nautilus-renamer.py:277
+#: nautilus-renamer.py:298
 msgid "Enter the pattern here ... "
 msgstr ""
 
-#: nautilus-renamer.py:288
+#: nautilus-renamer.py:309
 msgid "Enter the base pattern to rename. Click '?' for available patterns."
 msgstr ""
 
-#: nautilus-renamer.py:303
+#: nautilus-renamer.py:324
 msgid "Delete or replace multiple characters and words..."
 msgstr "Forigi aŭ anstataŭigi plurajn karakterojn kaj vortojn"
 
-#: nautilus-renamer.py:307
+#: nautilus-renamer.py:328
 msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
 msgstr ""
 
-#: nautilus-renamer.py:311
+#: nautilus-renamer.py:332
 msgid "Corresponding words to replace with, e.g., one/two ..."
 msgstr ""
 
-#: nautilus-renamer.py:314
+#: nautilus-renamer.py:335
 msgid "Enter the characters or words to be replaced, separated by '/'"
 msgstr ""
 
-#: nautilus-renamer.py:315
+#: nautilus-renamer.py:336
 msgid "Enter the corresponding words to replace with"
 msgstr ""
 
-#: nautilus-renamer.py:327
+#: nautilus-renamer.py:348
 msgid "Keep Original Case"
 msgstr ""
 
-#: nautilus-renamer.py:328
+#: nautilus-renamer.py:349
 msgid "ALL IN CAPITALS"
 msgstr ""
 
-#: nautilus-renamer.py:329
+#: nautilus-renamer.py:350
 msgid "all in lower case"
 msgstr ""
 
-#: nautilus-renamer.py:330
+#: nautilus-renamer.py:351
 msgid "First letter upper case"
 msgstr ""
 
-#: nautilus-renamer.py:331
+#: nautilus-renamer.py:352
 msgid "Title Case"
 msgstr ""
 
-#: nautilus-renamer.py:332
+#: nautilus-renamer.py:353
 msgid "Capital Case After ..."
 msgstr ""
 
-#: nautilus-renamer.py:353
+#: nautilus-renamer.py:374
 msgid "Choose One"
 msgstr "Elektu unu"
 
-#: nautilus-renamer.py:363
+#: nautilus-renamer.py:384
 msgid "Choose the casing style you want to apply."
 msgstr "Malfari la lastan operacion je ĉ"
 
-#: nautilus-renamer.py:382
+#: nautilus-renamer.py:403
 msgid ""
 "<b>Undo the last operation inside this folder.</b>\n"
 "\n"
@@ -200,74 +212,74 @@ msgstr ""
 "\n"
 " <span "
 
-#: nautilus-renamer.py:385
+#: nautilus-renamer.py:406
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
 msgstr ""
 
-#: nautilus-renamer.py:395
+#: nautilus-renamer.py:416
 msgid "Enter a list of letters or words, seperated by '/'."
 msgstr ""
 
-#: nautilus-renamer.py:405
+#: nautilus-renamer.py:426
 msgid "_First Letter"
 msgstr "_Unua litero"
 
-#: nautilus-renamer.py:407
+#: nautilus-renamer.py:428
 msgid ""
 "A list of sequences, separated by '/'. The letters after them will be "
 "capitalized."
 msgstr ""
 
-#: nautilus-renamer.py:408
+#: nautilus-renamer.py:429
 msgid "Capitalize the first letter"
 msgstr "Majuskligi la unuan literon"
 
-#: nautilus-renamer.py:587
+#: nautilus-renamer.py:617
 msgid "No file selected"
 msgstr "Neniu elektita dosiero"
 
-#: nautilus-renamer.py:587
+#: nautilus-renamer.py:617
 msgid "Please, select some files first."
 msgstr "Bv, selektu iujn dosieron unue"
 
-#: nautilus-renamer.py:602
+#: nautilus-renamer.py:632
 msgid "Rename successful"
 msgstr ""
 
-#: nautilus-renamer.py:603
+#: nautilus-renamer.py:633
 #, python-format
 msgid "renamed %d files successfully."
 msgstr ""
 
-#: nautilus-renamer.py:623
+#: nautilus-renamer.py:653
 msgid "File Already Exists"
 msgstr "La dosiero jam ekzistas"
 
-#: nautilus-renamer.py:623
+#: nautilus-renamer.py:653
 msgid " already exists. Use Undo to revert."
 msgstr ""
 
-#: nautilus-renamer.py:685
+#: nautilus-renamer.py:739
 msgid "Not Enough Random Number Range"
 msgstr ""
 
-#: nautilus-renamer.py:685
+#: nautilus-renamer.py:739
 msgid "Please, use a larger range"
 msgstr ""
 
-#: nautilus-renamer.py:822
+#: nautilus-renamer.py:870
 msgid "Undo Failed"
 msgstr "Malfarado nesukcesa"
 
-#: nautilus-renamer.py:822
+#: nautilus-renamer.py:870
 msgid "Log file not found"
 msgstr ""
 
-#: nautilus-renamer.py:838
+#: nautilus-renamer.py:886
 msgid "Undo successful"
 msgstr ""
 
-#: nautilus-renamer.py:839
+#: nautilus-renamer.py:887
 #, python-format
 msgid "%d files restored."
 msgstr ""

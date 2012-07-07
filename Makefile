@@ -2,6 +2,7 @@ NAUTILUS_SCRIPTS_DIR = ~/.gnome2/nautilus-scripts
 
 build:
 	./scripts/genmo.py po/ mo/
+	chmod +x nautilus-renamer.py
 
 localinstall: build uninstall
 	mkdir -p $(NAUTILUS_SCRIPTS_DIR)/.rdata/po
@@ -14,6 +15,7 @@ uninstall:
 
 clean:
 	rm -rfv mo
+	rm -rfv .rope*
 	find . -name '*.pyc' -exec rm '{}' \;
 #find . -name '*~' -exec rm -rfv '{}' \;
 

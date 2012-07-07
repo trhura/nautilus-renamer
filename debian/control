@@ -6,9 +6,8 @@ Build-Depends: debhelper (>= 8.0.0)
 Standards-Version: 3.9.2
 Homepage: https://launchpad.net/nautilus-renamer
 
-
 Package: nautilus-renamer
 Architecture: all
-Depends: python, python-gobject, python-nautilus, gir1.2-notify-0.7
+Depends: python2.7, python-gobject, python-nautilus, gir1.2-notify-0.7, gir1.2-gtk-3.0, python-roman
 Description: nautilus-renamer
- Mass rename files in nautilus
+ Mass rename files in nautilus.
