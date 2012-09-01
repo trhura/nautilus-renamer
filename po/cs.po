@@ -6,17 +6,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
-"Report-Msgid-Bugs-To: trhura@gmail.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-07-07 11:14+0630\n"
 "PO-Revision-Date: 2012-05-23 09:41+0000\n"
 "Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
-"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-24 11:44+0000\n"
-"X-Generator: Launchpad (build 15288)\n"
+"X-Launchpad-Export-Date: 2012-07-08 04:47+0000\n"
+"X-Generator: Launchpad (build 15558)\n"
 
 #: nautilus-renamer.py:97
 msgid "_Pattern"
@@ -91,9 +90,8 @@ msgid "/number|3+5/ => 005, 006, 007 , ..."
 msgstr ""
 
 #: nautilus-renamer.py:152
-#, fuzzy
 msgid "A random number between 01 and 99"
-msgstr "Náhodné číslo od 10 do 99"
+msgstr ""
 
 #: nautilus-renamer.py:153
 msgid "The first three letters of filename."
