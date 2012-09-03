@@ -26,6 +26,7 @@ import gettext
 import string
 
 from gi.repository import Gtk
+from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import Notify
@@ -989,12 +990,17 @@ def show_error (title, message):
     dialog.destroy ()
 
 if __name__ == '__main__':
-    files = [file for file in sys.argv[1:]]
+    files = []
+    for each in sys.argv[1:]:
+        if each.startswith ("file:///"):
+            files += [os.path.relpath (Gio.File.new_for_uri (each).get_path ())]
+        else:
+            files += [each]
+
+    print files
     app = RenameApplication ()
 
     Notify.init (APP)
     while (app.dialog.run () == Gtk.ResponseType.OK):
         if app.rename (files):
             break
-
-
