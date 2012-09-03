@@ -26,7 +26,6 @@ import gettext
 import string
 
 from gi.repository import Gtk
-from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import Notify
@@ -58,9 +57,9 @@ APP = 'nautilus-renamer'
 
 ## init gettext
 PO_DIR = None
-if os.path.exists(os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')):
+if os.path.exists(os.path.expanduser('~/.local/share/nautilus-renamer/.rdata/po')):
     # po dir, when it is installed as a user script
-    PO_DIR = os.path.expanduser('~/.gnome2/nautilus-scripts/.rdata/po')
+    PO_DIR = os.path.expanduser('~/.local/share/nautilus-renamer/.rdata/po')
 
 gettext.bindtextdomain(APP, PO_DIR)
 gettext.textdomain(APP)
@@ -1003,13 +1002,23 @@ def show_error (title, message):
 
 if __name__ == '__main__':
     files = []
-    for each in sys.argv[1:]:
-        if each.startswith ("file:///"):
-            files += [os.path.relpath (Gio.File.new_for_uri (each).get_path ())]
-        else:
-            files += [each]
+    # get current directory
+    cwd = os.path.commonprefix (sys.argv[1:])[len("file://"):]
+    if not cwd:
+        raise RuntimeError ("All command-line arguments must be URIs.")
+    os.chdir (cwd)
 
-    print files
+    for each in sys.argv[1:]:
+        if not each.startswith ("file:///"):
+            raise RuntimeError ("All command-line arguments must be URIs.")
+
+        path = each.replace ("file:///", "/") # naive convert uri to path
+        path = os.path.relpath (path)
+
+        if '/' in path:
+            raise RuntimeError ("All passed URIs must be in the same directory.")
+        files += [path]
+
     app = RenameApplication ()
 
     Notify.init (APP)

@@ -1,4 +1,4 @@
-NAUTILUS_SCRIPTS_DIR = ~/.gnome2/nautilus-scripts
+NAUTILUS_SCRIPTS_DIR = "$(HOME)/.local/share/nautilus-renamer"
 
 build:
 	./scripts/genmo.py po/ mo/
