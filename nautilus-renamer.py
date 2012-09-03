@@ -532,6 +532,19 @@ class RenameApplication(Gtk.Application):
 
     def prepare_preview (self, widget):
         " Wrapper around build_preview_model. Prepare and validate settings."
+
+        def update_preview_area ():
+            self.preview_align.foreach (lambda widget, data: self.preview_align.remove (widget), None)
+            if len(self.pmodel) == 0:
+                # Nothing to be done
+                label = Gtk.Label (_("No file needs to be renamed."))
+                self.preview_align.add (label)
+                self.preview_height = NO_PREVIEW_HEIGHT
+            else:
+                self.preview_align.add (self.scrollwin)
+                self.preview_height = PREVIEW_HEIGHT
+                self.preview_align.show_all ()
+
         self.pmodel.clear ()
         if self.undo_p and self.log_file_p():
             logFile = open (UNDO_LOG_FILE, 'rb')
@@ -545,28 +558,18 @@ class RenameApplication(Gtk.Application):
                 self.pmodel.append ([newpath, oldpath])
 
             logFile.close ()
+            update_preview_area ()
             return
 
         if not self.prepare_data_from_dialog():
-        # if there is any error, return
+            # if there is any error, return
             return
 
         for file in files:
             if not self.build_preview_model (file):
                 # if there is any error
                 return
-
-        self.preview_align.foreach (lambda widget, data: self.preview_align.remove (widget), None)
-        if len(self.pmodel) == 0:
-            # Nothing to be done
-            label = Gtk.Label (_("No file needs to be renamed."))
-            self.preview_align.add (label)
-            self.preview_height = NO_PREVIEW_HEIGHT
-        else:
-            self.preview_align.add (self.scrollwin)
-            self.preview_height = PREVIEW_HEIGHT
-        self.preview_align.show_all ()
-
+        update_preview_area ()
 
     def prepare_data_from_dialog (self):
         ''' Initialize data require for rename and preview from dailog
