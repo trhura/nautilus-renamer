@@ -40,6 +40,7 @@ except ImportError:
 DEFAULT_WIDTH   = 550                   # Dialog's default width at startup
 DEFAULT_HEIGHT  = 350                   # Dialog's default height at startup
 PREVIEW_HEIGHT  = 150                   # Height of preview area
+NO_PREVIEW_HEIGHT = 25                  # Height of preview area,
 UNDO_LOG_FILE   = '.rlog'               # Name used for Log file
 DATA_DIR        = '.rdata/'             #
 LOG_SEP         = ' is converted to '   # Log file separator
@@ -217,19 +218,19 @@ class RenameApplication(Gtk.Application):
         column.set_property ('resizable', True)
         view.append_column (column)
 
-        scrollwin   = Gtk.ScrolledWindow.new (None, None)
-        scrollwin.set_policy (Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        scrollwin.set_size_request (-1, PREVIEW_HEIGHT)
-        scrollwin.add (view)
+        self.scrollwin   = Gtk.ScrolledWindow.new (None, None)
+        self.scrollwin.set_policy (Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        self.scrollwin.set_size_request (-1, PREVIEW_HEIGHT)
+        self.scrollwin.add (view)
 
-        preview_align  = Gtk.Alignment.new (0.1, 0.1, 1.0, 0.0)
-        preview_align.add (scrollwin)
-        preview_align.set_padding (0, 0, 10, 10)
+        self.preview_align  = Gtk.Alignment.new (0.1, 0.1, 1.0, 0.0)
+        self.preview_align.add (self.scrollwin)
+        self.preview_align.set_padding (0, 0, 10, 10)
 
         expander = Gtk.Expander.new_with_mnemonic (_("Pre_view"))
         expander.set_use_underline (True)
         expander.set_spacing (5)
-        expander.add (preview_align)
+        expander.add (self.preview_align)
 
         main_box    = Gtk.VBox.new ( False, 8)
         main_box.pack_start (buttonbox, False, False, 0)
@@ -478,8 +479,8 @@ class RenameApplication(Gtk.Application):
         ''' When expander state is changed '''
         if widget.get_expanded ():
             # When preview is expanded, resize the dialog a litter bigger.
-            self.dialog.resize (DEFAULT_WIDTH + 100 , DEFAULT_HEIGHT + PREVIEW_HEIGHT)
             self.prepare_preview (widget)
+            self.dialog.resize (DEFAULT_WIDTH + 100 , DEFAULT_HEIGHT + self.preview_height)
         else:
             # When preview is hidden, restore normal size
             self.dialog.set_size_request (DEFAULT_WIDTH, DEFAULT_HEIGHT)
@@ -533,7 +534,6 @@ class RenameApplication(Gtk.Application):
     def prepare_preview (self, widget):
         " Wrapper around build_preview_model. Prepare and validate settings."
         self.pmodel.clear ()
-
         if self.undo_p and self.log_file_p():
             logFile = open (UNDO_LOG_FILE, 'rb')
 
@@ -556,6 +556,18 @@ class RenameApplication(Gtk.Application):
             if not self.build_preview_model (file):
                 # if there is any error
                 return
+
+        self.preview_align.foreach (lambda widget, data: self.preview_align.remove (widget), None)
+        if len(self.pmodel) == 0:
+            # Nothing to be done
+            label = Gtk.Label (_("No file needs to be renamed."))
+            self.preview_align.add (label)
+            self.preview_height = NO_PREVIEW_HEIGHT
+        else:
+            self.preview_align.add (self.scrollwin)
+            self.preview_height = PREVIEW_HEIGHT
+        self.preview_align.show_all ()
+
 
     def prepare_data_from_dialog (self):
         ''' Initialize data require for rename and preview from dailog
