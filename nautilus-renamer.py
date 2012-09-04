@@ -69,8 +69,9 @@ gettext.install (APP, PO_DIR)
 
 class RenameApplication(Gtk.Application):
     """ The main application """
-    def __init__(self):
+    def __init__(self, files):
 
+        self.files    = files
         self.case_opt = CASE_NONE
         self.recur    = False
         self.ext      = False
@@ -197,8 +198,9 @@ class RenameApplication(Gtk.Application):
 
         # Preview
         #preview_box    = Gtk.HBox.new (False, 5)
-        view    = Gtk.TreeView.new_with_model (self.pmodel)
-        view.set_rules_hint (True)
+        self.preview_view    = Gtk.TreeView.new_with_model (self.pmodel)
+        self.preview_view.set_rules_hint (True)
+        self.preview_view.set_reorderable (True)
 
         cell    = Gtk.CellRendererText.new ()
         cell.set_property ('scale', 0.8)
@@ -207,7 +209,7 @@ class RenameApplication(Gtk.Application):
         column  = Gtk.TreeViewColumn (_("Original Name"), cell, text=0)
         column.set_property ('sizing', Gtk.TreeViewColumnSizing.AUTOSIZE)
         column.set_property ('resizable', True)
-        view.append_column (column)
+        self.preview_view.append_column (column)
         cell    = Gtk.CellRendererText.new ()
         cell.set_property ('scale', 0.8)
         cell.set_property ('width', 280)
@@ -215,12 +217,12 @@ class RenameApplication(Gtk.Application):
         column  = Gtk.TreeViewColumn (_("New Name"), cell, text=1)
         column.set_property ('sizing', Gtk.TreeViewColumnSizing.AUTOSIZE)
         column.set_property ('resizable', True)
-        view.append_column (column)
+        self.preview_view.append_column (column)
 
         self.scrollwin   = Gtk.ScrolledWindow.new (None, None)
         self.scrollwin.set_policy (Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.scrollwin.set_size_request (-1, PREVIEW_HEIGHT)
-        self.scrollwin.add (view)
+        self.scrollwin.add (self.preview_view)
 
         self.preview_align  = Gtk.Alignment.new (0.1, 0.1, 1.0, 0.0)
         self.preview_align.add (self.scrollwin)
@@ -249,6 +251,7 @@ class RenameApplication(Gtk.Application):
         self.dialog.set_icon_name (Gtk.STOCK_EDIT)
         self.dialog.show_all ()
 
+        self.pmodel.connect ('row-deleted', self.on_row_reorder)
         self.pbutton.connect ('clicked', self.pattern_options_cb)
         self.sbutton.connect ('clicked', self.substitute_options_cb)
         self.cbutton.connect ('clicked', self.case_options_cb)
@@ -440,6 +443,15 @@ class RenameApplication(Gtk.Application):
         self.cap_box.pack_start (self.cap_entry, False, False, 0)
         self.cap_box.pack_start (temp_alignment, False, False, 0)
 
+    def on_row_reorder (self, model, path):
+        if self.recur:
+            #print "Reordering is not allowed in recursive mode."
+            return
+
+        reordered = [row[0] for row in model]
+        if len(self.files) == len(reordered):
+            self.files = [row[0] for row in model]
+
     def entry_focus_in (self, widget, event, data=None):
         ''' When the entriy is focused for the first time, clear the label text, and reset text style.'''
         if widget.clr_on_focus:
@@ -471,7 +483,7 @@ class RenameApplication(Gtk.Application):
 
     def pattern_entry_activate (self, entry, data=None):
         "When Return is pressed on pattern entry"
-        self.rename (files)
+        self.rename ()
         self.dialog.destroy ()
 
     def expander_cb (self, widget, data):
@@ -523,6 +535,7 @@ class RenameApplication(Gtk.Application):
             self.pmodel.append ([path, newPath])
 
         if  os.path.isdir(path) and self.recur:
+            #self.view
             for subdir in os.listdir (path):
                 if not self.build_preview_model (os.path.join(path, subdir), os.path.join(newPath, subdir)):
                     # If there is any error
@@ -532,9 +545,10 @@ class RenameApplication(Gtk.Application):
 
     def prepare_preview (self, widget):
         " Wrapper around build_preview_model. Prepare and validate settings."
-
         def update_preview_area ():
-            self.preview_align.foreach (lambda widget, data: self.preview_align.remove (widget), None)
+            self.preview_align.foreach (lambda widget, data:
+                                            self.preview_align.remove (widget),
+                                        None)
             if len(self.pmodel) == 0:
                 # Nothing to be done
                 label = Gtk.Label (_("No file needs to be renamed."))
@@ -543,14 +557,13 @@ class RenameApplication(Gtk.Application):
             else:
                 self.preview_align.add (self.scrollwin)
                 self.preview_height = PREVIEW_HEIGHT
-                self.preview_align.show_all ()
+            self.preview_align.show_all ()
 
         self.pmodel.clear ()
         if self.undo_p and self.log_file_p():
             logFile = open (UNDO_LOG_FILE, 'rb')
 
             for i in xrange(5): logFile.readline () #Skip 5 lines of header
-
             for line in logFile:
                 oldpath, newpath = line.split('\n')[0].split(LOG_SEP)
                 #oldp = os.path.join(os.path.dirname(oldpath), os.path.basename(newpath))
@@ -563,11 +576,13 @@ class RenameApplication(Gtk.Application):
 
         if not self.prepare_data_from_dialog():
             # if there is any error, return
+            update_preview_area ()
             return
 
-        for file in files:
-            if not self.build_preview_model (file):
+        for each in self.files:
+            if not self.build_preview_model (each):
                 # if there is any error
+                update_preview_area ()
                 return
         update_preview_area ()
 
@@ -577,8 +592,9 @@ class RenameApplication(Gtk.Application):
 
         self.recur = self.recursive_cb.get_active ()
         self.ext   = self.extension_cb.get_active ()
+        self.preview_view.set_reorderable (not self.recur)
 
-        if not self.undo_p and not files:
+        if not self.undo_p and not self.files:
             # If it is not undo, and no selected files
             return False
 
@@ -627,13 +643,13 @@ class RenameApplication(Gtk.Application):
         self.replers = repler.split ('/')
         return True
 
-    def rename (self, files):
+    def rename (self):
         ''' Wrapper around _rename (). Prepare and validate settings, and write logs.'''
         if self.undo_p:
             self.undo ()
             return True
 
-        if not files:
+        if not self.files:
             # No files to rename
             show_error (_("No file selected"), _("Please, select some files first."))
             self.exit ()
@@ -644,7 +660,7 @@ class RenameApplication(Gtk.Application):
 
         self.start_log ()
 
-        for file in files:
+        for file in self.files:
             app._rename(file)
 
         self.close_log ()
@@ -995,7 +1011,6 @@ class AlphabetUpperSeq (SequenceIterator):
     def __init__ (self, length):
         super (AlphabetUpperSeq, self).__init__ (string.ascii_uppercase, length)
 
-
 def show_error (title, message):
     "help function to show an error dialog"
     dialog = Gtk.MessageDialog (type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE)
@@ -1022,9 +1037,8 @@ if __name__ == '__main__':
             raise RuntimeError ("All passed URIs must be in the same directory.")
         files += [path]
 
-    app = RenameApplication ()
-
+    app = RenameApplication (files)
     Notify.init (APP)
     while (app.dialog.run () == Gtk.ResponseType.OK):
-        if app.rename (files):
+        if app.rename ():
             break

@@ -9,7 +9,7 @@ renamer = imp.load_source ('renamer', 'nautilus-renamer.py')
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.app = renamer.RenameApplication ()
+        self.app = renamer.RenameApplication (None)
         self.files1 = ['a.jpg','b.jpg','c.jpg', 'd.jpg']
         self.files2 = ['123abc.jpg','4321dcba.jpg']
 
