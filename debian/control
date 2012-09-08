@@ -3,11 +3,14 @@ Section: gnome
 Priority: optional
 Maintainer: Amr Osman <dr3mro@gmail.com>
 Build-Depends: debhelper (>= 8.0.0)
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 Homepage: https://launchpad.net/nautilus-renamer
 
 Package: nautilus-renamer
 Architecture: all
 Depends: python2.7, python-gobject, python-nautilus, gir1.2-notify-0.7, gir1.2-gtk-3.0, python-roman
-Description: nautilus-renamer
- Mass rename files in nautilus.
+Description: Batch rename files in nautilus
+ Renamer is a small script for batch renaming files in nautilus.
+ .
+ After installation, 'F2' or 'rename' in context menu will bring up
+ nautilus-renamer, if you have selected more than one file.

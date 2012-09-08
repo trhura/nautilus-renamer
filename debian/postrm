@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove)
+	rm -f /etc/dconf/db/site.d/??_nautilus_renamer
+    ;;
+
+esac

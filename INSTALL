@@ -1,10 +1,16 @@
 Get Lastest Version
-------------------
+------------------------------
+
 If you want to install the lastest version with updated translations, use bzr to download.
     bzr branch lp:nautilus-renamer
 
 Install
--------------
+------------------------------
+
 To install Renamer only for current user, run
     make localinstall
 
+Deb packages for ubuntu can also be downloaded in lauchpad project page.
+
+NOTE: After installation, 'F2' or 'rename' in context menu will bring up nautilus-renamer,
+if you have selected more than one file.

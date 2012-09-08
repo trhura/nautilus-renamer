@@ -1,3 +1,9 @@
+3.2 (7 Sep 2012)
+-----------------
+* better integration with nautilus
+* improved preview area
+* allow reordering of files, when not in recursive mode
+
 3.1 (7 Jul 2012)
 -----------------
 * fix patternize option bugs,

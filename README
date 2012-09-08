@@ -1,6 +1,6 @@
 About
 ======
-Renamer is a small nautilus script, written in python and gtk+, for batch renaming files in nautilus.
+Renamer is a small script for batch renaming files in nautilus.
 
 Installation
 ============

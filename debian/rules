@@ -11,6 +11,6 @@
 
 #build:
 #	scripts/genmo.py po/ mo/
-	
+
 %:
-	dh $@ 
+	dh $@
