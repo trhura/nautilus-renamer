@@ -26,6 +26,7 @@ import gettext
 import string
 
 from gi.repository import Gtk
+from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import Notify
@@ -772,7 +773,7 @@ class RenameApplication(Gtk.Application):
         for index, match in enumerate(self.ran_pat.finditer (newName)):
             if not self.ran_seq[str(index)]:
                 # if random number sequence is None
-                print "Not Enought Random Number Range"
+                #print "Not Enought Random Number Range"
                 show_error (_("Not Enough Random Number Range"), _("Please, use a larger range"))
                 self.exit ()
                 #return False
@@ -1021,22 +1022,25 @@ def show_error (title, message):
 if __name__ == '__main__':
     files = []
     # get current directory
-    cwd = os.path.commonprefix (sys.argv[1:])[len("file://"):]
+    common_prefix = os.path.commonprefix (sys.argv[1:])[len("file://"):]
+    cwd_pos = common_prefix.rfind ('/')
+    cwd = common_prefix [:cwd_pos]
+
     if not cwd:
-        raise RuntimeError ("All command-line arguments must be URIs.")
+        raise RuntimeError ("Unable to determine current working directory.")
+
     os.chdir (cwd)
+    parent = Gio.File.new_for_path (cwd)
 
     for each in sys.argv[1:]:
-        if not each.startswith ("file:///"):
-            raise RuntimeError ("All command-line arguments must be URIs.")
-
-        path = each.replace ("file:///", "/") # naive convert uri to path
-        path = os.path.relpath (path)
-
+        path = Gio.File.get_relative_path (parent,
+                                           Gio.File.new_for_uri (each))
+        print path, each
         if '/' in path:
             raise RuntimeError ("All passed URIs must be in the same directory.")
         files += [path]
 
+    print files
     app = RenameApplication (files)
     Notify.init (APP)
     while (app.dialog.run () == Gtk.ResponseType.OK):
