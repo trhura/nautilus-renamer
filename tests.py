@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 #  -*- coding: utf-8 -*-
 
 import imp
@@ -34,7 +34,7 @@ class TestSequenceFunctions(unittest.TestCase):
         for index, match in enumerate(self.app.ran_pat.finditer (self.app.pattern)):
             start = match.groupdict ().get ('start')
             end = match.groupdict ().get ('end')
-            self.app.ran_seq[str(index)] = [x for x in xrange (int(start), int(end) + 1)]
+            self.app.ran_seq[str(index)] = [x for x in range (int(start), int(end) + 1)]
             self.app.ran_fill[str(index)] = len(str(end))
         for item in [self.app._get_new_name (fil) for fil in self.files1]:
             #print '\n%s = %s' %(self.app.pattern, item)
