@@ -1,8 +1,8 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 #  -*- coding: utf-8 -*-
 
 '''
-Copyright (C) 2006-2011 Thura Hlaing <trhura@gmail.com>
+Copyright (C) 2006-2012 Thura Hlaing <trhura@gmail.com>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -21,7 +21,6 @@ import re
 import time
 import mmap
 import random
-import glib
 import gettext
 import string
 
@@ -30,6 +29,7 @@ from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import Notify
+from gi.repository import GLib
 
 try:
     import roman
@@ -50,10 +50,10 @@ NOTIFICATION_TIMEOUT =  -1              # notification timeout, Notify.EXPIRES_D
 SMALL_FONT_SIZE = Pango.SCALE * 10
 
 # Fake Enums
-CASE_NONE, CASE_ALL_CAP, CASE_ALL_LOW, CASE_FIRST_CAP, CASE_EACH_CAP, CASE_CAP_AFTER = range (6)
+CASE_NONE, CASE_ALL_CAP, CASE_ALL_LOW, CASE_FIRST_CAP, CASE_EACH_CAP, CASE_CAP_AFTER = list(range(6))
 
 # dir to store application state, recent patterns ...
-CONFIG_DIR = os.path.join (glib.get_user_data_dir (), 'nautilus-renamer')
+CONFIG_DIR = os.path.join (GLib.get_user_data_dir (), 'nautilus-renamer')
 APP = 'nautilus-renamer'
 
 ## init gettext
@@ -527,7 +527,7 @@ class RenameApplication(Gtk.Application):
 
         if not newName:
             # If there is any error getting new name, return False
-            print "build preview error ...."
+            print("build preview error ....")
             return False
 
         newPath = os.path.join (os.path.split(vpath)[0],newName)
@@ -564,7 +564,7 @@ class RenameApplication(Gtk.Application):
         if self.undo_p and self.log_file_p():
             logFile = open (UNDO_LOG_FILE, 'rb')
 
-            for i in xrange(5): logFile.readline () #Skip 5 lines of header
+            for i in range(5): logFile.readline () #Skip 5 lines of header
             for line in logFile:
                 oldpath, newpath = line.split('\n')[0].split(LOG_SEP)
                 #oldp = os.path.join(os.path.dirname(oldpath), os.path.basename(newpath))
@@ -626,7 +626,7 @@ class RenameApplication(Gtk.Application):
             start = match.groupdict ().get ('start')
             end = match.groupdict ().get ('end')
             self.ran_fill[str(index)] = len(str(end))
-            self.ran_seq[str(index)] = [x for x in xrange (int(start), int(end) + 1)]
+            self.ran_seq[str(index)] = [x for x in range (int(start), int(end) + 1)]
 
         # prepare substitute related options, and check for possible errors
         replee = self.sub_replee.get_text ()
@@ -746,7 +746,7 @@ class RenameApplication(Gtk.Application):
         # roman pattern
         for index, match in enumerate(self.roman_pat.finditer (newName)):
             if not roman:
-                print "python-roman is not installed."
+                print("python-roman is not installed.")
                 break
 
             number = self.romans.get (str(index), 0)
@@ -760,12 +760,12 @@ class RenameApplication(Gtk.Application):
             self.romans[str(index)]  = number + 1
 
         for index, match in enumerate(self.alphau_pat.finditer (self.pattern)):
-            nxt = self.alphaus[str(index)].next ()
+            nxt = next(self.alphaus[str(index)])
             subst = ''.join (nxt)
             newName = self.alphau_pat.sub (subst, newName, 1)
 
         for index, match in enumerate(self.alpha_pat.finditer (self.pattern)):
-            nxt = self.alphas[str(index)].next ()
+            nxt = next(self.alphas[str(index)])
             subst = ''.join (nxt)
             newName = self.alpha_pat.sub (subst, newName, 1)
 
@@ -858,7 +858,7 @@ class RenameApplication(Gtk.Application):
 
         # Handle Substitute
         if self.substitute_p:
-            for i in xrange (0, len(self.replees)):
+            for i in range (0, len(self.replees)):
                 if i < len (self.replers):
                     name = name.replace (self.replees[i], self.replers[i])
                 else:
@@ -892,7 +892,7 @@ class RenameApplication(Gtk.Application):
             for sep in seps.split ('/'):
                 if not sep == '':
                     lst = [ l for l in name.split(sep)]
-                for i in xrange(1, len(lst)):
+                for i in range(1, len(lst)):
                     if lst[i] is not '':
                         lst[i] = lst[i][0].upper() + lst[i][1:]
                 name = sep.join (lst)
@@ -988,7 +988,7 @@ class SequenceIterator (object):
     def __iter__ (self):
         return self
 
-    def next (self):
+    def __next__ (self):
         i = 0
         ret = list(self.cur)
 
@@ -1035,12 +1035,12 @@ if __name__ == '__main__':
     for each in sys.argv[1:]:
         path = Gio.File.get_relative_path (parent,
                                            Gio.File.new_for_uri (each))
-        print path, each
+        print(path, each)
         if '/' in path:
             raise RuntimeError ("All passed URIs must be in the same directory.")
         files += [path]
 
-    print files
+    print(files)
     app = RenameApplication (files)
     Notify.init (APP)
     while (app.dialog.run () == Gtk.ResponseType.OK):
