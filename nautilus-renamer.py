@@ -13,8 +13,8 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
-
 '''
+
 import os
 import sys
 import re
@@ -94,7 +94,7 @@ class RenameApplication(Gtk.Application):
         self.alphaus = {}
         self.filesRenamed = 0
         self.undo_p = False
-        self.pmodel = Gtk.ListStore.new ([GObject.TYPE_STRING, GObject.TYPE_STRING])
+        self.pmodel = Gtk.TreeStore.new ([GObject.TYPE_STRING, GObject.TYPE_STRING])
 
         # Toggle Buttons Box
         self.pbutton = Gtk.Button.new_with_mnemonic (_("_Pattern"))
@@ -204,7 +204,7 @@ class RenameApplication(Gtk.Application):
         self.preview_view.set_reorderable (True)
 
         cell    = Gtk.CellRendererText.new ()
-        cell.set_property ('scale', 0.8)
+        cell.set_property ('scale', 0.75)
         cell.set_property ('width', 280)
         cell.set_property ('ellipsize', Pango.EllipsizeMode.MIDDLE)
         column  = Gtk.TreeViewColumn (_("Original Name"), cell, text=0)
@@ -445,6 +445,7 @@ class RenameApplication(Gtk.Application):
         self.cap_box.pack_start (temp_alignment, False, False, 0)
 
     def on_row_reorder (self, model, path):
+        ''' Reorder files according to the order in tree model '''
         if self.recur:
             #print "Reordering is not allowed in recursive mode."
             return
@@ -520,7 +521,7 @@ class RenameApplication(Gtk.Application):
         ''' callback to remove a child from options_box '''
         self.options_box.remove (child)
 
-    def build_preview_model (self, path, vpath=''):
+    def build_preview_model (self, path, parent_iter=None):
         ''' Base function for building list store for preview '''
         parent, name = os.path.split (path)
         newName = self._get_new_name(name)
@@ -530,18 +531,27 @@ class RenameApplication(Gtk.Application):
             print("build preview error ....")
             return False
 
-        newPath = os.path.join (os.path.split(vpath)[0],newName)
-
-        if not path == newPath:
-            self.pmodel.append ([path, newPath])
+        _iter = None
+        if name == newName:
+            # if there is no need to rename file
+            print ("checking", path)
+            if os.path.isdir (path) and self.recur:
+                # if recursive mode is enabled, add to preview
+                # since subfiles/folder may need to rename
+                _iter = self.pmodel.append (parent_iter)
+                self.pmodel.set (_iter, 0, name, 1, newName)
+                print ("\tappending",  name, newName)
+        else:
+            _iter = self.pmodel.append (parent_iter)
+            self.pmodel.set (_iter, 0, name, 1, newName)
+            print ("appending ", name, newName)
 
         if  os.path.isdir(path) and self.recur:
             #self.view
             for subdir in os.listdir (path):
-                if not self.build_preview_model (os.path.join(path, subdir), os.path.join(newPath, subdir)):
+                if not self.build_preview_model (os.path.join(path, subdir), _iter):
                     # If there is any error
                     return False
-
         return True
 
     def prepare_preview (self, widget):
@@ -1022,6 +1032,7 @@ def show_error (title, message):
 if __name__ == '__main__':
     files = []
     # get current directory
+    print (sys.argv[1:])
     common_prefix = os.path.commonprefix (sys.argv[1:])[len("file://"):]
     cwd_pos = common_prefix.rfind ('/')
     cwd = common_prefix [:cwd_pos]
@@ -1035,12 +1046,12 @@ if __name__ == '__main__':
     for each in sys.argv[1:]:
         path = Gio.File.get_relative_path (parent,
                                            Gio.File.new_for_uri (each))
-        print(path, each)
+        #print(path, each)
         if '/' in path:
             raise RuntimeError ("All passed URIs must be in the same directory.")
         files += [path]
 
-    print(files)
+    #print(files)
     app = RenameApplication (files)
     Notify.init (APP)
     while (app.dialog.run () == Gtk.ResponseType.OK):
