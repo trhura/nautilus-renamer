@@ -23,6 +23,7 @@ import mmap
 import random
 import gettext
 import string
+import difflib
 
 from gi.repository import Gtk
 from gi.repository import Gio
@@ -37,9 +38,9 @@ except ImportError:
     roman = False
 
 # Configuration
-DEFAULT_WIDTH   = 550                   # Dialog's default width at startup
-DEFAULT_HEIGHT  = 350                   # Dialog's default height at startup
-PREVIEW_HEIGHT  = 150                   # Height of preview area
+DEFAULT_WIDTH   = 600                   # Dialog's default width at startup
+DEFAULT_HEIGHT  = 370                   # Dialog's default height at startup
+PREVIEW_HEIGHT  = 170                   # Height of preview area
 NO_PREVIEW_HEIGHT = 25                  # Height of preview area,
 UNDO_LOG_FILE   = '.rlog'               # Name used for Log file
 DATA_DIR        = '.rdata/'             #
@@ -204,20 +205,21 @@ class RenameApplication(Gtk.Application):
         self.preview_view.set_reorderable (True)
 
         cell    = Gtk.CellRendererText.new ()
-        cell.set_property ('scale', 0.75)
-        cell.set_property ('width', 280)
+        cell.set_property ('scale', 0.7)
+        print ((DEFAULT_WIDTH/2) - 20)
+        cell.set_property ('width', (DEFAULT_WIDTH/2) - 20)
         cell.set_property ('ellipsize', Pango.EllipsizeMode.MIDDLE)
-        column  = Gtk.TreeViewColumn (_("Original Name"), cell, text=0)
+        column  = Gtk.TreeViewColumn (_("Original Name"), cell, markup=0)
         column.set_property ('sizing', Gtk.TreeViewColumnSizing.AUTOSIZE)
-        column.set_property ('resizable', True)
+        column.set_property ('resizable', False)
         self.preview_view.append_column (column)
         cell    = Gtk.CellRendererText.new ()
-        cell.set_property ('scale', 0.8)
-        cell.set_property ('width', 280)
+        cell.set_property ('scale', 0.7)
+        cell.set_property ('width', (DEFAULT_WIDTH/2) - 20)
         cell.set_property ('ellipsize', Pango.EllipsizeMode.MIDDLE)
-        column  = Gtk.TreeViewColumn (_("New Name"), cell, text=1)
+        column  = Gtk.TreeViewColumn (_("New Name"), cell, markup=1)
         column.set_property ('sizing', Gtk.TreeViewColumnSizing.AUTOSIZE)
-        column.set_property ('resizable', True)
+        column.set_property ('resizable', False)
         self.preview_view.append_column (column)
 
         self.scrollwin   = Gtk.ScrolledWindow.new (None, None)
@@ -531,20 +533,30 @@ class RenameApplication(Gtk.Application):
             print("build preview error ....")
             return False
 
+        def get_markup (name, newName):
+            """ """
+            s = difflib.SequenceMatcher (None, name, newName)
+            i = 0
+            markup = ""
+            for _, start, length in s.get_matching_blocks ():
+                if not i == start:
+                    markup += "<span color='red'><b>" + newName[i:start] + "</b></span>"
+                markup += newName[start:start+length]
+                i = start + length
+
+            return markup
+
         _iter = None
         if name == newName:
             # if there is no need to rename file
-            print ("checking", path)
             if os.path.isdir (path) and self.recur:
                 # if recursive mode is enabled, add to preview
                 # since subfiles/folder may need to rename
                 _iter = self.pmodel.append (parent_iter)
-                self.pmodel.set (_iter, 0, name, 1, newName)
-                print ("\tappending",  name, newName)
+                self.pmodel.set (_iter, 0, name, 1, get_markup(name, newName))
         else:
             _iter = self.pmodel.append (parent_iter)
-            self.pmodel.set (_iter, 0, name, 1, newName)
-            print ("appending ", name, newName)
+            self.pmodel.set (_iter, 0, name, 1, get_markup(name, newName))
 
         if  os.path.isdir(path) and self.recur:
             #self.view
