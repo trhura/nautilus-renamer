@@ -584,14 +584,15 @@ class RenameApplication(Gtk.Application):
 
         self.pmodel.clear ()
         if self.undo_p and self.log_file_p():
-            logFile = open (UNDO_LOG_FILE, 'rb')
+            logFile = open (UNDO_LOG_FILE, 'r')
 
             for i in range(5): logFile.readline () #Skip 5 lines of header
             for line in logFile:
                 oldpath, newpath = line.split('\n')[0].split(LOG_SEP)
-                #oldp = os.path.join(os.path.dirname(oldpath), os.path.basename(newpath))
-                #newp = os.path.join(os.path.dirname(newpath), os.path.basename(oldpath))
-                self.pmodel.append ([newpath, oldpath])
+
+                depth =
+                _iter = self.pmodel.append (None)
+                self.pmodel.set (_iter, 0, newpath, 1, oldpath)
 
             logFile.close ()
             update_preview_area ()
@@ -930,7 +931,7 @@ class RenameApplication(Gtk.Application):
             show_error (_("Undo Failed"), _("Log file not found"))
             self.exit()
 
-        logFile = open (UNDO_LOG_FILE, 'rb')
+        logFile = open (UNDO_LOG_FILE, 'r')
         for i in range(5): logFile.readline () #Skip 5 lines of header
 
         for line in logFile:
@@ -954,7 +955,7 @@ class RenameApplication(Gtk.Application):
 
     def start_log (self):
         ''' Open log and write header. '''
-        self.logFile = open (UNDO_LOG_FILE, 'wb', 1)
+        self.logFile = open (UNDO_LOG_FILE, 'w', 1)
 
         self.logFile.write (' Renamer Log '.center (80, '#'))
         self.logFile.write ('\n')
@@ -972,15 +973,15 @@ class RenameApplication(Gtk.Application):
 
         self.logFile.close ()
 
-        with open (UNDO_LOG_FILE, 'r+b') as file:
+        with open (UNDO_LOG_FILE, 'r+') as file:
             m = mmap.mmap(file.fileno(), os.path.getsize(UNDO_LOG_FILE))
-            str = '%d' % self.filesRenamed
-            l = len(str) #len
+            files_str = '%d' % self.filesRenamed
+            l = len(files_str) #len
             s = m.size() #size
             o = 90       #offset
             m.resize (s + l)
             m[(o+l) : ] = m [o : s]
-            m[o : (o+l)] = str
+            m[o : (o+l)] = bytes (files_str, 'UTF-8')
             m.close ()
 
     def exit (self):
@@ -1044,7 +1045,6 @@ def show_error (title, message):
 if __name__ == '__main__':
     files = []
     # get current directory
-    print (sys.argv[1:])
     common_prefix = os.path.commonprefix (sys.argv[1:])[len("file://"):]
     cwd_pos = common_prefix.rfind ('/')
     cwd = common_prefix [:cwd_pos]
@@ -1058,12 +1058,10 @@ if __name__ == '__main__':
     for each in sys.argv[1:]:
         path = Gio.File.get_relative_path (parent,
                                            Gio.File.new_for_uri (each))
-        #print(path, each)
         if '/' in path:
             raise RuntimeError ("All passed URIs must be in the same directory.")
         files += [path]
 
-    #print(files)
     app = RenameApplication (files)
     Notify.init (APP)
     while (app.dialog.run () == Gtk.ResponseType.OK):
