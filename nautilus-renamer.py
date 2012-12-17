@@ -523,6 +523,18 @@ class RenameApplication(Gtk.Application):
         ''' callback to remove a child from options_box '''
         self.options_box.remove (child)
 
+    def get_diff_markup (self, name, newName):
+        """ """
+        s = difflib.SequenceMatcher (None, name, newName)
+        i = 0
+        markup = ""
+        for _, start, length in s.get_matching_blocks ():
+            if not i == start:
+                markup += "<span color='red'><b>" + newName[i:start] + "</b></span>"
+            markup += newName[start:start+length]
+            i = start + length
+        return markup
+
     def build_preview_model (self, path, parent_iter=None):
         ''' Base function for building list store for preview '''
         parent, name = os.path.split (path)
@@ -533,19 +545,6 @@ class RenameApplication(Gtk.Application):
             print("build preview error ....")
             return False
 
-        def get_markup (name, newName):
-            """ """
-            s = difflib.SequenceMatcher (None, name, newName)
-            i = 0
-            markup = ""
-            for _, start, length in s.get_matching_blocks ():
-                if not i == start:
-                    markup += "<span color='red'><b>" + newName[i:start] + "</b></span>"
-                markup += newName[start:start+length]
-                i = start + length
-
-            return markup
-
         _iter = None
         if name == newName:
             # if there is no need to rename file
@@ -553,10 +552,10 @@ class RenameApplication(Gtk.Application):
                 # if recursive mode is enabled, add to preview
                 # since subfiles/folder may need to rename
                 _iter = self.pmodel.append (parent_iter)
-                self.pmodel.set (_iter, 0, name, 1, get_markup(name, newName))
+                self.pmodel.set (_iter, 0, name, 1, self.get_diff_markup(name, newName))
         else:
             _iter = self.pmodel.append (parent_iter)
-            self.pmodel.set (_iter, 0, name, 1, get_markup(name, newName))
+            self.pmodel.set (_iter, 0, name, 1, self.get_diff_markup(name, newName))
 
         if  os.path.isdir(path) and self.recur:
             #self.view
@@ -605,9 +604,11 @@ class RenameApplication(Gtk.Application):
                     parent_iter = None
 
                 _iter = self.pmodel.append (parent_iter)
+                name    = os.path.split(newpath)[1]
+                newName = os.path.split(oldpath)[1]
                 self.pmodel.set (_iter,
-                                 0, os.path.split(newpath)[1],
-                                 1, os.path.split(oldpath)[1])
+                                 0, name,
+                                 1, self.get_diff_markup(name, newName))
 
 
             logFile.close ()
