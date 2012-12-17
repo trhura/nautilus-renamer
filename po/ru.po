@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: nautilus-renamer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-07-07 11:14+0630\n"
-"PO-Revision-Date: 2012-10-14 12:50+0000\n"
-"Last-Translator: Eugene Marshal <Unknown>\n"
+"PO-Revision-Date: 2011-02-28 22:55+0000\n"
+"Last-Translator: Eugene Babiy <eugene.babiy@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-15 05:20+0000\n"
-"X-Generator: Launchpad (build 16137)\n"
+"X-Launchpad-Export-Date: 2012-07-08 04:47+0000\n"
+"X-Generator: Launchpad (build 15558)\n"
 
 #: nautilus-renamer.py:97
 msgid "_Pattern"
-msgstr "_Шаблон"
+msgstr ""
 
 #: nautilus-renamer.py:98
 msgid "_Substitute"
@@ -91,11 +91,11 @@ msgstr ""
 
 #: nautilus-renamer.py:152
 msgid "A random number between 01 and 99"
-msgstr "A random number between 01 and 99"
+msgstr ""
 
 #: nautilus-renamer.py:153
 msgid "The first three letters of filename."
-msgstr "Первые три буквы имени файла."
+msgstr ""
 
 #: nautilus-renamer.py:154
 msgid "/alphabet|3/ => aaa, aab, .. aaaa, aaab .."
@@ -148,12 +148,10 @@ msgstr "Введите шаблон здесь... "
 #: nautilus-renamer.py:309
 msgid "Enter the base pattern to rename. Click '?' for available patterns."
 msgstr ""
-"Введите основной шаблон для выполнения переименования. Щёлкните '?', чтобы "
-"ознакомиться с доступными  шаблонами."
 
 #: nautilus-renamer.py:324
 msgid "Delete or replace multiple characters and words..."
-msgstr "Удалить или заменить несколько символов и слов..."
+msgstr ""
 
 #: nautilus-renamer.py:328
 msgid "Words to be replaced separated by \"/\", e.g., 1/2 ..."
@@ -165,7 +163,7 @@ msgstr "Соответствующие слова замещаются, напр
 
 #: nautilus-renamer.py:335
 msgid "Enter the characters or words to be replaced, separated by '/'"
-msgstr "Введите символы или слова для замены, разделяя их '/'"
+msgstr ""
 
 #: nautilus-renamer.py:336
 msgid "Enter the corresponding words to replace with"
@@ -173,7 +171,7 @@ msgstr "Введите соответствующие слова для заме
 
 #: nautilus-renamer.py:348
 msgid "Keep Original Case"
-msgstr "Сохранять исходный регистр"
+msgstr ""
 
 #: nautilus-renamer.py:349
 msgid "ALL IN CAPITALS"
@@ -209,17 +207,14 @@ msgid ""
 "\n"
 " <span "
 msgstr ""
-"<b>Отменить последнюю операцию внутри этой папки.</b>\n"
-"\n"
-" <span "
 
 #: nautilus-renamer.py:406
 msgid "<span color='red' weight='bold'>No log file is found in this folder."
-msgstr "<span color='red' weight='bold'>Файл журнала не найден в этой папке."
+msgstr ""
 
 #: nautilus-renamer.py:416
 msgid "Enter a list of letters or words, seperated by '/'."
-msgstr "Введите список букв или слов, разделяя их '/'."
+msgstr ""
 
 #: nautilus-renamer.py:426
 msgid "_First Letter"
@@ -230,8 +225,6 @@ msgid ""
 "A list of sequences, separated by '/'. The letters after them will be "
 "capitalized."
 msgstr ""
-"Список последовательностей, разделяемый '/'. Буквы после них будут "
-"переведены в верхний регистр."
 
 #: nautilus-renamer.py:429
 msgid "Capitalize the first letter"
@@ -290,4 +283,4 @@ msgstr "%d файлы восстановлены."
 #: nautilus-extension/nautilus-renamer.py:45
 #: nautilus-extension/nautilus-renamer.py:46
 msgid "Mass Rename"
-msgstr "Переименование нескольких объектов"
+msgstr ""
