@@ -587,12 +587,28 @@ class RenameApplication(Gtk.Application):
             logFile = open (UNDO_LOG_FILE, 'r')
 
             for i in range(5): logFile.readline () #Skip 5 lines of header
+
+            depth_list = {}
             for line in logFile:
                 oldpath, newpath = line.split('\n')[0].split(LOG_SEP)
 
-                depth =
-                _iter = self.pmodel.append (None)
-                self.pmodel.set (_iter, 0, newpath, 1, oldpath)
+                depth = newpath.count ("/")
+                depth_list = { k : v for k, v in depth_list.items() if k <= depth }
+
+                depth_list[depth] = depth_list.get (depth, -1) + 1
+                parent_path  = ":".join ([ str(x) for _, x in sorted (depth_list.items())[:-1]])
+                #print ("===", newpath, depth_list, parent_path, "===")
+
+                if parent_path:
+                    parent_iter = self.pmodel.get_iter_from_string (parent_path)
+                else:
+                    parent_iter = None
+
+                _iter = self.pmodel.append (parent_iter)
+                self.pmodel.set (_iter,
+                                 0, os.path.split(newpath)[1],
+                                 1, os.path.split(oldpath)[1])
+
 
             logFile.close ()
             update_preview_area ()
