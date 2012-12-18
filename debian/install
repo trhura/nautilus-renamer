@@ -1,4 +1,2 @@
 nautilus-renamer.py usr/share/nautilus-renamer/
-dconf/??_nautilus_renamer etc/dconf/db/site.d/
-dconf/user etc/dconf/profile/
 mo/* usr/share/locale/

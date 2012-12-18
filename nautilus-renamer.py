@@ -206,7 +206,6 @@ class RenameApplication(Gtk.Application):
 
         cell    = Gtk.CellRendererText.new ()
         cell.set_property ('scale', 0.7)
-        print ((DEFAULT_WIDTH/2) - 20)
         cell.set_property ('width', (DEFAULT_WIDTH/2) - 20)
         cell.set_property ('ellipsize', Pango.EllipsizeMode.MIDDLE)
         column  = Gtk.TreeViewColumn (_("Original Name"), cell, markup=0)

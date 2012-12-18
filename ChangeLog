@@ -1,8 +1,12 @@
-3.2 (7 Sep 2012)
+4.0 ( Dec 2012)
 -----------------
 * better integration with nautilus
 * improved preview area
 * allow reordering of files, when not in recursive mode
+* port to python3
+* improved preview
+	- tree view for recursive operations
+	- show highlighted diff
 
 3.1 (7 Jul 2012)
 -----------------

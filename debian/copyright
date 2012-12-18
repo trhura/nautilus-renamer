@@ -14,8 +14,8 @@ License: <special license>
 # If you want to use GPL v2 or later for the /debian/* files use 
 # the following clauses, or change it to suit. Delete these two lines
 Files: debian/*
-Copyright: 2012 Amr Osman <dr3mro@gmail.com>
-License: GPL-2+
+Copyright: 2012 Thura Hlaing <trhura@gmail.com>
+License: GPL-3+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or

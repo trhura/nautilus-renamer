@@ -1,6 +1,6 @@
 TODO
 ----
 * More Translations
-* More features
 * Remove matching prefix /name#word/, /name##word/
 * Remove matching suffix /name%word/, /name%%word/
+* Add support for network files (ftp/http)
