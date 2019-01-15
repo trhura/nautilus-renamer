@@ -2,6 +2,10 @@
 #  -*- coding: utf-8 -*-
 
 '''
+Mod: 2019 ... AJ ... por+renamer@posteo.de ... below Copyright applies
+Mod: a) More robust file list handling for other distributions and file manager.
+Mod: b) Added overwrite option.
+
 Copyright (C) 2006-2012 Thura Hlaing <trhura@gmail.com>
 
 This program is free software; you can redistribute it and/or
@@ -24,6 +28,7 @@ import random
 import gettext
 import string
 import difflib
+import urllib.parse
 
 from gi.repository import Gtk
 from gi.repository import Gio
@@ -77,6 +82,7 @@ class RenameApplication(Gtk.Application):
         self.case_opt = CASE_NONE
         self.recur    = False
         self.ext      = False
+        self.overw    = False
         self.pattern  = None
         self.logFile  = None
         self.num_pat = re.compile (r'\/number\|(?P<fill>\d+)(\+(?P<start>\d+))?\/')
@@ -184,10 +190,13 @@ class RenameApplication(Gtk.Application):
         # Two checkboxs at the bottoms
         self.extension_cb   = Gtk.CheckButton.new_with_mnemonic (_("_Extension"))
         self.recursive_cb   = Gtk.CheckButton.new_with_mnemonic (_("_Recursive"))
+        self.overwrite_cb   = Gtk.CheckButton.new_with_mnemonic (_("_Overwrite"))
         self.extension_cb.set_tooltip_text (_("Also operate on extensions"))
         self.recursive_cb.set_tooltip_text (_("Also operate on subfolders and files"))
+        self.overwrite_cb.set_tooltip_text (_("Overwrite existing files"))
 
         brbox   = Gtk.HBox.new (False, 5)
+        brbox.pack_end (self.overwrite_cb, False, False, 0)
         brbox.pack_end (self.recursive_cb, False, False, 0)
         brbox.pack_end (self.extension_cb, False, False, 0)
         ralign = Gtk.Alignment.new (1.0, 0.5, 0.0, 0.0)
@@ -630,6 +639,7 @@ class RenameApplication(Gtk.Application):
         ''' Initialize data require for rename and preview from dailog
             Report and return False.on errors'''
 
+        self.overw = self.overwrite_cb.get_active ()
         self.recur = self.recursive_cb.get_active ()
         self.ext   = self.extension_cb.get_active ()
         self.preview_view.set_reorderable (not self.recur)
@@ -726,7 +736,7 @@ class RenameApplication(Gtk.Application):
 
         if not path == newPath:
             # No need to rename if path (old) = newPath
-            if os.path.exists (newPath):
+            if not self.overw and os.path.exists (newPath):
                 show_error (_("File Already Exists"), newPath + _(" already exists. Use Undo to revert."))
                 self.exit()
 
@@ -734,7 +744,7 @@ class RenameApplication(Gtk.Application):
             self.logFile.write ('%s%s%s\n' %(oldPath, LOG_SEP,newPath))
             self.filesRenamed = self.filesRenamed + 1
 
-        if  os.path.isdir(newPath) and self.recur:
+        if os.path.isdir(newPath) and self.recur:
             for file in os.listdir (newPath):
                 self._rename (os.path.join (newPath, file), oldPath)
 
@@ -1059,6 +1069,11 @@ def show_error (title, message):
     dialog.destroy ()
 
 if __name__ == '__main__':
+    #AJ: We adjust the input file list in case we get real URLs (with %20 and so on) or just a list of local files ... useful for other file managers (e.g. pcmanfm)
+    if "file://" != sys.argv[1][0:len("file://")]:
+        sys.argv = ["file://"+item for item in sys.argv]
+    if not os.path.exists(sys.argv[1].replace("file://", "")):
+        sys.argv = [urllib.parse.unquote(item) for item in sys.argv]
     files = []
     # get current directory
     common_prefix = os.path.commonprefix (sys.argv[1:])[len("file://"):]
